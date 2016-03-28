@@ -1,19 +1,24 @@
 #!/usr/bin/env node
 
 var budo = require('budo')
+var httpProxy = require('http-proxy')
 var argv = require('minimist')(process.argv.slice(2))
-var proxy = require('proxy-middleware')
 var transform = require('../lib/transform')
 
 var middleware = []
 if (argv.proxy) {
-  var proxyTo = argv.proxy
-  proxyTo.route = '/api'
-  middleware.push(proxy(proxyTo))
+  var proxy = httpProxy.createProxyServer({ target: argv.proxy })
+  middleware.push(function (req, res, next) {
+    if (req.url.indexOf('/api') === 0) {
+      proxy.web(req, res)
+    } else {
+      next()
+    }
+  })
 }
 
 budo.cli([argv._[0] + ':assets/index.js'], {
   browserify: {debug: true, transform: transform(argv.config)},
   cors: true,
-  middleware
+  middleware: middleware
 })
