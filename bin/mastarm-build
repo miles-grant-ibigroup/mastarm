@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+var browserify = require('browserify')
+var argv = require('minimist')(process.argv.slice(2))
+var transform = require('../lib/transform')
+
+browserify(argv._, { transform: transform(argv.config) })
+  .transform({ global: true }, 'uglifyify')
+  .bundle()
+  .pipe(process.stdout)

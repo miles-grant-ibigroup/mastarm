@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "description": "Cause our JavaScript configuration needs to be consolidated",
   "main": "index.js",
-  "bin": "./bin/cmd.js",
+  "bin": {
+    "mastarm": "bin/mastarm",
+    "mastarm-build": "bin/mastarm-build",
+    "mastarm-serve": "bin/mastarm-serve"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -40,6 +44,8 @@
     "react-transform-hmr": "^1.0.2",
     "react-transform-render-visualizer": "^0.4.0",
     "snazzy": "^3.0.0",
-    "standard": "^6.0.7"
+    "standard": "^6.0.7",
+    "uglifyify": "^3.0.1",
+    "win-fork": "^1.1.1"
   }
 }
