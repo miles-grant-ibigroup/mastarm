@@ -3,4 +3,4 @@
 var engine = require('standard-engine')
 var standard = require('standard')
 
-engine(standard)
+engine.cli(standard)

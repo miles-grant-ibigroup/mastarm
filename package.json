@@ -41,13 +41,19 @@
     "browserify-css": "^0.9.0",
     "browserify-hmr": "^0.3.1",
     "budo": "^8.0.4",
+    "envify": "^3.4.0",
     "minimist": "^1.2.0",
+    "proxy-middleware": "^0.15.0",
+    "react": "^0.14.7",
+    "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.2",
     "react-transform-render-visualizer": "^0.4.0",
+    "redbox-react": "^1.2.2",
     "snazzy": "^3.0.0",
     "standard": "^6.0.8",
     "standard-engine": "^3.3.1",
     "uglifyify": "^3.0.1",
-    "win-fork": "^1.1.1"
+    "win-fork": "^1.1.1",
+    "yamljs": "^0.2.7"
   }
 }
