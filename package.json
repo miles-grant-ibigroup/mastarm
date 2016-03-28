@@ -6,6 +6,7 @@
   "bin": {
     "mastarm": "bin/mastarm",
     "mastarm-build": "bin/mastarm-build",
+    "mastarm-lint": "bin/mastarm-lint",
     "mastarm-serve": "bin/mastarm-serve"
   },
   "scripts": {
@@ -44,7 +45,8 @@
     "react-transform-hmr": "^1.0.2",
     "react-transform-render-visualizer": "^0.4.0",
     "snazzy": "^3.0.0",
-    "standard": "^6.0.7",
+    "standard": "^6.0.8",
+    "standard-engine": "^3.3.1",
     "uglifyify": "^3.0.1",
     "win-fork": "^1.1.1"
   }
