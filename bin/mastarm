@@ -33,15 +33,11 @@ if (exists(local)) {
   }, bin)
 }
 
-// display help if bin does not exist
+// display error if bin does not exist
 
 if (!exists(bin)) {
   console.error('\n  %s(1) does not exist', bin)
 }
-
-// update NODE_PATH for when it's installed globally
-
-process.env.NODE_PATH = process.env.NODE_PATH + ':' + resolve(__dirname, '../node_modules')
 
 // spawn
 
