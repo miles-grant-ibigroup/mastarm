@@ -39,6 +39,13 @@ if (!exists(bin)) {
   console.error('\n  %s(1) does not exist', bin)
 }
 
+// update NODE_PATH for when it's installed globally
+
+var node_modules = resolve(__dirname, '../node_modules')
+process.env.NODE_PATH = process.env.NODE_PATH
+  ? process.env.NODE_PATH + ':' + node_modules
+  : node_modules
+
 // spawn
 
 var proc = spawn(bin, args, { stdio: 'inherit', customFds: [0, 1, 2] })
