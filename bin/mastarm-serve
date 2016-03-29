@@ -2,14 +2,19 @@
 
 var budo = require('budo')
 var httpProxy = require('http-proxy')
+var loadConfig = require('../lib/load-config')
 var argv = require('minimist')(process.argv.slice(2))
 var transform = require('../lib/transform')
 
+var config = loadConfig(process.cwd(), argv.config)
+
 var middleware = []
 if (argv.proxy) {
-  var proxy = httpProxy.createProxyServer({ target: argv.proxy })
+  var url = config.settings.api || '/api'
+  var proxy = httpProxy.createProxyServer({target: argv.proxy})
   middleware.push(function (req, res, next) {
-    if (req.url.indexOf('/api') === 0) {
+    if (req.url.indexOf(url) === 0) {
+      req.url = req.url.slice(url.length)
       proxy.web(req, res)
     } else {
       next()
@@ -18,7 +23,7 @@ if (argv.proxy) {
 }
 
 budo.cli([argv._[0] + ':assets/index.js'], {
-  browserify: {debug: true, transform: transform(argv.config)},
+  browserify: {debug: true, transform: transform(config)},
   cors: true,
   middleware: middleware
 })

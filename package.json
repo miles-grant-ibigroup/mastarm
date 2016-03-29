@@ -55,5 +55,8 @@
     "uglifyify": "^3.0.1",
     "win-fork": "^1.1.1",
     "yamljs": "^0.2.7"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }
