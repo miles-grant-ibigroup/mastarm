@@ -2,4 +2,3 @@
 
 var babel = require('babel-core')
 var argv = require('minimist')(process.argv.slice(2))
-

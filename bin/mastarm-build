@@ -6,6 +6,6 @@ var argv = require('minimist')(process.argv.slice(2))
 var transform = require('../lib/transform')
 
 browserify(argv._, { transform: transform(loadConfig(process.cwd(), argv.config)) })
-  .transform({ global: true }, 'uglifyify')
+  .transform({ global: true }, require('uglifyify'))
   .bundle()
   .pipe(process.stdout)

@@ -3,58 +3,33 @@
 var spawn = require('win-fork')
 var path = require('path')
 var fs = require('fs')
-var join = path.join
-var stat = fs.statSync
-var exists = fs.existsSync
-var resolve = path.resolve
 
-// args void of cmd
-
-var args = process.argv.slice(3)
-
-// command
-
-var cmd = process.argv[2]
-
-if (cmd.indexOf('version') !== -1 || cmd === '-v') {
+var args = process.argv.slice(3) // args void of cmd
+var name = process.argv[2]
+if (name.indexOf('version') !== -1 || name === '-v') {
   console.log(require('../package.json').version)
   process.exit()
 }
 
-// executable
+spawn(bin(name), args, { stdio: 'inherit', customFds: [0, 1, 2] })
+  .on('close', function (code) {
+    process.exit(code)
+  })
 
-var bin = 'mastarm-' + cmd
-
-// local or resolve to absolute executable path
-
-var local = join(__dirname, bin)
-
-if (exists(local)) {
-  bin = local
-} else {
-  bin = process.env.PATH.split(path.delimiter).reduce(function (binary, p) {
-    p = resolve(p, bin)
-    return exists(p) && stat(p).isFile() ? p : binary
-  }, bin)
+function bin (name) {
+  var cmd = 'mastarm-' + name
+  var local = path.join(__dirname, cmd)
+  if (fs.existsSync(local)) {
+    cmd = local
+  } else {
+    cmd = process.env.PATH.split(path.delimiter).reduce(function (binary, p) {
+      p = path.resolve(p, cmd)
+      return fs.existsSync(p) && fs.statSync(p).isFile() ? p : binary
+    }, cmd)
+  }
+  if (!fs.existsSync(cmd)) {
+    console.error('\n  %s(1) does not exist', cmd)
+    process.exit(1)
+  }
+  return cmd
 }
-
-// display error if bin does not exist
-
-if (!exists(bin)) {
-  console.error('\n  %s(1) does not exist', bin)
-}
-
-// update NODE_PATH for when it's installed globally
-
-var node_modules = resolve(__dirname, '../node_modules')
-process.env.NODE_PATH = process.env.NODE_PATH
-  ? process.env.NODE_PATH + ':' + node_modules
-  : node_modules
-
-// spawn
-
-var proc = spawn(bin, args, { stdio: 'inherit', customFds: [0, 1, 2] })
-
-proc.on('close', function (code) {
-  process.exit(code)
-})

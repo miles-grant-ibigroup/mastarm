@@ -3,4 +3,10 @@
 var engine = require('standard-engine')
 var standard = require('standard')
 
-engine.cli(standard)
+// Force verbose
+process.argv.push('--verbose')
+
+engine.cli(Object.assign({}, standard, {
+  cwd: process.cwd(),
+  homepage: 'https://github.com/conveyal/mastarm'
+}))
