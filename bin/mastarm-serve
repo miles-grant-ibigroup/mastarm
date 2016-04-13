@@ -12,7 +12,8 @@ var config = loadConfig(process.cwd(), argv.config)
 var budoOpts = {
   browserify: {debug: true, transform: transform(config)},
   cors: true,
-  middleware: []
+  middleware: [],
+  pushstate: true
 }
 if (argv.proxy) {
   var url = config.settings.api || '/api'
