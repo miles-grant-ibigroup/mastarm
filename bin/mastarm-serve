@@ -10,7 +10,10 @@ var transform = require('../lib/transform')
 var entry = argv._[0] || pkg.main
 var config = loadConfig(process.cwd(), argv.config)
 var budoOpts = {
-  browserify: {debug: true, transform: transform(config)},
+  browserify: {
+    debug: true,
+    transform: transform(config, true)
+  },
   cors: true,
   middleware: [],
   pushstate: true
