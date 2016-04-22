@@ -7,8 +7,8 @@ var argv = require('minimist')(process.argv.slice(2))
 var pkg = require('../lib/pkg')
 var transform = require('../lib/transform')
 
-var entry = argv._[0] || pkg.main
 var config = loadConfig(process.cwd(), argv.config)
+var entry = argv._[0] || config.settings.entry || pkg.main
 var budoOpts = {
   browserify: {
     debug: true,

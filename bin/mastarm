@@ -28,7 +28,7 @@ function bin (name) {
     }, cmd)
   }
   if (!fs.existsSync(cmd)) {
-    console.error('\n  %s(1) does not exist', cmd)
+    console.error('%s does not exist', cmd)
     process.exit(1)
   }
   return cmd

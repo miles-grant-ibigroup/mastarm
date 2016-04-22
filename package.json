@@ -6,6 +6,7 @@
   "bin": {
     "mastarm": "bin/mastarm",
     "mastarm-build": "bin/mastarm-build",
+    "mastarm-deploy": "bin/mastarm-deploy",
     "mastarm-lint": "bin/mastarm-lint",
     "mastarm-serve": "bin/mastarm-serve"
   },
@@ -29,6 +30,7 @@
   },
   "homepage": "https://github.com/conveyal/mastarm",
   "dependencies": {
+    "aws-sdk": "^2.3.5",
     "babel-cli": "^6.7.5",
     "babel-core": "^6.7.6",
     "babel-eslint": "^6.0.3",
@@ -57,6 +59,7 @@
     "standard": "^6.0.8",
     "standard-engine": "^3.3.1",
     "uglifyify": "^3.0.1",
+    "uuid": "^2.0.2",
     "win-fork": "^1.1.1",
     "yamljs": "^0.2.7"
   },
