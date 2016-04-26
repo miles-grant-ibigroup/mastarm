@@ -18,13 +18,13 @@ var budoOpts = {
   middleware: [],
   pushstate: true
 }
-if (argv.proxy) {
-  var url = config.settings.api || '/api'
-  var proxy = httpProxy.createProxyServer({target: argv.proxy})
+var proxyTarget = argv.proxy || config.settings.apiProxy
+if (proxyTarget) {
+  var proxyServer = httpProxy.createProxyServer({target: proxyTarget})
   budoOpts.middleware.push(function (req, res, next) {
-    if (req.url.indexOf(url) === 0) {
-      req.url = req.url.slice(url.length)
-      proxy.web(req, res)
+    if (req.url.indexOf('/api') === 0) {
+      req.url = req.url.slice(4)
+      proxyServer.web(req, res)
     } else {
       next()
     }
