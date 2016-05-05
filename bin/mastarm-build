@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var auto = require('../lib/auto')(false)
+var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
-build(auto.entry, auto.config)
+build(auto.entry, auto.config, !auto.argv.debug)
   .pipe(process.stdout)

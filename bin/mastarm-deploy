@@ -2,21 +2,22 @@
 
 var AWS = require('aws-sdk')
 var uuid = require('uuid')
-var auto = require('../lib/auto')(false)
+var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
 var key = 'assets/index.js'
-var settings = auto.config.settings
+var cloudfrontDistributionID = auto.argv.cloudfront || auto.config.settings.cloudfrontDistributionID
+var s3bucket = auto.argv.bucket || auto.config.settings.s3bucket
 var s3object = new AWS.S3({
   params: {
     ACL: 'public-read',
-    Body: build(auto.entry, auto.config),
-    Bucket: settings.s3bucket,
+    Body: build(auto.entry, auto.config, !auto.argv.debug),
+    Bucket: s3bucket,
     Key: key
   }
 })
 
-console.log('pushing %s to s3 bucket %s', key, settings.s3bucket)
+console.log('building and pushing %s to s3 bucket %s', key, s3bucket)
 s3object
   .upload()
   .send(function (err, data) {
@@ -26,11 +27,11 @@ s3object
     } else {
       console.log('finished pushing to s3')
 
-      if (settings.cloudfrontDistributionID) {
+      if (cloudfrontDistributionID) {
         var cf = new AWS.CloudFront()
-        console.log('creating invalidation for cf distribution %s at %s', settings.cloudfrontDistributionID, key)
+        console.log('creating invalidation for cf distribution %s at %s', cloudfrontDistributionID, key)
         cf.createInvalidation({
-          DistributionId: settings.cloudfrontDistributionID,
+          DistributionId: cloudfrontDistributionID,
           InvalidationBatch: {
             CallerReference: uuid.v4(),
             Paths: {

@@ -2,23 +2,24 @@
 
 var budo = require('budo')
 var httpProxy = require('http-proxy')
-var loadConfig = require('../lib/load-config')
+var auto = require('../lib/auto')()
 var argv = require('minimist')(process.argv.slice(2))
-var pkg = require('../lib/pkg')
 var transform = require('../lib/transform')
 
-var config = loadConfig(process.cwd(), argv.config)
-var entry = argv._[0] || config.settings.entry || pkg.main
 var budoOpts = {
   browserify: {
     debug: true,
-    transform: transform(config, true)
+    paths: [
+      __dirname + '/../node_modules',
+      process.cwd() + '/node_modules'
+    ],
+    transform: transform(auto.config, true)
   },
   cors: true,
   middleware: [],
   pushstate: true
 }
-var proxyTarget = argv.proxy || config.settings.apiProxy
+var proxyTarget = argv.proxy || auto.config.settings.apiProxy
 if (proxyTarget) {
   var proxyServer = httpProxy.createProxyServer({target: proxyTarget})
   budoOpts.middleware.push(function (req, res, next) {
@@ -31,4 +32,4 @@ if (proxyTarget) {
   })
 }
 
-budo.cli([entry + ':assets/index.js'], budoOpts)
+budo.cli([auto.entry + ':assets/index.js'], budoOpts)
