@@ -10,8 +10,8 @@ var budoOpts = {
   browserify: {
     debug: true,
     paths: [
-      __dirname + '/../node_modules',
-      process.cwd() + '/node_modules'
+      process.cwd() + '/node_modules',
+      __dirname + '/../node_modules'
     ],
     transform: transform(auto.config, true)
   },
