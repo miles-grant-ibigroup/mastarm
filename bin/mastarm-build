@@ -1,9 +1,25 @@
 #!/usr/bin/env node
 
+var errorify = require('errorify')
 var fs = require('fs')
+var watchify = require('watchify')
 
 var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
-build(auto.entry, auto.config, !!auto.argv.debug)
-  .pipe(fs.createWriteStream(auto.outfile))
+var debug = !!auto.argv.debug
+var pipeline = build(auto.entry, auto.config, debug)
+
+if (debug) {
+  pipeline.plugin(watchify, { poll: true })
+  pipeline.plugin(errorify)
+}
+
+pipeline.on('update', bundle)
+bundle()
+
+function bundle () {
+  pipeline
+    .bundle()
+    .pipe(fs.createWriteStream(auto.outfile))
+}
