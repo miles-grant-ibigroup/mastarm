@@ -47,6 +47,7 @@
     "browserify-markdown": "^1.0.0",
     "budo": "^8.2.2",
     "envify": "^3.4.0",
+    "errorify": "^0.3.1",
     "from2-string": "^1.1.0",
     "http-proxy": "^1.13.2",
     "inject-css": "^0.1.1",
@@ -71,6 +72,7 @@
     "through2": "^2.0.1",
     "uglifyify": "^3.0.1",
     "uuid": "^2.0.2",
+    "watchify": "^3.7.0",
     "win-fork": "^1.1.1",
     "yamljs": "^0.2.7"
   },

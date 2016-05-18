@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+var fs = require('fs')
+
 var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
 build(auto.entry, auto.config, !!auto.argv.debug)
-  .pipe(process.stdout)
+  .pipe(fs.createWriteStream(auto.outfile))

@@ -5,13 +5,13 @@ var uuid = require('uuid')
 var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
-var key = 'assets/index.js'
+var key = auto.argv.outfile || auto.config.settings.outfile || 'assets/index.js'
 var cloudfrontDistributionID = auto.argv.cloudfront || auto.config.settings.cloudfrontDistributionID
 var s3bucket = auto.argv.bucket || auto.config.settings.s3bucket
 var s3object = new AWS.S3({
   params: {
     ACL: 'public-read',
-    Body: build(auto.entry, auto.config, !auto.argv.debug),
+    Body: build(auto.entry, auto.config, !!auto.argv.debug),
     Bucket: s3bucket,
     Key: key
   }

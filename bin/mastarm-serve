@@ -32,4 +32,4 @@ if (proxyTarget) {
   })
 }
 
-budo.cli([auto.entry + ':assets/index.js'], budoOpts)
+budo.cli([auto.entry + ':' + auto.outfile], budoOpts)
