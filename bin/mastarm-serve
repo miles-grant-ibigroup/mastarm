@@ -13,7 +13,7 @@ var budoOpts = {
       process.cwd() + '/node_modules',
       __dirname + '/../node_modules'
     ],
-    transform: transform(auto.config, true)
+    transform: transform(auto.config, true, 'development')
   },
   cors: true,
   middleware: [],
