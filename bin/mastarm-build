@@ -3,5 +3,5 @@
 var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
-build(auto.entry, auto.config, !auto.argv.debug)
+build(auto.entry, auto.config, !!auto.argv.debug)
   .pipe(process.stdout)
