@@ -7,10 +7,9 @@ var watchify = require('watchify')
 var auto = require('../lib/auto')()
 var build = require('../lib/build')
 
-var debug = !!auto.argv.debug
-var pipeline = build(auto.entry, auto.config, debug, auto.env)
+var pipeline = build(auto.entry, auto.config, auto.argv.debug, auto.env)
 
-if (debug) {
+if (auto.argv.watch) {
   pipeline.plugin(watchify, { poll: true })
   pipeline.plugin(errorify)
 }
