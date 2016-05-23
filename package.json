@@ -1,6 +1,6 @@
 {
   "name": "mastarm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Cause our JavaScript configuration needs to be consolidated",
   "main": "index.js",
   "bin": {
