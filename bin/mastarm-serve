@@ -2,18 +2,25 @@
 
 var budo = require('budo')
 var httpProxy = require('http-proxy')
-var auto = require('../lib/auto')()
 var argv = require('minimist')(process.argv.slice(2))
+var path = require('path')
+
+var auto = require('../lib/auto')()
 var transform = require('../lib/transform')
 
 var budoOpts = {
   browserify: {
     debug: true,
     paths: [
-      process.cwd() + '/node_modules',
-      __dirname + '/../node_modules'
+      path.join(process.cwd(), '/node_modules'),
+      path.join(__dirname, '/../node_modules')
     ],
-    transform: transform(auto.config, true, 'development')
+    transform: transform({
+      config: auto.config,
+      debug: true,
+      env: 'development',
+      outfile: auto.outfile
+    })
   },
   cors: true,
   middleware: [],

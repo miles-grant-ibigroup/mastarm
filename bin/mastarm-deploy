@@ -11,7 +11,12 @@ var s3bucket = auto.argv.bucket || auto.config.settings.s3bucket
 var s3object = new AWS.S3({
   params: {
     ACL: 'public-read',
-    Body: build(auto.entry, auto.config, !!auto.argv.debug, auto.env).bundle(),
+    Body: build({
+      config: auto.config,
+      debug: auto.argv.debug,
+      entry: auto.entry,
+      env: auto.env
+    }).bundle(),
     Bucket: s3bucket,
     Key: key
   }
