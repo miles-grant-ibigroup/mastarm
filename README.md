@@ -7,7 +7,7 @@ Conveyal's front-end JavaScript tool-belt. Build, run, lint and deploy front-end
 With [node v6+ and npm 3+ installed](https://nodejs.org/en/download/current/):
 
 ```shell
-$ npm install -g mastarm`
+$ npm install -g mastarm
 ```
 
 ## Configuration
@@ -40,7 +40,7 @@ Build, push to S3, and invalidate CloudFront in one command.
 
 ## Lint
 
-Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`].
+Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
 
 ### Usage
 
@@ -54,7 +54,7 @@ You can optionally pass in a directory (or directories) using the glob pattern. 
 $ mastarm lint "src/util/**/*.js" "test/**/*.js"
 ```
 
-Note: by default standard will look for all files matching the patterns: **/*.js, **/*.jsx.
+Note: by default standard will look for all files matching the patterns: "**/*.js", "**/*.jsx".
 
 ## Serve
 
