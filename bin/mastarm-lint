@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var engine = require('standard-engine')
-var standard = require('standard')
+const engine = require('standard-engine')
+const standard = require('standard')
 
 // Force verbose
 process.argv.push('--verbose')

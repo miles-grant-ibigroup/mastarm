@@ -50,6 +50,7 @@
     "browserify-hmr": "^0.3.1",
     "browserify-markdown": "^1.0.0",
     "budo": "^8.2.2",
+    "commander": "^2.9.0",
     "cssnano": "^3.6.2",
     "envify": "^3.4.0",
     "errorify": "^0.3.1",
@@ -79,7 +80,6 @@
     "uglifyify": "^3.0.1",
     "uuid": "^2.0.2",
     "watchify": "^3.7.0",
-    "win-fork": "^1.1.1",
     "yamljs": "^0.2.7"
   },
   "standard": {

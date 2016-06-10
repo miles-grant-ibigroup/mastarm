@@ -1,35 +1,12 @@
 #!/usr/bin/env node
 
-var spawn = require('win-fork')
-var path = require('path')
-var fs = require('fs')
+const program = require('commander')
+const pkg = require('../package.json')
 
-var args = process.argv.slice(3) // args void of cmd
-var name = process.argv[2]
-if (name.indexOf('version') !== -1 || name === '-v') {
-  console.log(require('../package.json').version)
-  process.exit()
-}
-
-spawn(bin(name), args, { stdio: 'inherit', customFds: [0, 1, 2] })
-  .on('close', function (code) {
-    process.exit(code)
-  })
-
-function bin (name) {
-  var cmd = 'mastarm-' + name
-  var local = path.join(__dirname, cmd)
-  if (fs.existsSync(local)) {
-    cmd = local
-  } else {
-    cmd = process.env.PATH.split(path.delimiter).reduce(function (binary, p) {
-      p = path.resolve(p, cmd)
-      return fs.existsSync(p) && fs.statSync(p).isFile() ? p : binary
-    }, cmd)
-  }
-  if (!fs.existsSync(cmd)) {
-    console.error('%s does not exist', cmd)
-    process.exit(1)
-  }
-  return cmd
-}
+program
+  .version(pkg.version)
+  .command('build [entries...]', 'Bundle JavaScript & CSS')
+  .command('deploy [entries...]', 'Bundle & Deploy JavaScript & CSS')
+  .command('lint [paths...]', 'Lint JavaScript [& CSS coming soon!]')
+  .command('serve [entries...]', 'Bundle & serve JavaScript & CSS')
+  .parse(process.argv)
