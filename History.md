@@ -1,4 +1,8 @@
 
+## master
+
+* Push CSS to S3 along with JS on deploy. (addresses #11)
+
 ## 0.3.0 — 2016-06-10
 
 * Allow for tiered `env.yml` based on `process.env.NODE_ENV`. (addresses #7)
