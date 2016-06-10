@@ -1,6 +1,6 @@
 {
   "name": "mastarm",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Cause our JavaScript configuration needs to be consolidated",
   "main": "bin/mastarm",
   "engines": {
@@ -8,11 +8,7 @@
     "npm": ">=3"
   },
   "bin": {
-    "mastarm": "bin/mastarm",
-    "mastarm-build": "bin/mastarm-build",
-    "mastarm-deploy": "bin/mastarm-deploy",
-    "mastarm-lint": "bin/mastarm-lint",
-    "mastarm-serve": "bin/mastarm-serve"
+    "mastarm": "bin/mastarm"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
