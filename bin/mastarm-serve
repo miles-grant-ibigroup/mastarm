@@ -1,42 +1,46 @@
 #!/usr/bin/env node
 
-var budo = require('budo')
-var httpProxy = require('http-proxy')
-var argv = require('minimist')(process.argv.slice(2))
-var path = require('path')
+const budo = require('budo')
+const httpProxy = require('http-proxy')
+const argv = require('minimist')(process.argv.slice(2))
+const path = require('path')
 
-var auto = require('../lib/auto')()
-var transform = require('../lib/transform')
+const auto = require('../lib/auto')()
+const transform = require('../lib/transform')
 
-var budoOpts = {
-  browserify: {
-    debug: true,
-    paths: [
-      path.join(process.cwd(), '/node_modules'),
-      path.join(__dirname, '/../node_modules')
-    ],
-    transform: transform({
-      config: auto.config,
+auto.files.map(run)
+
+function run ([entry, outfile]) {
+  const budoOpts = {
+    browserify: {
       debug: true,
-      env: 'development',
-      outfile: auto.outfile
+      paths: [
+        path.join(process.cwd(), '/node_modules'),
+        path.join(__dirname, '/../node_modules')
+      ],
+      transform: transform({
+        config: auto.config,
+        debug: true,
+        env: 'development',
+        outfile
+      })
+    },
+    cors: true,
+    middleware: [],
+    pushstate: true
+  }
+  const proxyTarget = argv.proxy || auto.config.settings.apiProxy
+  if (proxyTarget) {
+    const proxyServer = httpProxy.createProxyServer({target: proxyTarget})
+    budoOpts.middleware.push(function (req, res, next) {
+      if (req.url.indexOf('/api') === 0) {
+        req.url = req.url.slice(4)
+        proxyServer.web(req, res)
+      } else {
+        next()
+      }
     })
-  },
-  cors: true,
-  middleware: [],
-  pushstate: true
-}
-var proxyTarget = argv.proxy || auto.config.settings.apiProxy
-if (proxyTarget) {
-  var proxyServer = httpProxy.createProxyServer({target: proxyTarget})
-  budoOpts.middleware.push(function (req, res, next) {
-    if (req.url.indexOf('/api') === 0) {
-      req.url = req.url.slice(4)
-      proxyServer.web(req, res)
-    } else {
-      next()
-    }
-  })
-}
+  }
 
-budo.cli([auto.entry + ':' + auto.outfile], budoOpts)
+  budo.cli([entry + ':' + outfile], budoOpts)
+}
