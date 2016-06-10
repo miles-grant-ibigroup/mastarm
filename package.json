@@ -2,7 +2,11 @@
   "name": "mastarm",
   "version": "0.2.2",
   "description": "Cause our JavaScript configuration needs to be consolidated",
-  "main": "index.js",
+  "main": "bin/mastarm",
+  "engines": {
+    "node": ">=6",
+    "npm": ">=3"
+  },
   "bin": {
     "mastarm": "bin/mastarm",
     "mastarm-build": "bin/mastarm-build",
