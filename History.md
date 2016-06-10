@@ -4,7 +4,8 @@
 * Allow for tiered `env.yml` based on `process.env.NODE_ENV`. (addresses #7)
 * Add `engines` field to `package.json`.
 * Pass multiple input files using `entry:output` signature. (addresses #6)
-* Auto-parse objects passed into `envify`. (addresses #10)
+* Auto-parse objects passed into `envify`. (addresses #10)  
+* Switch from `minimist` to `commander`. (addresses #8)
 
 ## 0.2.2 — 2016-06-01
 
