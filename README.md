@@ -26,49 +26,61 @@ This file should contain string messages to be used throughout the application. 
 
 Settings contain both Mastarm configuration settings and per environment settings to be used in the application. To override base settings, create an environments section in the `yml` file. [Example in Modeify](https://github.com/conveyal/modeify/blob/master/configurations/example/settings.yml#L40). Each section below will contain the settings that they can use.
 
-## Build
+## Usage
 
-Compile JS, HTML, CSS, YAML, Markdown into a single `.js`
-
-Usage:
+Entries are in the format `input/file.js:output/file.js`. Not all options pertain to all commands.
 
 ```shell
-$ mastarm build [entry file] [output file] {OPTIONS}
-```
+$ mastarm --help
+
+Usage: mastarm <cmd> [options]
+
+
+Commands:
+
+  build [entries...]             Bundle JavaScript & CSS
+  deploy [options] [entries...]  Bundle & Deploy JavaScript & CSS
+  lint [paths...]                Lint JavaScript [& CSS coming soon!]
 
 Options:
 
-`--config path [default: ./configurations/default]`
+  -h, --help               output usage information
+  -V, --version            output the version number
+  -c, --config <path>      Path to configuration files.
+  -e, --env <environment>  Environment to use.
+  -m, --minify             Minify built files.
+  -p, --proxy <address>    Proxy calls through to target address.
+  -s, --serve              Serve with budo.
+  -w, --watch              Rebuild on changes with watchify.
 
-Path to find your configurations file.
-
-`--debug [default: process.env.NODE_ENV === 'development']`
-
-Debug mode turns off `uglify`,
-
-`--watch [default: false]`
-
-Auto-rebuilds files on changes.
-
-Example:
-
-```shell
-$ mastarm build lib/index.js dist/index.js --debug --watch --config configurations/custom
 ```
 
-## Deploy
+### `build`
+
+Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes Browserify, Budo, and PostCSS.
+
+### `deploy`
 
 Build, push to S3, and invalidate CloudFront in one command.
 
-#### Usage
+```shell
+$ mastarm deploy --help
 
-[...]
+Usage: deploy [entries...] [options]
 
-## Lint
+Bundle & Deploy JavaScript & CSS
+
+Options:
+
+  -h, --help    output usage information
+  --cloudfront  CloudFront Distribution ID to invalidate.
+  --s3bucket    S3 Bucket to push to.
+
+```
+
+## `lint`
 
 Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
-
-#### Usage
 
 ```shell
 $ mastarm lint
@@ -82,10 +94,3 @@ $ mastarm lint "src/util/**/*.js" "test/**/*.js"
 
 Note: by default standard will look for all files matching the patterns: "**/*.js", "**/*.jsx".
 
-## Serve
-
-Build, but with support from `budo`.
-
-#### Usage
-
-[...]
