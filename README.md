@@ -1,6 +1,8 @@
-# mastarm
+<h1 align="center">mastarm</h1>
 
-Conveyal's front-end JavaScript tool-belt. Build, run, lint and deploy front-end code.
+<p align="center"><img src="mastarm.png" /></p>
+
+<p align="center">Conveyal's front-end JavaScript tool-belt. Build, run, lint and deploy front-end code.</p>
 
 ## Install
 
@@ -78,7 +80,7 @@ Options:
 
 ```
 
-## `lint`
+### `lint`
 
 Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
 
