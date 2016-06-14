@@ -59,7 +59,7 @@ Options:
 
 ### `build`
 
-Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes Browserify, Budo, and PostCSS.
+Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes [babel](https://babeljs.io/), [browserify](https://github.com/substack/node-browserify), [budo](https://github.com/mattdesl/budo), and [postcss](http://postcss.org/).
 
 ### `deploy`
 

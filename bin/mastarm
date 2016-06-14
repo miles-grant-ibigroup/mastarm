@@ -13,7 +13,7 @@ commander
   .option('-e, --env <environment>', 'Environment to use.', process.env.NODE_ENV || 'development')
   .option('-m, --minify', 'Minify built files.', false)
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
-  .option('-s, --serve', 'Serve with budo.', false)
+  .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.', false)
   .option('-w, --watch', 'Rebuild on changes with watchify.', false)
 
 commander
