@@ -94,5 +94,4 @@ You can optionally pass in a directory (or directories) using the glob pattern. 
 $ mastarm lint "src/util/**/*.js" "test/**/*.js"
 ```
 
-Note: by default standard will look for all files matching the patterns: `"**/*.js"`, `"**/*.jsx"`.
-
+Note: by default standard will look for all files matching the patterns: `"**/*.js"`, `"**/*.jsx"`. Always quote the globs. Needed when used as an `npm` command.
