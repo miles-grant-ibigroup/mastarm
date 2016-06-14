@@ -3,6 +3,7 @@
 
 * Push CSS to S3 along with JS on deploy. (addresses #11)
 * Add error handling to `budo` and `http-proxy`. (addresses #13)
+* Update `babel-core` to `6.9.1` to fix a path not found error when installing as local dependency. [More info](https://github.com/mapbox/docbox/issues/13)
 
 ## 0.3.0 — 2016-06-10
 
