@@ -1,5 +1,5 @@
 
-## master
+## 0.3.1 — 2016-06-14
 
 * Push CSS to S3 along with JS on deploy. (addresses #11)
 * Add error handling to `budo` and `http-proxy`. (addresses #13)
