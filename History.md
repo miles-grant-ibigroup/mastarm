@@ -1,4 +1,8 @@
 
+## 0.3.2 — 2016-06-14
+
+* Revert solution to #10 for now.
+
 ## 0.3.1 — 2016-06-14
 
 * Push CSS to S3 along with JS on deploy. (addresses #11)
