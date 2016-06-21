@@ -1,6 +1,6 @@
 {
   "name": "mastarm",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Cause our JavaScript configuration needs to be consolidated",
   "main": "bin/mastarm",
   "engines": {

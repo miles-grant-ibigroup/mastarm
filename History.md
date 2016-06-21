@@ -1,4 +1,8 @@
 
+## 0.3.3 — 2016-06-21
+
+* feat: Check and install dependencies with `--check-dependencies` flag. closes #15.
+
 ## 0.3.2 — 2016-06-14
 
 * Revert solution to #10 for now.
