@@ -110,7 +110,6 @@ function parseEntries (entries, get) {
 
 function dependencyCheck () {
   if (commander.checkDependencies) {
-    console.log('checking dependencies')
     const results = checkDependencies.sync({ install: true })
     if (results.status !== 0) {
       console.error(results.error)
