@@ -1,4 +1,8 @@
 
+## master
+
+* Fix linter.
+
 ## 0.3.3 — 2016-06-21
 
 * feat: Check and install dependencies with `--check-dependencies` flag. closes #15.

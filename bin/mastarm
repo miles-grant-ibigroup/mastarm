@@ -78,6 +78,8 @@ commander
     const engine = require('standard-engine')
     const standard = require('standard')
 
+    // get lint out of there
+    process.argv.pop()
     // Force verbose
     process.argv.push('--verbose')
 
