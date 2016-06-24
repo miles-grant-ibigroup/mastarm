@@ -2,6 +2,7 @@
 ## master
 
 * Fix linter.
+* Add linting as `npm test`.
 
 ## 0.3.3 — 2016-06-21
 
