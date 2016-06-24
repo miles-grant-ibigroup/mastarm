@@ -1,6 +1,5 @@
 {
   "name": "mastarm",
-  "version": "0.3.3",
   "description": "Cause our JavaScript configuration needs to be consolidated",
   "main": "bin/mastarm",
   "engines": {
@@ -11,6 +10,8 @@
     "mastarm": "bin/mastarm"
   },
   "scripts": {
+    "commit": "git-cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "standard"
   },
   "repository": {
@@ -81,5 +82,15 @@
   },
   "standard": {
     "parser": "babel-eslint"
+  },
+  "devDependencies": {
+    "commitizen": "^2.8.2",
+    "cz-conventional-changelog": "^1.1.6",
+    "semantic-release": "^4.3.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   }
 }
