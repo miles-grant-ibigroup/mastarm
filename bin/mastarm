@@ -46,6 +46,23 @@ commander
   })
 
 commander
+  .command('commit')
+  .description('Force intelligent commit messages.')
+  .action(function () {
+    popMastarmFromArgv()
+
+    const path = require('path')
+    const bootstrap = require('commitizen/dist/cli/git-cz').bootstrap
+
+    bootstrap({
+      cliPath: path.join(__dirname, '../node_modules/commitizen'),
+      config: {
+        path: 'cz-conventional-changelog'
+      }
+    })
+  })
+
+commander
   .command('deploy [entries...]')
   .usage('[entries...] [options]')
   .description('Bundle & Deploy JavaScript & CSS')
@@ -118,4 +135,11 @@ function dependencyCheck () {
       process.exit(results.status)
     }
   }
+}
+
+/**
+ * A lot of subcommands utilize exact argument lengths. Pop mastarm to handle it.
+ */
+function popMastarmFromArgv () {
+  process.argv = process.argv.slice(0, 1).concat(process.argv.slice(2))
 }
