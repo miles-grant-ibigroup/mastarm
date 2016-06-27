@@ -1,6 +1,6 @@
 {
   "name": "mastarm",
-  "description": "Cause our JavaScript configuration needs to be consolidated",
+  "description": "Conveyal JavaScript development toolbelt.",
   "main": "bin/mastarm",
   "engines": {
     "node": ">=6",
