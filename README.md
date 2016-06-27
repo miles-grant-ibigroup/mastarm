@@ -41,6 +41,7 @@ Usage: mastarm <cmd> [options]
 Commands:
 
   build [entries...]             Bundle JavaScript & CSS
+  commit                         Force intelligent commit messages
   deploy [options] [entries...]  Bundle & Deploy JavaScript & CSS
   lint [paths...]                Lint JavaScript [& CSS coming soon!]
 
@@ -60,6 +61,10 @@ Options:
 ### `build`
 
 Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes [babel](https://babeljs.io/), [browserify](https://github.com/substack/node-browserify), [budo](https://github.com/mattdesl/budo), and [postcss](http://postcss.org/).
+
+### `commit`
+
+Utilize best practices when forming a commit message using [Commitzen](http://commitizen.github.io/cz-cli/) & the [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog) standard.
 
 ### `deploy`
 
