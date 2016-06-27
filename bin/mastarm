@@ -11,19 +11,17 @@ commander
   .version(require('../package.json').version)
   .usage('<cmd> [options]')
   .option('-c, --config <path>', 'Path to configuration files.', path.join(process.cwd(), '/configurations/default'))
-  .option('-C, --check-dependencies', 'Check and install package.json dependencies.', false)
   .option('-e, --env <environment>', 'Environment to use.', process.env.NODE_ENV || 'development')
   .option('-m, --minify', 'Minify built files.', false)
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
   .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.', false)
+  .option('-S, --skip-check-dependencies', 'Skip checking and installing out of date package.json dependencies.', false)
   .option('-w, --watch', 'Rebuild on changes with watchify.', false)
 
 commander
   .command('build [entries...]')
   .description('Bundle JavaScript & CSS')
   .action(function (entries) {
-    dependencyCheck()
-
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = (item, backup) => commander[item] || config.settings[item] || backup
     const files = parseEntries(entries, get)
@@ -69,8 +67,6 @@ commander
   .option('--cloudfront', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket', 'S3 Bucket to push to.')
   .action(function (entries) {
-    dependencyCheck()
-
     const pushToS3 = require('../lib/push-to-s3')
 
     const config = loadConfig(process.cwd(), commander.config, commander.env)
@@ -90,8 +86,6 @@ commander
   .command('lint [paths...]')
   .description('Lint JavaScript [& CSS coming soon!]')
   .action(function () {
-    dependencyCheck()
-
     const engine = require('standard-engine')
     const standard = require('standard')
 
@@ -107,6 +101,14 @@ commander
   })
 
 commander.parse(process.argv)
+
+if (!commander.skipCheckDependencies) {
+  const results = checkDependencies.sync({install: true})
+  if (results.status !== 0) {
+    console.error(results.error)
+    process.exit(results.status)
+  }
+}
 
 function parseEntries (entries, get) {
   const files = entries.map((entry) => {
@@ -125,16 +127,6 @@ function parseEntries (entries, get) {
   }
 
   return files
-}
-
-function dependencyCheck () {
-  if (commander.checkDependencies) {
-    const results = checkDependencies.sync({ install: true })
-    if (results.status !== 0) {
-      console.error(results.error)
-      process.exit(results.status)
-    }
-  }
 }
 
 /**

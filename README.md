@@ -35,27 +35,27 @@ Entries are in the format `input/file.js:output/file.js`. Not all options pertai
 ```shell
 $ mastarm --help
 
-Usage: mastarm <cmd> [options]
+  Usage: mastarm <cmd> [options]
 
 
-Commands:
+  Commands:
 
-  build [entries...]             Bundle JavaScript & CSS
-  commit                         Force intelligent commit messages
-  deploy [options] [entries...]  Bundle & Deploy JavaScript & CSS
-  lint [paths...]                Lint JavaScript [& CSS coming soon!]
+    build [entries...]             Bundle JavaScript & CSS
+    commit                         Force intelligent commit messages.
+    deploy [options] [entries...]  Bundle & Deploy JavaScript & CSS
+    lint [paths...]                Lint JavaScript [& CSS coming soon!]
 
-Options:
+  Options:
 
-  -h, --help               output usage information
-  -V, --version            output the version number
-  -c, --config <path>      Path to configuration files.
-  -e, --env <environment>  Environment to use.
-  -m, --minify             Minify built files.
-  -p, --proxy <address>    Proxy calls through to target address.
-  -s, --serve              Serve with budo.
-  -w, --watch              Rebuild on changes with watchify.
-
+    -h, --help                     output usage information
+    -V, --version                  output the version number
+    -c, --config <path>            Path to configuration files.
+    -e, --env <environment>        Environment to use.
+    -m, --minify                   Minify built files.
+    -p, --proxy <address>          Proxy calls through to target address.
+    -s, --serve                    Serve with budo. Auto-matically rebuilds on changes.
+    -S, --skip-check-dependencies  Skip checking and installing out of date package.json dependencies.
+    -w, --watch                    Rebuild on changes with watchify.
 ```
 
 ### `build`
