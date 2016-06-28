@@ -103,9 +103,15 @@ commander
 commander.parse(process.argv)
 
 if (!commander.skipCheckDependencies) {
-  const results = checkDependencies.sync({install: true})
+  const results = checkDependencies.sync({
+    install: true,
+    packageDir: process.cwd()
+  })
   if (results.status !== 0) {
     console.error(results.error)
+    process.exit(results.status)
+  } else if (!results.depsWereOk) {
+    console.log('Updated out of date dependencies found in package.json. Please try running the command again.')
     process.exit(results.status)
   }
 }
