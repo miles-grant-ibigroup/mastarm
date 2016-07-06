@@ -12,21 +12,21 @@ commander
   .usage('<cmd> [options]')
   .option('-c, --config <path>', 'Path to configuration files.', path.join(process.cwd(), '/configurations/default'))
   .option('-e, --env <environment>', 'Environment to use.', process.env.NODE_ENV || 'development')
-  .option('-m, --minify', 'Minify built files.', false)
-  .option('-p, --proxy <address>', 'Proxy calls through to target address.')
-  .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.', false)
-  .option('-S, --skip-check-dependencies', 'Skip checking and installing out of date package.json dependencies.', false)
-  .option('-w, --watch', 'Rebuild on changes with watchify.', false)
+  .option('-m, --minify', 'Minify built files.')
+  .option('-S, --skip-check-dependencies', 'Skip checking and installing out of date package.json dependencies.')
 
 commander
   .command('build [entries...]')
   .description('Bundle JavaScript & CSS')
-  .action(function (entries) {
+  .option('-p, --proxy <address>', 'Proxy calls through to target address.')
+  .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
+  .option('-w, --watch', 'Rebuild on changes with watchify.')
+  .action(function (entries, options) {
     const config = loadConfig(process.cwd(), commander.config, commander.env)
-    const get = (item, backup) => commander[item] || config.settings[item] || backup
+    const get = (item) => val([options, commander, config.settings], item)
     const files = parseEntries(entries, get)
 
-    if (commander.serve) {
+    if (get('serve')) {
       const budo = require('../lib/budo')
       files.map(budo({
         config,
@@ -66,11 +66,11 @@ commander
   .description('Bundle & Deploy JavaScript & CSS')
   .option('--cloudfront', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket', 'S3 Bucket to push to.')
-  .action(function (entries) {
+  .action(function (entries, options) {
     const pushToS3 = require('../lib/push-to-s3')
 
     const config = loadConfig(process.cwd(), commander.config, commander.env)
-    const get = (item, backup) => commander[item] || config.settings[item] || backup
+    const get = (item) => val([options, commander, config.settings], item)
     const files = parseEntries(entries, get)
 
     files.map(pushToS3({
@@ -140,4 +140,9 @@ function parseEntries (entries, get) {
  */
 function popMastarmFromArgv () {
   process.argv = process.argv.slice(0, 1).concat(process.argv.slice(2))
+}
+
+function val (targets, i) {
+  const ts = targets.filter((t) => t[i] !== undefined)
+  if (ts.length > 0) return ts[0][i]
 }
