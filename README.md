@@ -1,4 +1,5 @@
-<h1 align="center">mastarm</h1>
+<h1 align="center">mastarm<br/>[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]</h1>
 
 <p align="center"><img src="mastarm.png" /></p>
 
@@ -100,3 +101,8 @@ $ mastarm lint "src/util/**/*.js" "test/**/*.js"
 ```
 
 Note: by default standard will look for all files matching the patterns: `"**/*.js"`, `"**/*.jsx"`. Always quote the globs. Needed when used as an `npm` command.
+
+[npm-image]: https://img.shields.io/npm/v/mastarm.svg?maxAge=2592000&style=flat-square
+[npm-url]: https://www.npmjs.com/package/mastarm
+[travis-image]: https://img.shields.io/travis/conveyal/mastarm.svg?style=flat-square
+[travis-url]: https://travis-ci.org/conveyal/mastarm
