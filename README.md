@@ -1,5 +1,7 @@
-<h1 align="center">mastarm<br/>[![NPM version][npm-image]][npm-url]
-[![Build status][travis-image]][travis-url]</h1>
+# mastarm
+
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
 
 <p align="center"><img src="mastarm.png" /></p>
 
