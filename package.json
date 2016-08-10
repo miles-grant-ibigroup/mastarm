@@ -62,7 +62,7 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "standard": "^7.1.2",
-    "standard-engine": "^4.0.4",
+    "standard-engine": "^5.0.0",
     "through2": "^2.0.1",
     "uglifyify": "^3.0.2",
     "uuid": "^2.0.2",
