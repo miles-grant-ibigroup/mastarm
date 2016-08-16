@@ -18,6 +18,7 @@ commander
 commander
   .command('build [entries...]')
   .description('Bundle JavaScript & CSS')
+  .option('-F, --flyle', 'Cache and serve tiles.')
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
   .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
   .option('-w, --watch', 'Rebuild on changes with watchify.')
@@ -30,6 +31,7 @@ commander
       const budo = require('../lib/budo')
       files.map(budo({
         config,
+        flyle: get('flyle'),
         proxy: get('proxy')
       }))
     } else {
