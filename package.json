@@ -62,7 +62,7 @@
     "postcss-safe-parser": "^1.0.7",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "standard": "^7.1.2",
+    "standard": "^8.0.0",
     "standard-engine": "^5.0.0",
     "through2": "^2.0.1",
     "uglifyify": "^3.0.2",
