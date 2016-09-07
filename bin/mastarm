@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const checkDependencies = require('check-dependencies')
 const commander = require('commander')
 const path = require('path')
 
@@ -9,7 +8,6 @@ const pkg = require('../lib/pkg')
 
 commander
   .version(require('../package.json').version)
-  .usage('<cmd> [options]')
   .option('-c, --config <path>', 'Path to configuration files.', path.join(process.cwd(), '/configurations/default'))
   .option('-e, --env <environment>', 'Environment to use.', process.env.NODE_ENV || 'development')
   .option('-m, --minify', 'Minify built files.')
@@ -23,10 +21,10 @@ commander
   .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
   .option('-w, --watch', 'Rebuild on changes with watchify.')
   .action(function (entries, options) {
+    checkDependencies()
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = (item) => val([options, commander, config.settings], item)
     const files = parseEntries(entries, get)
-
     if (get('serve')) {
       const budo = require('../lib/budo')
       files.map(budo({
@@ -50,10 +48,8 @@ commander
   .description('Force intelligent commit messages.')
   .action(function () {
     popMastarmFromArgv()
-
     const path = require('path')
     const bootstrap = require('commitizen/dist/cli/git-cz').bootstrap
-
     bootstrap({
       cliPath: path.join(__dirname, '../node_modules/commitizen'),
       config: {
@@ -64,17 +60,15 @@ commander
 
 commander
   .command('deploy [entries...]')
-  .usage('[entries...] [options]')
   .description('Bundle & Deploy JavaScript & CSS')
   .option('--cloudfront', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket', 'S3 Bucket to push to.')
   .action(function (entries, options) {
+    checkDependencies()
     const pushToS3 = require('../lib/push-to-s3')
-
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = (item) => val([options, commander, config.settings], item)
     const files = parseEntries(entries, get)
-
     files.map(pushToS3({
       cloudfront: get('cloudfront'),
       config,
@@ -90,31 +84,43 @@ commander
   .action(function () {
     const engine = require('standard-engine')
     const standard = require('standard')
-
     // get lint out of there
     process.argv.pop()
     // Force verbose
     process.argv.push('--verbose')
-
     engine.cli(Object.assign({}, standard, {
       cwd: process.cwd(),
       homepage: 'https://github.com/conveyal/mastarm'
     }))
   })
 
+const BABEL = path.join(__dirname, '../node_modules/.bin/babel')
+commander
+  .command('prepublish [entries...]')
+  .description('Transpile JavaScript down to ES5 with Babel')
+  .action(function (entries, options) {
+    checkDependencies()
+    const exec = require('child_process').execSync
+    entries.forEach((entry) =>
+      exec(`${BABEL} ${entry} --out-dir build --source-maps`))
+  })
+
 commander.parse(process.argv)
 
-if (!commander.skipCheckDependencies) {
-  const results = checkDependencies.sync({
-    install: true,
-    packageDir: process.cwd()
-  })
-  if (results.status !== 0) {
-    console.error(results.error)
-    process.exit(results.status)
-  } else if (!results.depsWereOk) {
-    console.log('Updated out of date dependencies found in package.json. Please try running the command again.')
-    process.exit(results.status)
+function checkDependencies () {
+  if (!commander.skipCheckDependencies) {
+    const checkDependenciesSync = require('check-dependencies').sync
+    const results = checkDependenciesSync({
+      install: true,
+      packageDir: process.cwd()
+    })
+    if (results.status !== 0) {
+      console.error(results.error)
+      process.exit(results.status)
+    } else if (!results.depsWereOk) {
+      console.log('Updated out of date dependencies found in package.json. Please try running the command again.')
+      process.exit(results.status)
+    }
   }
 }
 
