@@ -47,6 +47,7 @@ $ mastarm --help
     commit                         Force intelligent commit messages.
     deploy [options] [entries...]  Bundle & Deploy JavaScript & CSS
     lint [paths...]                Lint JavaScript [& CSS coming soon!]
+    test [options]                 Run tests using Jest test runner
 
   Options:
 
@@ -58,6 +59,7 @@ $ mastarm --help
     -p, --proxy <address>          Proxy calls through to target address.
     -s, --serve                    Serve with budo. Auto-matically rebuilds on changes.
     -S, --skip-check-dependencies  Skip checking and installing out of date package.json dependencies.
+    -u, --update-snapshots         Force update of jest snapshots.  USE WITH CAUTION.
     -w, --watch                    Rebuild on changes with watchify.
 ```
 
@@ -103,6 +105,14 @@ $ mastarm lint "src/util/**/*.js" "test/**/*.js"
 ```
 
 Note: by default standard will look for all files matching the patterns: `"**/*.js"`, `"**/*.jsx"`. Always quote the globs. Needed when used as an `npm` command.
+
+### `test`
+
+Run the [Jest](http://facebook.github.io/jest/) test runner on your project.  It is expected that you create tests within your project.  By default, mastarm will run Jest and generate coverage reports on all .js files in the `lib` folder of your project.
+
+```shell
+$ mastarm test
+```
 
 [npm-image]: https://img.shields.io/npm/v/mastarm.svg?maxAge=2592000&style=flat-square
 [npm-url]: https://www.npmjs.com/package/mastarm

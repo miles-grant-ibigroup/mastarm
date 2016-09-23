@@ -144,6 +144,17 @@ commander
     }
   })
 
+commander
+  .command('test')
+  .description('Run tests using Jest')
+  .option('-u, --update-snapshots', 'Force update of snapshots.  USE WITH CAUTION.')
+  .action(function (options) {
+    const jest = require('jest')
+    const config = loadConfig(process.cwd(), commander.config, commander.env)
+    const generateTestConfig = require('../lib/test.js')
+    jest.run(generateTestConfig(config, options))
+  })
+
 commander.parse(process.argv)
 
 function checkDependencies () {
