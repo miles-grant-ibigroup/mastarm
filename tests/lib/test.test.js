@@ -1,4 +1,6 @@
 /* globals describe, it, expect */
+const should = require('chai').should()
+
 const testUtils = require('../../lib/test')
 
 describe('test.js', () => {
@@ -8,7 +10,15 @@ describe('test.js', () => {
       updateSnapshots: true,
       cache: false
     })
-    expect(cfg).toMatchSnapshot()
+    should.exist(cfg)
+    cfg.should.be.instanceOf(Array)
+    cfg.length.should.equal(4)
+    expect(cfg.slice(0, 3)).toMatchSnapshot()
+    const jestCfg = JSON.parse(cfg[3])
+    jestCfg.should.have.property('scriptPreprocessor')
+    jestCfg.scriptPreprocessor.should.contain('lib/jestPreprocessor.js')
+    delete jestCfg.scriptPreprocessor
+    expect(jestCfg).toMatchSnapshot()
   })
 
   it('setupTestEnvironment should set MESSAGES environment variable if needed', () => {
