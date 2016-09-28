@@ -148,11 +148,14 @@ commander
   .command('test')
   .description('Run tests using Jest')
   .option('-u, --update-snapshots', 'Force update of snapshots.  USE WITH CAUTION.')
+  .option('--coverage', 'Run Jest with coverage reporting')
+  .option('--no-cache', 'Run Jest without cache')
   .action(function (options) {
     const jest = require('jest')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
-    const generateTestConfig = require('../lib/test.js')
-    jest.run(generateTestConfig(config, options))
+    const testUtils = require('../lib/test')
+    testUtils.setupTestEnvironment(config)
+    jest.run(testUtils.generateTestConfig(options))
   })
 
 commander.parse(process.argv)
