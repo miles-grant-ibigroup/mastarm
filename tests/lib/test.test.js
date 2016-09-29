@@ -1,5 +1,4 @@
 /* globals describe, it, expect */
-const should = require('chai').should()
 
 const testUtils = require('../../lib/test')
 
@@ -10,13 +9,11 @@ describe('test.js', () => {
       updateSnapshots: true,
       cache: false
     })
-    should.exist(cfg)
-    cfg.should.be.instanceOf(Array)
-    cfg.length.should.equal(4)
+    expect(cfg).toBeTruthy()
+    expect(cfg.length).toEqual(4)
     expect(cfg.slice(0, 3)).toMatchSnapshot()
     const jestCfg = JSON.parse(cfg[3])
-    jestCfg.should.have.property('scriptPreprocessor')
-    jestCfg.scriptPreprocessor.should.contain('lib/jestPreprocessor.js')
+    expect(jestCfg.scriptPreprocessor).toContain('lib/jestPreprocessor.js')
     delete jestCfg.scriptPreprocessor
     expect(jestCfg).toMatchSnapshot()
   })

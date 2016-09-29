@@ -78,7 +78,6 @@
     "parser": "babel-eslint"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
     "semantic-release": "^4.3.5"
   }
 }
