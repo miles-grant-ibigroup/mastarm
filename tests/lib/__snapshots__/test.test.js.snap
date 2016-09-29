@@ -1,0 +1,22 @@
+exports[`test.js generateTestConfig should generate proper config 1`] = `
+Array [
+  "-u",
+  "--no-cache",
+  "--config"
+]
+`;
+
+exports[`test.js generateTestConfig should generate proper config 2`] = `
+Object {
+  "cacheDirectory": "tmp",
+  "collectCoverageFrom": Array [
+    "lib/**/*.js",
+    "bin",
+    "src",
+    "another-folder"
+  ],
+  "coverageDirectory": "coverage"
+}
+`;
+
+exports[`test.js setupTestEnvironment should set MESSAGES environment variable if needed 1`] = `"{\"hi\":\"there\"}"`;
