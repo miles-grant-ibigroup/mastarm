@@ -152,6 +152,7 @@ commander
   .option('--no-cache', 'Run Jest with cache')
   .option('--coverage-paths <paths>')
   .action(function (options) {
+    checkDependencies()
     const jest = require('jest')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const testUtils = require('../lib/test')
