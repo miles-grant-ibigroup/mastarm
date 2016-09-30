@@ -11,7 +11,7 @@
   },
   "scripts": {
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "standard && bin/mastarm test",
+    "test": "bin/mastarm standard && bin/mastarm test",
     "cover": "bin/mastarm test --coverage --coverage-paths bin"
   },
   "repository": {
@@ -33,6 +33,7 @@
   "dependencies": {
     "aws-sdk": "^2.4.2",
     "babel-core": "^6.10.4",
+    "babel-eslint": "^7.0.0",
     "babel-jest": "^15.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-runtime": "^6.9.0",
