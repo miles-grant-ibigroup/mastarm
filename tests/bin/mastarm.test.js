@@ -4,7 +4,6 @@ const exec = require('child_process').exec
 const fs = require('fs')
 const path = require('path')
 
-const each = require('async-each')
 const rimraf = require('rimraf')
 
 const mastarm = path.resolve('./bin/mastarm')
@@ -28,23 +27,16 @@ describe('mastarm cli', () => {
     afterEach(clean)
 
     it('should build a project', (done) => {
-      exec(`node ${mastarm} build tests/mocks/mockComponent.js:tests/mocks/built.js --css-files tests/mocks/mock.css:tests/mocks/built.css`,
+      exec(`node ${mastarm} build tests/mocks/mockComponent.js:tests/mocks/built.js tests/mocks/mock.css:tests/mocks/built.css`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toBe('')
           expect(stderr).toBe('')
-          each(['tests/mocks/built.js', 'tests/mocks/built.css'],
-            (file, cb) => {
-              fs.stat(file, (err, data) => {
-                if (err) { return cb(err) }
-                cb()
-              })
-            },
-            (err) => {
-              expect(err).not.toBeTruthy()
-              done()
-            }
-          )
+          const expectedBuiltFiles = ['tests/mocks/built.js', 'tests/mocks/built.css']
+          expectedBuiltFiles.forEach((file) => {
+            expect(fs.existsSync(file)).toBeTruthy()
+          })
+          done()
         }
       )
     })

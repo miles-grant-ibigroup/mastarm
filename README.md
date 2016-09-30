@@ -33,7 +33,7 @@ Settings contain both Mastarm configuration settings and per environment setting
 
 ## Usage
 
-Entries are in the format `input/file.js:output/file.js`. Not all options pertain to all commands.
+Not all options pertain to all commands.  Entries are in the format `input/file.js:output/file.js`.
 
 ```shell
 $ mastarm --help
@@ -43,9 +43,9 @@ $ mastarm --help
 
   Commands:
 
-    build [entries...]             Bundle JavaScript & CSS
+    build [entries...] [options]   Bundle JavaScript & CSS
     commit                         Force intelligent commit messages.
-    deploy [options] [entries...]  Bundle & Deploy JavaScript & CSS
+    deploy [entries...] [options]  Bundle & Deploy JavaScript & CSS
     lint [paths...]                Lint JavaScript [& CSS coming soon!]
     test [options]                 Run tests using Jest test runner
 
@@ -66,6 +66,14 @@ $ mastarm --help
 ### `build`
 
 Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes [babel](https://babeljs.io/), [browserify](https://github.com/substack/node-browserify), [budo](https://github.com/mattdesl/budo), and [postcss](http://postcss.org/).
+
+```shell
+$ mastarm build [entries...] [options]
+```
+
+If not entries are provided, mastarm will attempt to find the entry file.  It will first see if the `entry` option has been set in the `settings.yml` config file.  If that setting or the file does not exist, it will attempt to build the file specified as `main` in your project's `package.json` file.  And finally, if both of those options fail, mastarm will attempt to look for the `index.js` and `index.css` file in the current working directory and attempt to compile each into `assets/index.js` and `assets/index.css` respectively.  
+
+If entries are provided, mastarm will build only those files.
 
 ### `commit`
 

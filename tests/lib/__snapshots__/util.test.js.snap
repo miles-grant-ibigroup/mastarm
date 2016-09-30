@@ -1,36 +1,23 @@
-exports[`util.js getCssFiles should return correct results 1`] = `Array []`;
-
-exports[`util.js getCssFiles should return correct results 2`] = `
-Array [
-  "lib/styles.css:assets/index.css"
-]
-`;
-
-exports[`util.js getCssFiles should return correct results 3`] = `
-Array [
-  "a:b",
-  "c"
-]
-`;
-
-exports[`util.js parseEntries should return default file paths 1`] = `
-Array [
-  Array [
-    "bin/mastarm",
-    "assets/index.js"
-  ]
-]
-`;
+exports[`util.js parseEntries should not find any paths if no matches 1`] = `Array []`;
 
 exports[`util.js parseEntries should return inputted file paths 1`] = `
 Array [
   Array [
-    "a",
-    "b"
+    "tests/mocks/mock.css",
+    "assets/tests/mocks/mock.css"
   ],
   Array [
-    "c",
-    "assets/c"
+    "tests/mocks/mockComponent.js",
+    "blah"
   ]
 ]
+`;
+
+exports[`util.js parseEntries should try to find default file paths 1`] = `Array []`;
+
+exports[`util.js updateDependencies should run check-dependencies package 1`] = `
+Object {
+  "depsWereOk": true,
+  "status": 0
+}
 `;

@@ -20,13 +20,15 @@ commander
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
   .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
   .option('-w, --watch', 'Rebuild on changes with watchify.')
-  .option('--no-css', 'Do not build using default css options')
-  .option('--css-files <files>', 'Specify custom css files to build')
   .action(function (entries, options) {
     checkDependencies()
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
-    const files = util.parseEntries(entries.concat(util.getCssFiles(options)), get)
+    const files = util.parseEntries(entries, get)
+    if (files.length === 0) {
+      console.log('No entry point found!  Did you spell the filename correctly?')
+      process.exit(1)
+    }
     if (get('serve')) {
       const budo = require('../lib/budo')
       files.map(budo({
@@ -71,6 +73,10 @@ commander
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
     const files = util.parseEntries(entries, get)
+    if (files.length === 0) {
+      console.log('No file(s) found!  Did you spell the filename correctly?')
+      process.exit(1)
+    }
     files.map(pushToS3({
       cloudfront: get('cloudfront'),
       config,
@@ -166,6 +172,13 @@ commander.parse(process.argv)
 
 function checkDependencies () {
   if (!commander.skipCheckDependencies) {
-    util.updateDependencies()
+    const results = util.updateDependencies()
+    if (results.status !== 0) {
+      console.error(results.error)
+      process.exit(results.status)
+    } else if (!results.depsWereOk) {
+      console.log('Updated out of date dependencies found in package.json. Please try running the command again.')
+      process.exit(results.status)
+    }
   }
 }
