@@ -90,6 +90,9 @@ commander
     process.argv.push('--verbose')
     engine.cli(Object.assign({}, standard, {
       cwd: process.cwd(),
+      eslintConfig: {
+        parser: 'babel-eslint'
+      },
       homepage: 'https://github.com/conveyal/mastarm'
     }))
   })
