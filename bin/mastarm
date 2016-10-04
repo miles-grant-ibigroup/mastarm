@@ -31,19 +31,21 @@ commander
     }
     if (get('serve')) {
       const budo = require('../lib/budo')
-      files.map(budo({
+      budo({
         config,
+        files,
         flyle: get('flyle'),
         proxy: get('proxy')
-      }))
+      })
     } else {
       const build = require('../lib/build')
-      files.map(build({
+      build({
         config,
         env: get('env'),
+        files,
         minify: get('minify'),
         watch: get('watch')
-      }))
+      })
     }
   })
 
