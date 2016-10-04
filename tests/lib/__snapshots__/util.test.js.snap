@@ -4,12 +4,12 @@ exports[`util.js parseEntries should return inputted file paths 1`] = `
 Array [
   Array [
     "tests/mocks/mock.css",
-    "assets/tests/mocks/mock.css"
+    "assets/tests/mocks/mock.css",
   ],
   Array [
     "tests/mocks/mockComponent.js",
-    "blah"
-  ]
+    "blah",
+  ],
 ]
 `;
 
@@ -18,6 +18,6 @@ exports[`util.js parseEntries should try to find default file paths 1`] = `Array
 exports[`util.js updateDependencies should run check-dependencies package 1`] = `
 Object {
   "depsWereOk": true,
-  "status": 0
+  "status": 0,
 }
 `;
