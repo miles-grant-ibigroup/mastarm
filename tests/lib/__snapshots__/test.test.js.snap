@@ -2,7 +2,7 @@ exports[`test.js generateTestConfig should generate proper config 1`] = `
 Array [
   "-u",
   "--no-cache",
-  "--config"
+  "--config",
 ]
 `;
 
@@ -13,9 +13,9 @@ Object {
     "lib/**/*.js",
     "bin",
     "src",
-    "another-folder"
+    "another-folder",
   ],
-  "coverageDirectory": "coverage"
+  "coverageDirectory": "coverage",
 }
 `;
 
