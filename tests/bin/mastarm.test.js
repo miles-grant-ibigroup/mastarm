@@ -32,10 +32,8 @@ describe('mastarm cli', () => {
           expect(err).toBeNull()
           expect(stdout).toBe('')
           expect(stderr).toBe('')
-          const expectedBuiltFiles = ['tests/mocks/built.js', 'tests/mocks/built.css']
-          expectedBuiltFiles.forEach((file) => {
-            expect(fs.existsSync(file)).toBeTruthy()
-          })
+          expect(fs.existsSync('tests/mocks/built.js')).toBeTruthy()
+          expect(fs.existsSync('tests/mocks/built.css')).toBeTruthy()
           done()
         }
       )
