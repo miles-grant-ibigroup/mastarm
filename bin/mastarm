@@ -4,7 +4,7 @@ const commander = require('commander')
 const path = require('path')
 
 const loadConfig = require('../lib/load-config')
-const pkg = require('../lib/pkg')
+const util = require('../lib/util')
 
 commander
   .version(require('../package.json').version)
@@ -19,27 +19,33 @@ commander
   .option('-F, --flyle', 'Cache and serve tiles.')
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
   .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
-  .option('-w, --watch', 'Rebuild on changes with watchify.')
+  .option('-w, --watch', 'Automatically rebuild on changes.')
   .action(function (entries, options) {
     checkDependencies()
     const config = loadConfig(process.cwd(), commander.config, commander.env)
-    const get = (item) => val([options, commander, config.settings], item)
-    const files = parseEntries(entries, get)
+    const get = util.makeGetFn([options, commander, config.settings])
+    const files = util.parseEntries(entries, get)
+    if (files.length === 0) {
+      console.log('No entry point found!  Did you spell the filename correctly?')
+      process.exit(1)
+    }
     if (get('serve')) {
       const budo = require('../lib/budo')
-      files.map(budo({
+      budo({
         config,
+        files,
         flyle: get('flyle'),
         proxy: get('proxy')
-      }))
+      })
     } else {
       const build = require('../lib/build')
-      files.map(build({
+      build({
         config,
         env: get('env'),
+        files,
         minify: get('minify'),
         watch: get('watch')
-      }))
+      })
     }
   })
 
@@ -47,7 +53,7 @@ commander
   .command('commit')
   .description('Force intelligent commit messages.')
   .action(function () {
-    popMastarmFromArgv()
+    util.popMastarmFromArgv()
     const path = require('path')
     const bootstrap = require('commitizen/dist/cli/git-cz').bootstrap
     bootstrap({
@@ -67,8 +73,12 @@ commander
     checkDependencies()
     const pushToS3 = require('../lib/push-to-s3')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
-    const get = (item) => val([options, commander, config.settings], item)
-    const files = parseEntries(entries, get)
+    const get = util.makeGetFn([options, commander, config.settings])
+    const files = util.parseEntries(entries, get)
+    if (files.length === 0) {
+      console.log('No file(s) found!  Did you spell the filename correctly?')
+      process.exit(1)
+    }
     files.map(pushToS3({
       cloudfront: get('cloudfront'),
       config,
@@ -164,11 +174,7 @@ commander.parse(process.argv)
 
 function checkDependencies () {
   if (!commander.skipCheckDependencies) {
-    const checkDependenciesSync = require('check-dependencies').sync
-    const results = checkDependenciesSync({
-      install: true,
-      packageDir: process.cwd()
-    })
+    const results = util.updateDependencies()
     if (results.status !== 0) {
       console.error(results.error)
       process.exit(results.status)
@@ -177,35 +183,4 @@ function checkDependencies () {
       process.exit(results.status)
     }
   }
-}
-
-function parseEntries (entries, get) {
-  const files = entries.map((entry) => {
-    entry = entry.split(':')
-    if (entry.length === 1) {
-      entry.push(`assets/${entry[0]}`)
-    }
-    return entry
-  })
-
-  if (files.length === 0) {
-    files.push([
-      get('entry') || pkg.main || 'index.js',
-      get('outfile') || 'assets/index.js'
-    ])
-  }
-
-  return files
-}
-
-/**
- * A lot of subcommands utilize exact argument lengths. Pop mastarm to handle it.
- */
-function popMastarmFromArgv () {
-  process.argv = process.argv.slice(0, 1).concat(process.argv.slice(2))
-}
-
-function val (targets, i) {
-  const ts = targets.filter((t) => t[i] !== undefined)
-  if (ts.length > 0) return ts[0][i]
 }
