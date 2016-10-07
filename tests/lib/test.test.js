@@ -8,7 +8,7 @@ describe('test.js', () => {
       coveragePaths: 'bin src another-folder',
       updateSnapshots: true,
       cache: false,
-      setupFiles: ['beforeTestsSetup.js']
+      setupFiles: 'beforeTestsSetup.js'
     })
     expect(cfg).toBeTruthy()
     expect(cfg.length).toEqual(7)
