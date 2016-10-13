@@ -75,5 +75,8 @@
   "devDependencies": {
     "rimraf": "^2.5.4",
     "semantic-release": "^4.3.5"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }

@@ -89,22 +89,19 @@ commander
   })
 
 commander
-  .command('lint [paths...]')
+  .command('lint')
+  .allowUnknownOption()
   .description('Lint JavaScript [& CSS coming soon!]')
   .action(function () {
     const engine = require('standard-engine')
-    const standard = require('standard')
+    const standardOptions = require('standard/options')
     // get lint out of there
-    process.argv.pop()
+    process.argv = process.argv.filter((arg) => arg !== 'lint')
     // Force verbose
     process.argv.push('--verbose')
-    engine.cli(Object.assign({}, standard, {
-      cwd: process.cwd(),
-      eslintConfig: {
-        parser: 'babel-eslint'
-      },
-      homepage: 'https://github.com/conveyal/mastarm'
-    }))
+    // add babel-eslint parser
+    standardOptions.parser = 'babel-eslint'
+    engine.cli(standardOptions)
   })
 
 commander
