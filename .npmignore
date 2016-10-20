@@ -26,9 +26,7 @@ build/Release
 
 # Dependency directory
 node_modules
-
-# Transpiled files
-/react
+yarn.lock
 
 # Optional npm cache directory
 .npm
@@ -38,3 +36,13 @@ node_modules
 
 # MacOS
 .DS_Store
+
+# tests
+tests
+
+# Continuous Integration
+.travis.yml
+
+# Docs
+README.md
+mastarm.png
