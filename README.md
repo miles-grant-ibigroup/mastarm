@@ -139,12 +139,13 @@ Run tests using Jest
 
 Options:
 
-  -h, --help                output usage information
-  -u, --update-snapshots    Force update of snapshots.  USE WITH CAUTION.
-  --coverage                Run Jest with coverage reporting
-  --no-cache                Run Jest with cache
-  --coverage-paths <paths>  Extra paths to collect code coverage from
-  --setup-files <paths>     Setup files to run before each test
+  -h, --help                              output usage information
+  -u, --update-snapshots                  Force update of snapshots.  USE WITH CAUTION.
+  --coverage                              Run Jest with coverage reporting
+  --no-cache                              Run Jest without cache (defaults to using cache)
+  --coverage-paths <paths>                Extra paths to collect code coverage from
+  --setup-files <paths>                   Setup files to run before each test
+  --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
 
 ```
 
