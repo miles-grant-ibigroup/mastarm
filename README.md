@@ -7,6 +7,18 @@
 
 <p align="center">Conveyal's front-end JavaScript tool-belt. Build, run, lint and deploy front-end code.</p>
 
+## Table of Contents
+
+* [Install](#install)
+* [Configuration](#configuration)
+* [CLI Usage](#cli-usage)
+  * [Build](#build)
+  * [Commit](#commit)
+  * [Deploy](#deploy)
+  * [Lint](#lint)
+  * [Test](#test)
+* [React Utils](#react-utils)
+
 ## Install
 
 With [node v6+ and npm 3+ installed](https://nodejs.org/en/download/current/):
@@ -31,7 +43,7 @@ This file should contain string messages to be used throughout the application. 
 
 Settings contain both Mastarm configuration settings and per environment settings to be used in the application. To override base settings, create an environments section in the `yml` file. [Example in Modeify](https://github.com/conveyal/modeify/blob/master/configurations/example/settings.yml#L40). Each section below will contain the settings that they can use.
 
-## Usage
+## CLI Usage
 
 Not all options pertain to all commands.  Entries are in the format `input/file.js:output/file.js`.
 
@@ -148,6 +160,10 @@ Options:
   --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
 
 ```
+
+## React Utils
+
+Documentation coming soon
 
 [npm-image]: https://img.shields.io/npm/v/mastarm.svg?maxAge=2592000&style=flat-square
 [npm-url]: https://www.npmjs.com/package/mastarm
