@@ -5,6 +5,8 @@ jest.mock('check-dependencies', () => { return { sync: mockSyncFn } })
 jest.mock('../../lib/pkg', () => { return {} })
 
 const util = require('../../lib/util')
+const testUtils = require('../test-utils/util')
+const mockDir = testUtils.mockDir
 
 describe('util.js', () => {
   it('makeGetFn should find the right value', () => {
@@ -14,15 +16,21 @@ describe('util.js', () => {
   describe('parseEntries', () => {
     const get = () => null
     it('should try to find default file paths', () => {
-      expect(util.parseEntries([], get)).toMatchSnapshot()
+      const result = util.parseEntries([], get)
+      expect(result.length).toBe(0)
+      expect(result).toMatchSnapshot()
     })
 
     it('should not find any paths if no matches', () => {
-      expect(util.parseEntries([], get)).toMatchSnapshot()
+      const result = util.parseEntries(['fileDoesNotExist:blah'], get)
+      expect(result.length).toBe(0)
+      expect(result).toMatchSnapshot()
     })
 
     it('should return inputted file paths', () => {
-      expect(util.parseEntries(['tests/mocks/mock.css', 'tests/mocks/mockComponent.js:blah'], get)).toMatchSnapshot()
+      const result = util.parseEntries([`${mockDir}/mock.css`, `${mockDir}/mockComponent.js:blah`], get)
+      expect(result.length).toBe(2)
+      expect(result).toMatchSnapshot()
     })
   })
 
@@ -36,6 +44,7 @@ describe('util.js', () => {
   it('updateDependencies should run check-dependencies package', () => {
     const results = util.updateDependencies()
     expect(mockSyncFn).toBeCalled()
+    expect(results.status).toBe(0)
     expect(results).toMatchSnapshot()
   })
 })
