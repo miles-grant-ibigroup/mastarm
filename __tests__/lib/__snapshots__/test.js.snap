@@ -22,6 +22,10 @@ Object {
   "setupFiles": Array [
     "beforeTestsSetup.js",
   ],
+  "testPathIgnorePatterns": Array [
+    "<rootDir>/node_modules/",
+    "<rootDir>/__tests__/test-utils",
+  ],
 }
 `;
 
