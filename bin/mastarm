@@ -107,13 +107,15 @@ commander
 commander
   .command('prepublish [entries...]')
   .description('Transpile JavaScript down to ES5 with Babel')
-  .action(function (entries) {
+  .action(function (entries, options) {
     checkDependencies()
     const babel = require('babel-core')
     const fs = require('fs')
     const glob = require('glob')
     const mkdirp = require('mkdirp')
     const babelConfig = require('../lib/babel-config')
+    const config = loadConfig(process.cwd(), commander.config, commander.env)
+    const get = util.makeGetFn([options, commander, config.settings])
     const outdir = path.join(process.cwd(), 'build')
     entries.forEach((entry) => {
       if (fs.statSync(entry).isDirectory()) {
@@ -126,7 +128,7 @@ commander
       const filepath = path.join(outdir, filename)
       const results = babel.transform(
         fs.readFileSync(filename, 'utf8'),
-        Object.assign({}, babelConfig, {filename, sourceMaps: true})
+        Object.assign({}, babelConfig(get('env')), {filename, sourceMaps: true})
       )
       mkdirp.sync(path.dirname(filepath))
       fs.writeFileSync(filepath, results.code + '\n//# sourceMappingURL=' + path.basename(filepath))
