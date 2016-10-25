@@ -7,6 +7,25 @@ const testUtils = require('../test-utils/util')
 const mockDir = testUtils.mockDir
 
 describe('util.js', () => {
+  it('configureEnvironment should set process.env vars', () => {
+    const env2 = 'mock-env2'
+    const messages = { hi: 'there' }
+    const settings = { someSetting: true }
+    const store = {}
+    const config = {
+      env: 'mock-env',
+      path: '/made/up/path',
+      messages,
+      settings,
+      store
+    }
+    util.configureEnvironment({ config, env: env2 })
+    expect(process.env.NODE_ENV).toEqual(env2)
+    expect(JSON.parse(process.env.MESSAGES)).toEqual(messages)
+    expect(JSON.parse(process.env.SETTINGS)).toEqual(settings)
+    expect(JSON.parse(process.env.STORE)).toEqual(store)
+  })
+
   it('makeGetFn should find the right value', () => {
     expect(util.makeGetFn([{ a: 1 }, { a: 2 }])('a')).toEqual(1)
   })
