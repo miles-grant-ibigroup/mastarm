@@ -3,11 +3,13 @@ const fs = require('fs')
 
 const build = require('../../lib/build')
 
-const util = require('../util.js')
+const util = require('../test-utils/util.js')
 
 describe('build', () => {
   const buildFilePattern = 'built-build'
   const cleanFn = util.makeCleanBuiltFilesFn(buildFilePattern)
+  const mockDir = util.mockDir
+
   beforeEach(cleanFn)
   afterEach(cleanFn)
 
@@ -15,15 +17,15 @@ describe('build', () => {
     build({
       config: {},
       files: [
-        ['tests/mocks/mockComponent.js', `tests/mocks/${buildFilePattern}.js`],
-        ['tests/mocks/mock.css', `tests/mocks/${buildFilePattern}.css`]
+        [`${mockDir}/mockComponent.js`, `${mockDir}/${buildFilePattern}.js`],
+        [`${mockDir}/mock.css`, `${mockDir}/${buildFilePattern}.css`]
       ]
     })
 
     // css transform happens asynchronously, so wait 1 second before checking for file
     setTimeout(() => {
-      expect(fs.existsSync(`tests/mocks/${buildFilePattern}.js`)).toBeTruthy()
-      expect(fs.existsSync(`tests/mocks/${buildFilePattern}.css`)).toBeTruthy()
+      expect(fs.existsSync(`${mockDir}/${buildFilePattern}.js`)).toBeTruthy()
+      expect(fs.existsSync(`${mockDir}/${buildFilePattern}.css`)).toBeTruthy()
       done()
     }, 1000)
   })

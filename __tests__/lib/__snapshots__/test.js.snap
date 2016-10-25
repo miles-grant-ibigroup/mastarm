@@ -22,7 +22,9 @@ Object {
   "setupFiles": Array [
     "beforeTestsSetup.js",
   ],
+  "testPathIgnorePatterns": Array [
+    "<rootDir>/node_modules/",
+    "<rootDir>/__tests__/test-utils",
+  ],
 }
 `;
-
-exports[`test.js setupTestEnvironment should set MESSAGES environment variable if needed 1`] = `"{\"hi\":\"there\"}"`;
