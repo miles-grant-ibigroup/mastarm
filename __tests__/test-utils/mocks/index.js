@@ -1,6 +1,6 @@
-import {Component} from 'react'
+import uuid from 'uuid'
 
-export default class MockTestComponentUniqueName extends Component {
+export default class MockTestComponentUniqueName {
   static defaultProps = {
     test: 'hi'
   }
@@ -9,3 +9,5 @@ export default class MockTestComponentUniqueName extends Component {
     <div />
   }
 }
+
+uuid.v4()
