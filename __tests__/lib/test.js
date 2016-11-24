@@ -14,8 +14,8 @@ describe('test.js', () => {
     expect(cfg.length).toEqual(7)
     const jestCfg = JSON.parse(cfg.splice(3, 1))
     expect(cfg).toMatchSnapshot()
-    expect(jestCfg.scriptPreprocessor).toContain('lib/jest-preprocessor.js')
-    delete jestCfg.scriptPreprocessor
+    expect(jestCfg.transform['.*']).toContain('lib/jest-preprocessor.js')
+    delete jestCfg.transform
     expect(jestCfg).toMatchSnapshot()
   })
 })
