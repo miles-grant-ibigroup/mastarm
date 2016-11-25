@@ -10,9 +10,9 @@
     "mastarm": "bin/mastarm"
   },
   "scripts": {
-    "cover": "bin/mastarm test --coverage --coverage-paths bin",
+    "cover": "bin/mastarm test --env test --coverage --coverage-paths bin",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "bin/mastarm lint && bin/mastarm test"
+    "test": "bin/mastarm lint && bin/mastarm test --env test"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "babel-eslint": "^7.0.0",
     "babel-jest": "^16.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-env": "^0.0.7",
     "babel-preset-react": "^6.5.0",
