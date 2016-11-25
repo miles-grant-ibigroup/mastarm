@@ -1,6 +1,4 @@
-/* globals describe, expect, it, jest */
-
-jest.mock('../../lib/pkg', () => { return {} })
+/* globals describe, expect, it */
 
 const util = require('../../lib/util')
 const testUtils = require('../test-utils/util')
