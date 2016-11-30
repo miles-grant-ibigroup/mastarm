@@ -12,7 +12,6 @@ commander
   .option('-e, --env <environment>', 'Environment to use.')
   .option('-m, --minify', 'Minify built files.')
   .option('-O, --outdir <dir>', 'Publish directory', '')
-  .option('-S, --skip-check-dependencies', '**DEPRECATED**')
 
 commander
   .command('build [entries...]')
@@ -77,9 +76,10 @@ commander
       minify: get('minify'),
       s3bucket: get('s3bucket')
     }))).then(() => {
-      console.log('Finished pushing to s3')
+      console.log('Finished deploying!')
       process.exit(0)
     }).catch((err) => {
+      console.error('Error while deploying!')
       console.error(err.stack)
       process.exit(1)
     })
