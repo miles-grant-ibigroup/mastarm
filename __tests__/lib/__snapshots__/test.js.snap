@@ -19,6 +19,7 @@ Object {
     "another-folder",
   ],
   "coverageDirectory": "coverage",
+  "notify": true,
   "setupFiles": Array [
     "beforeTestsSetup.js",
   ],
