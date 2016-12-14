@@ -5,10 +5,11 @@ const testUtils = require('../../lib/test')
 describe('test.js', () => {
   it('generateTestConfig should generate proper config', () => {
     const cfg = testUtils.generateTestConfig(['these', 'files', 'only'], {
-      coveragePaths: 'bin src another-folder',
-      updateSnapshots: true,
       cache: false,
-      setupFiles: 'beforeTestsSetup.js'
+      coveragePaths: 'bin src another-folder',
+      setupFiles: 'beforeTestsSetup.js',
+      testEnvironment: 'node',
+      updateSnapshots: true
     })
     expect(cfg).toBeTruthy()
     expect(cfg.length).toEqual(7)
