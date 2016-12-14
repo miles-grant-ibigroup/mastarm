@@ -124,6 +124,7 @@ commander
   .option('--no-cache', 'Run Jest without cache (defaults to using cache)')
   .option('--coverage-paths <paths>', 'Extra paths to collect code coverage from')
   .option('--setup-files <paths>', 'Setup files to run before each test')
+  .option('--test-environment <env>', 'Jest test environment to use (Jest default is jsdom)')
   .option('--test-path-ignore-patterns <patterns>', 'File patterns to ignore when scanning for test files')
   .action(function (patterns, options) {
     const jest = require('jest')
