@@ -130,9 +130,9 @@ commander
     const jest = require('jest')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
-    const testUtils = require('../lib/test')
+    const jestUtils = require('../lib/jest')
     util.configureEnvironment({config, env: get('env')})
-    jest.run(testUtils.generateTestConfig(patterns, options))
+    jest.run(jestUtils.generateTestConfig(patterns, options))
   })
 
 commander.parse(process.argv)
