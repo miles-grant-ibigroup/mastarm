@@ -2,6 +2,7 @@ exports[`test.js generateTestConfig should generate proper config 1`] = `
 Array [
   "-u",
   "--no-cache",
+  "-i",
   "--config",
   "these",
   "files",
