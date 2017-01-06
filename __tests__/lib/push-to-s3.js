@@ -4,8 +4,8 @@ const BUILD_DIR = '__tests__/test-utils/tmp'
 const MOCK_DIR = '__tests__/test-utils/mocks'
 
 describe('lib > push to s3', () => {
-  const configPush = require('../push-to-s3')
-  const loadConfig = require('../load-config')
+  const configPush = require('../../lib/push-to-s3')
+  const loadConfig = require('../../lib/load-config')
 
   it('should compile JavaScript and CSS and send to s3 via aws-sdk', () => {
     const config = loadConfig(process.cwd(), '~/mastarm/configurations/default', 'test')
