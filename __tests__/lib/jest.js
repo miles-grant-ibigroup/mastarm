@@ -1,10 +1,10 @@
 /* globals describe, it, expect */
 
-const testUtils = require('../../lib/test')
+const jestUtils = require('../../lib/jest')
 
 describe('test.js', () => {
   it('generateTestConfig should generate proper config', () => {
-    const cfg = testUtils.generateTestConfig(['these', 'files', 'only'], {
+    const cfg = jestUtils.generateTestConfig(['these', 'files', 'only'], {
       cache: false,
       coveragePaths: 'bin src another-folder',
       setupFiles: 'beforeTestsSetup.js',
