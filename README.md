@@ -162,8 +162,9 @@ Options:
   -h, --help                              output usage information
   -u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
   --coverage                              Run Jest with coverage reporting
-  --no-cache                              Run Jest without cache (defaults to using cache)
   --coverage-paths <paths>                Extra paths to collect code coverage from
+  --no-cache                              Run Jest without cache (defaults to using cache)
+  --run-in-band                           Run all tests serially in the current process
   --setup-files <paths>                   Setup files to run before each test
   --test-environment <env>                Jest test environment to use (Jest default is jsdom)
   --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
