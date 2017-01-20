@@ -111,7 +111,7 @@ commander
     const errors = lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
 
     if (errors.length > 0) {
-      console.log(`${errors.length} errors messages`)
+      console.log(`${errors.length} missing messages`)
       for (const [message, file, line] of errors) {
         console.log(`${file} line ${line}: ${message} is not defined`)
       }
