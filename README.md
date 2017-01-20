@@ -71,6 +71,7 @@ $ mastarm --help
     deploy [entries...] [options]  Bundle & Deploy JavaScript & CSS
     lint [paths...]                Lint JavaScript [& CSS coming soon!]
     test [options]                 Run tests using Jest test runner
+    lint-messages [paths...]       Lint message strings, making sure all messages used in source files are present in messages.yml
 
   Options:
 
@@ -170,6 +171,35 @@ Options:
   --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
 
 ```
+
+### `lint-messages`
+
+This checks to ensure that all of the messages referenced in JS code are defined in the `messages.yml`
+file. It defaults to using the messages in `configurations/default/messages.yml`, however a different
+config can be specified with `--config`. By default it will check the JS files in `lib`, but you can
+also pass in an arbitrary number of paths to directories or files to lint.
+
+`lint-messages` is somewhat opinionated about how messages should be used in code. They should be imported
+from a local module called `messages`, and referred to using dot notation. It will work regardless
+of whether you import the top-level messages object or named children; the following all work:
+
+    import messages from '../utils/messages'
+    import msgs from './messages'
+    import { analysis } from './messages'
+    import msgs, { project as proj } from '../messages'
+    import {analysis, project as proj}, msgs from '../messages'
+
+and permutations thereof. Messages should be referred to directly from these top-level imports, i.e.
+you should not refer to messages like this:
+
+    import messages from './messages'
+    const { analysis, project } = messages
+    return analysis.newScenario
+
+but the following is fine:
+
+    import { analysis } from './messages'
+    return analysis.newScenario
 
 [npm-image]: https://img.shields.io/npm/v/mastarm.svg?maxAge=2592000&style=flat-square
 [npm-url]: https://www.npmjs.com/package/mastarm
