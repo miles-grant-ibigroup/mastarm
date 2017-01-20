@@ -102,11 +102,13 @@ commander
   })
 
 commander
-  .command('messages')
+  .command('lint-messages [paths...]')
   .description('Check that all messages are present')
-  .action(function () {
+  .action(function (paths) {
     const lintMessages = require('../lib/lint-messages').lint
-    lintMessages()
+    const config = loadConfig(process.cwd(), commander.config, commander.env)
+    // default to linting lib
+    lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
   })
 
 commander
