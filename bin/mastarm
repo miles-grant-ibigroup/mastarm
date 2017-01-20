@@ -117,6 +117,8 @@ commander
       }
 
       process.exit(1)
+    } else {
+      console.log('No missing messages found! 💃')
     }
   })
 
