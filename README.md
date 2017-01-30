@@ -16,6 +16,7 @@
   * [Commit](#commit)
   * [Deploy](#deploy)
   * [Lint](#lint)
+  * [Lint Messages](#lint-messages)
   * [Test](#test)
 
 ## Install
@@ -173,6 +174,15 @@ Options:
 ```
 
 ### `lint-messages`
+
+```shell
+$ mastarm lint-messages
+
+Usage: lint-messages [options] [paths...]
+
+Check that all messages used in source code are present in config. Pass in path to source file(s). Set the config with --config.
+
+```
 
 This checks to ensure that all of the messages referenced in JS code are defined in the `messages.yml`
 file. It defaults to using the messages in `configurations/default/messages.yml`, however a different

@@ -103,7 +103,7 @@ commander
 
 commander
   .command('lint-messages [paths...]')
-  .description('Check that all messages are present')
+  .description('Check that all messages used in source code are present in config. Pass in path to source file(s). Set the config with --config.')
   .action(function (paths) {
     const lintMessages = require('../lib/lint-messages').lint
     const config = loadConfig(process.cwd(), commander.config, commander.env)
