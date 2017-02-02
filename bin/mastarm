@@ -102,6 +102,27 @@ commander
   })
 
 commander
+  .command('lint-messages [paths...]')
+  .description('Check that all messages used in source code are present in config. Pass in path to source file(s). Set the config with --config.')
+  .action(function (paths) {
+    const lintMessages = require('../lib/lint-messages').lint
+    const config = loadConfig(process.cwd(), commander.config, commander.env)
+    // default to linting lib
+    const errors = lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
+
+    if (errors.length > 0) {
+      console.log(`${errors.length} missing messages`)
+      for (const [message, file, line] of errors) {
+        console.log(`${file} line ${line}: ${message} is not defined`)
+      }
+
+      process.exit(1)
+    } else {
+      console.log('No missing messages found! 💃')
+    }
+  })
+
+commander
   .command('prepublish [entries...]')
   .description('Transpile JavaScript down to ES5 with Babel')
   .action(function (entries, options) {
