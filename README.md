@@ -16,8 +16,8 @@
   * [Commit](#commit)
   * [Deploy](#deploy)
   * [Lint](#lint)
-  * [Lint Messages](#lint-messages)
   * [Test](#test)
+  * [Lint Messages](#lint-messages)
 
 ## Install
 
