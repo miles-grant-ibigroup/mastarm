@@ -10,7 +10,8 @@
     "flowtype-errors"
   ],
   "rules": {
-    "flowtype-errors/show-errors": 2
+    "flowtype-errors/show-errors": 2,
+    "prefer-const": 1
   },
   "settings": {
     "flowtype": {
