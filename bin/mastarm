@@ -90,15 +90,24 @@ commander
   .allowUnknownOption()
   .description('Lint JavaScript [& CSS coming soon!]')
   .action(function () {
+    const eslint = require('eslint')
     const engine = require('standard-engine')
-    const standardOptions = require('standard/options')
     // get lint out of there
     process.argv = process.argv.filter((arg) => arg !== 'lint')
     // Force verbose
     process.argv.push('--verbose')
-    // add babel-eslint parser
-    standardOptions.parser = 'babel-eslint'
-    engine.cli(standardOptions)
+
+    engine.cli({
+      bugs: 'github.com/conveyal/mastarm/issues',
+      cmd: 'mastarm lint',
+      eslint,
+      eslintConfig: {
+        configFile: path.join(__dirname, '../lib/eslintrc.json')
+      },
+      homepage: 'github.com/conveyal/mastarm',
+      tagline: 'never forget to floss...or lint!',
+      version: require('../package.json').version
+    })
   })
 
 commander
