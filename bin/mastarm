@@ -64,22 +64,38 @@ commander
   .option('--cloudfront', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket', 'S3 Bucket to push to.')
   .action(function (entries, options) {
+    const commit = require('this-commit')()
+    const username = require('username')
+    const createLogger = require('../lib/logger')
+    const pkg = require('../lib/pkg')
     const pushToS3 = require('../lib/push-to-s3')
+
+    const url = pkg.repository.url.replace('.git', '')
+    const tag = `<${url}/commit/${commit}|${pkg.name}>:`
+    const user = username.sync()
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
+    const env = get('env')
     const files = util.parseEntries([...entries, ...(get('entries') || [])])
+    const s3bucket = get('s3bucket')
     util.assertEntriesExist(files)
+    const log = createLogger({channel: config.env.SLACK_CHANNEL, webhook: config.env.SLACK_WEBHOOK})
+
+    log(`${tag} deploy to ${s3bucket} started by <@${user}>`)
+    return
     Promise.all(files.map(pushToS3({
       cloudfront: get('cloudfront'),
       config,
-      env: get('env'),
+      env,
+      log,
       minify: get('minify'),
-      s3bucket: get('s3bucket')
+      s3bucket,
+      tag
     }))).then(() => {
-      console.log('Finished deploying!')
+      log(`${tag} finished deploying to ${s3bucket}`)
       process.exit(0)
     }).catch((err) => {
-      console.error('Error while deploying!')
+      log(`${tag} error while deploying to ${s3bucket}`)
       console.error(err.stack)
       process.exit(1)
     })
