@@ -10,9 +10,10 @@
     "mastarm": "bin/mastarm"
   },
   "scripts": {
-    "cover": "bin/mastarm test --env test --test-environment node --coverage --coverage-paths bin",
+    "cover": "yarn run test -- --coverage --coverage-paths bin",
+    "lint": "bin/mastarm lint",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "bin/mastarm lint && bin/mastarm test --env test --test-environment node"
+    "test": "bin/mastarm test --env test --test-environment node"
   },
   "repository": {
     "type": "git",
