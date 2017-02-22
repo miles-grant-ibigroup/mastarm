@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`util.js parseEntries should return inputted file paths 1`] = `
 Array [
   Array [
