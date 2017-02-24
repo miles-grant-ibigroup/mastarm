@@ -12,6 +12,7 @@ before_install:
 install:
   - yarn
 script:
+  - yarn run lint
   - yarn run cover
   - codecov
 after_success:
