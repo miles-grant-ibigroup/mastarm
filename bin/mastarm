@@ -71,33 +71,42 @@ commander
     const pushToS3 = require('../lib/push-to-s3')
 
     const url = pkg.repository.url.replace('.git', '')
-    const tag = `<${url}/commit/${commit}|${pkg.name}>:`
+    const tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>:`
     const user = username.sync()
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
-    const env = get('env')
-    const files = util.parseEntries([...entries, ...(get('entries') || [])])
-    const s3bucket = get('s3bucket')
-    util.assertEntriesExist(files)
-    const log = createLogger({channel: config.env.SLACK_CHANNEL, webhook: config.env.SLACK_WEBHOOK})
 
-    log(`${tag} deploy to ${s3bucket} started by <@${user}>`)
-    return
-    Promise.all(files.map(pushToS3({
-      cloudfront: get('cloudfront'),
+    const env = get('env')
+    const s3bucket = get('s3bucket')
+
+    const files = util.parseEntries([...entries, ...(get('entries') || [])])
+    util.assertEntriesExist(files)
+
+    const log = createLogger({channel: config.env.SLACK_CHANNEL || '#devops', webhook: config.env.SLACK_WEBHOOK})
+    const minify = get('minify')
+    const cloudfront = get('cloudfront')
+    const push = pushToS3({
+      cloudfront,
       config,
       env,
       log,
-      minify: get('minify'),
+      minify,
       s3bucket,
       tag
-    }))).then(() => {
-      log(`${tag} finished deploying to ${s3bucket}`)
-      process.exit(0)
-    }).catch((err) => {
-      log(`${tag} error while deploying to ${s3bucket}`)
-      console.error(err.stack)
-      process.exit(1)
+    })
+
+    log(
+`:construction: *${tag} deploy started by <@${user}>*
+:cloud: *cloudfront:* ${cloudfront}
+:hash: *commit:* ${commit}
+:seedling: *env:* ${env}
+:compression: *minify:* ${minify}
+:package: *s3bucket:* ${s3bucket}`
+    ).then(() => {
+      Promise
+        .all(files.map(push))
+        .then(() => log(`:rocket: ${tag} deploy finished!!!! :tada: :confetti_ball: :tada:`).then(() => process.exit(0)))
+        .catch((err) => log(`:rotating_light: *error while deploying ${tag} ${err.message || err}* :rotating_light:`).then(() => process.exit(1)))
     })
   })
 
