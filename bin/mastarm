@@ -105,8 +105,12 @@ commander
     ).then(() => {
       Promise
         .all(files.map(push))
-        .then(() => log(`:rocket: ${tag} deploy finished!!!! :tada: :confetti_ball: :tada:`).then(() => process.exit(0)))
-        .catch((err) => log(`:rotating_light: *error while deploying ${tag} ${err.message || err}* :rotating_light:`).then(() => process.exit(1)))
+        .then(() =>
+          log(`:rocket: ${tag} deploy finished!! :tada: :confetti_ball: :tada:`)
+            .then(() => process.exit(0)))
+        .catch((err) =>
+          log(`:rotating_light: *error deploying ${tag} ${err.message || err}*`)
+            .then(() => process.exit(1)))
     })
   })
 
