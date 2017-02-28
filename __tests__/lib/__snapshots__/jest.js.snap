@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`test.js generateTestConfig should generate proper config 1`] = `
 Array [
   "-u",
