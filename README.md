@@ -132,6 +132,15 @@ Options:
 
 ```
 
+#### Slack Notifications
+
+To enable Slack notifications during the deploy process create a [Slack Webhook](https://api.slack.com/incoming-webhooks) and add two entries `SLACK_WEBHOOK` and `SLACK_CHANNEL` to your `env.yml`.
+
+```
+SLACK_CHANNEL: '#devops'
+SLACK_WEBHOOK: https://hooks.slack.com/services/fake-code
+```
+
 ### `lint`
 
 Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).

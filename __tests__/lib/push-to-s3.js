@@ -6,12 +6,14 @@ const MOCK_DIR = '__tests__/test-utils/mocks'
 describe('lib > push to s3', () => {
   const configPush = require('../../lib/push-to-s3')
   const loadConfig = require('../../lib/load-config')
+  const createLogger = require('../../lib/logger')
 
   it('should compile JavaScript and CSS and send to s3 via aws-sdk', () => {
     const config = loadConfig(process.cwd(), '~/mastarm/configurations/default', 'test')
     const push = configPush({
       env: 'test',
       config,
+      log: createLogger(),
       minify: false,
       s3bucket: 'test-bucket'
     })
