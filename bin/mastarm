@@ -109,7 +109,7 @@ commander
           log(`:rocket: ${tag} deploy finished!! :tada: :confetti_ball: :tada:`)
             .then(() => process.exit(0)))
         .catch((err) =>
-          log(`:rotating_light: *error deploying ${tag} ${err.message || err}*`)
+          log(`:rotating_light: *error deploying ${tag} ${err.message}*`)
             .then(() => process.exit(1)))
     })
   })
@@ -163,15 +163,22 @@ commander
 commander
   .command('prepublish [entries...]')
   .description('Transpile JavaScript down to ES5 with Babel')
-  .action(function (entries, options) {
+  .action(function (cliEntries, options) {
     const prepublish = require('../lib/prepublish')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
 
+    const outdir = get('outdir')
+    const entries = util.parseEntries(cliEntries && cliEntries.length > 0
+      ? cliEntries
+      : get('entries') || [],
+      outdir
+    )
+
     prepublish({
-      entries: util.parseEntries([...entries, ...(get('entries') || [])], get('outdir')),
+      entries,
       env: get('env'),
-      outdir: get('outdir')
+      outdir
     })
   })
 
