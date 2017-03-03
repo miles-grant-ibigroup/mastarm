@@ -16,6 +16,7 @@
   * [Commit](#commit)
   * [Deploy](#deploy)
   * [Lint](#lint)
+  * [Prepublish](#prepublish)
   * [Test](#test)
   * [Lint Messages](#lint-messages)
 
@@ -156,6 +157,14 @@ $ mastarm lint "src/util/**/*.js" "test/**/*.js"
 ```
 
 Note: by default standard will look for all files matching the patterns: `"**/*.js"`, `"**/*.jsx"`. Always quote the globs. Needed when used as an `npm` command.
+
+### `prepublish`
+
+Transpile a library using [Babel](http://babeljs.io/) and our custom config. Usually used as a prepublish step for libraries written in ES6+ that will be published to NPM. Pass it a directory and it will look for `.js` files to transpile.
+
+```shell
+$ mastarm prepublish lib:build
+```
 
 ### `test`
 
