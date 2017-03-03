@@ -2178,9 +2178,9 @@ eslint-config-standard-jsx@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/eslint-config-standard-jsx/-/eslint-config-standard-jsx-3.3.0.tgz#cab0801a15a360bf63facb97ab22fbdd88d8a5e0"
 
-eslint-config-standard@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-6.2.1.tgz#d3a68aafc7191639e7ee441e7348739026354292"
+eslint-config-standard@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-7.0.0.tgz#4f161bc65695e4bc61331c55b9eeaca458cd99c6"
 
 eslint-plugin-flowtype-errors@^3.0.0:
   version "3.0.0"

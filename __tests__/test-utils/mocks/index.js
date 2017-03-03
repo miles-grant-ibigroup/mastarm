@@ -6,8 +6,8 @@ export default class MockTestComponentUniqueName {
   }
 
   render () {
-    <div />
+    return <div />
   }
 }
 
-uuid.v4()
+console.log(uuid.v4())
