@@ -7,5 +7,6 @@ Object {
   "messages": Object {},
   "settings": Object {},
   "store": Object {},
+  "style": "",
 }
 `;
