@@ -55,6 +55,10 @@ Settings contain both Mastarm configuration settings and per environment setting
 
 Auto-populate your redux store with this configuration data instead of setting defaults directly in code.
 
+### `style.css`
+
+Add a stylesheet that gets appended at the end of your entry stylesheet. This allows you to override styles for specific deployments and use [custom CSS properties](http://cssnext.io/features/#custom-properties-var).
+
 ## CLI Usage
 
 Not all options pertain to all commands.  Entries are in the format `input/file.js:output/file.js`.
