@@ -57,7 +57,7 @@ Auto-populate your redux store with this configuration data instead of setting d
 
 ### `style.css`
 
-Add a stylesheet that gets appended at the end of your entry stylesheet. This allows you to override styles for specific deployments and use [custom CSS properties](http://cssnext.io/features/#custom-properties-var).
+Add a stylesheet that gets `@import`ed at the beginning of your entry stylesheet. This allows you to override styles for specific deployments and use [custom CSS properties](http://cssnext.io/features/#custom-properties-var). Useful for configuration specific images and colors.
 
 ## CLI Usage
 
