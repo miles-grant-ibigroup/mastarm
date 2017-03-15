@@ -30,7 +30,7 @@ $ npm install -g mastarm
 
 ## Configuration
 
-Mastarm can be pointed to a directory containing configuration files using the `--config` flag. By default, Mastarm looks in the `configurations/default` path of the current working directory. Mastarm looks for four different files: `env.yml`, `settings.yml`, `store.yml`, and `messages.yml`.
+Mastarm can be pointed to a directory containing configuration files using the `--config` flag. It will fall back to files in the `configurations/default` path of the current working directory if one of the files below does not exist in config folder specified.
 
 ### `env.yml`
 
@@ -55,6 +55,10 @@ Settings contain both Mastarm configuration settings and per environment setting
 ### `store.yml`
 
 Auto-populate your redux store with this configuration data instead of setting defaults directly in code.
+
+### `style.css`
+
+Add a stylesheet that gets `@import`ed at the beginning of your entry stylesheet. This allows you to override styles for specific deployments and use [custom CSS properties](http://cssnext.io/features/#custom-properties-var). Useful for configuration specific images and colors.
 
 ## CLI Usage
 
