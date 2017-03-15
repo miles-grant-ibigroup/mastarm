@@ -29,7 +29,7 @@ $ npm install -g mastarm
 
 ## Configuration
 
-Mastarm can be pointed to a directory containing configuration files using the `--config` flag. By default, Mastarm looks in the `configurations/default` path of the current working directory. Mastarm looks for four different files: `env.yml`, `settings.yml`, `store.yml`, and `messages.yml`.
+Mastarm can be pointed to a directory containing configuration files using the `--config` flag. It will fall back to files in the `configurations/default` path of the current working directory if one of the files below does not exist in config folder specified.
 
 ### `env.yml`
 
