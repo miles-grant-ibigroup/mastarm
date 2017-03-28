@@ -40,6 +40,14 @@ commander
     } else {
       const build = require('../lib/build')
       build(opts)
+        .then((results) => {
+          console.log('done building...')
+          process.exit(0)
+        })
+        .catch((err) => {
+          console.error(err)
+          process.exit(1)
+        })
     }
   })
 
