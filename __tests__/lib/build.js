@@ -16,27 +16,23 @@ describe('build', () => {
   })
 
   describe('development', () => {
-    it('should transform js', (done) => {
-      const results = build({
+    it('should transform js', async () => {
+      const [result] = await build({
         config: {},
         files: [[`${mockDir}/index.js`]]
       })
 
-      results[0]
-        .then((buf) => {
-          expect(buf.toString().indexOf('MockTestComponentUniqueName')).to.not.equal(-1)
-          done()
-        })
-        .catch(done)
+      console.log(result)
+
+      expect(result.toString().indexOf('MockTestComponentUniqueName')).not.toBe(-1)
     })
 
     it('should transform css', async () => {
-      const results = build({
+      const [result] = await build({
         config: {},
         files: [[`${mockDir}/index.css`]]
       })
 
-      const result = await results[0]
       const css = result.css
       expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
     })
@@ -44,7 +40,7 @@ describe('build', () => {
 
   describe('production', () => {
     it('should transform and minify js', async () => {
-      const results = build({
+      const output = await build({
         config: {},
         env: 'production',
         files: [
@@ -53,8 +49,6 @@ describe('build', () => {
         ],
         minify: true
       })
-
-      const output = await Promise.all(results)
 
       expect(output[0].toString().indexOf('MockTestComponentUniqueName')).not.toBe(-1)
       expect(output[1].css.indexOf('criticalClass')).not.toBe(-1)
