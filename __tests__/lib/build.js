@@ -1,6 +1,7 @@
 /* globals afterEach, beforeEach, describe, it, expect, jasmine */
 
 const build = require('../../lib/build')
+const loadConfig = require('../../lib/load-config')
 const util = require('../test-utils/util.js')
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
@@ -18,30 +19,31 @@ describe('build', () => {
   describe('development', () => {
     it('should transform js', async () => {
       const [result] = await build({
-        config: {},
+        config: loadConfig(process.cwd(), null, 'development'),
         files: [[`${mockDir}/index.js`]]
       })
 
-      console.log(result)
-
-      expect(result.toString().indexOf('MockTestComponentUniqueName')).not.toBe(-1)
+      const transpiledString = result.toString()
+      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(-1)
+      expect(transpiledString.length).toMatchSnapshot()
     })
 
     it('should transform css', async () => {
       const [result] = await build({
-        config: {},
+        config: loadConfig(process.cwd(), null, 'development'),
         files: [[`${mockDir}/index.css`]]
       })
 
       const css = result.css
       expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
+      expect(css.length).toMatchSnapshot()
     })
   })
 
   describe('production', () => {
-    it('should transform and minify js', async () => {
-      const output = await build({
-        config: {},
+    it('should transform and minify js and css', async () => {
+      const [jsResult, cssResult] = await build({
+        config: loadConfig(process.cwd(), null, 'production'),
         env: 'production',
         files: [
           [`${mockDir}/index.js`],
@@ -49,9 +51,11 @@ describe('build', () => {
         ],
         minify: true
       })
-
-      expect(output[0].toString().indexOf('MockTestComponentUniqueName')).not.toBe(-1)
-      expect(output[1].css.indexOf('criticalClass')).not.toBe(-1)
+      const transpiledString = jsResult.toString()
+      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(-1)
+      expect(cssResult.css.indexOf('criticalClass')).not.toBe(-1)
+      expect(transpiledString.length).toMatchSnapshot()
+      expect(cssResult.css.length).toMatchSnapshot()
     })
   })
 })
