@@ -25,6 +25,7 @@ commander
     const get = util.makeGetFn([options, commander, config.settings])
     const files = util.parseEntries([...entries, ...(get('entries') || [])], get('outdir'))
     util.assertEntriesExist(files)
+    const watch = get('watch')
     const opts = {
       config,
       env: get('env'),
@@ -32,7 +33,7 @@ commander
       flyle: get('flyle'),
       minify: get('minify'),
       proxy: get('proxy'),
-      watch: get('watch')
+      watch
     }
     if (get('serve')) {
       const budo = require('../lib/budo')
@@ -40,6 +41,14 @@ commander
     } else {
       const build = require('../lib/build')
       build(opts)
+        .then((results) => {
+          console.log('done building...')
+          if (!watch) process.exit(0)
+        })
+        .catch((err) => {
+          console.error(err)
+          if (!watch) process.exit(1)
+        })
     }
   })
 

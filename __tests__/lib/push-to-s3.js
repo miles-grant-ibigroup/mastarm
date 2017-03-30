@@ -9,9 +9,9 @@ describe('lib > push to s3', () => {
   const createLogger = require('../../lib/logger')
 
   it('should compile JavaScript and CSS and send to s3 via aws-sdk', () => {
-    const config = loadConfig(process.cwd(), '~/mastarm/configurations/default', 'test')
+    const config = loadConfig(process.cwd(), 'configurations/default', 'development')
     const push = configPush({
-      env: 'test',
+      env: 'development',
       config,
       log: createLogger(),
       minify: false,
