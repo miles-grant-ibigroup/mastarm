@@ -85,7 +85,7 @@ commander
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
 
-    const env = get('env')
+    const env = get('env') || 'development'
     const s3bucket = get('s3bucket')
 
     const files = util.parseEntries([...entries, ...(get('entries') || [])])
