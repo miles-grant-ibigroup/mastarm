@@ -2,8 +2,8 @@
 
 exports[`build development should transform css 1`] = `345`;
 
-exports[`build development should transform js 1`] = `156821`;
+exports[`build development should transform js 1`] = `157929`;
 
-exports[`build production should transform and minify js and css 1`] = `155069`;
+exports[`build production should transform and minify js and css 1`] = `156127`;
 
 exports[`build production should transform and minify js and css 2`] = `345`;
