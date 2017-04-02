@@ -1,7 +1,9 @@
 /* global describe, it */
 
-const BUILD_DIR = '__tests__/test-utils/tmp'
-const MOCK_DIR = '__tests__/test-utils/mocks'
+const path = require('path')
+
+const BUILD_DIR = path.join(process.cwd(), '__tests__/test-utils/tmp')
+const MOCK_DIR = path.join(process.cwd(), '__tests__/test-utils/mocks')
 
 describe('lib > push to s3', () => {
   const configPush = require('../../lib/push-to-s3')
