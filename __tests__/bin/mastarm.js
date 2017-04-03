@@ -40,7 +40,7 @@ describe('mastarm cli', () => {
       exec(`node ${mastarm} build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
-          expect(stdout).toContain('updated css file')
+          expect(stdout).toContain('done building')
           expect(stderr).toBe('')
           expect(fs.existsSync(`${buildDir}/index.js`)).toBeTruthy()
           expect(fs.existsSync(`${buildDir}/index.css`)).toBeTruthy()

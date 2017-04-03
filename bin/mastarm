@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 const commander = require('commander')
-const logger = require('../lib/logger')
+const fs = require('fs')
 const path = require('path')
 
 const loadConfig = require('../lib/load-config')
+const logger = require('../lib/logger')
 const util = require('../lib/util')
 
 commander
@@ -76,53 +77,69 @@ commander
   .action(function (entries, options) {
     const commit = require('this-commit')()
     const username = require('username')
+
+    const build = require('../lib/build')
     const pkg = require('../lib/pkg')
-    const pushToS3 = require('../lib/push-to-s3')
+    const createPushToS3 = require('../lib/push-to-s3')
 
     const url = pkg.repository.url.replace('.git', '')
-    const tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>:`
-    const user = username.sync()
+    const tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>`
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
 
-    const env = get('env') || 'development'
-    const s3bucket = get('s3bucket')
+    if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
+      logger.logToSlack({
+        channel: config.env.SLACK_CHANNEL || '#devops',
+        webhook: config.env.SLACK_WEBHOOK
+      })
+    }
 
     const files = util.parseEntries([...entries, ...(get('entries') || [])])
     util.assertEntriesExist(files)
+    const sourceFiles = files.map((f) => f[0])
+    const outfiles = [
+      ...files.map((f) => f[1]),
+      ...files.map((f) => `${f[1]}.map`)
+    ]
 
-    if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
-      logger.logToSlack({channel: config.env.SLACK_CHANNEL || '#devops', webhook: config.env.SLACK_WEBHOOK})
-    }
-
+    const env = get('env') || 'development'
     const minify = get('minify')
-    const cloudfront = get('cloudfront')
-    const push = pushToS3({
-      cloudfront,
+    const buildOpts = {
       config,
       env,
-      minify,
-      s3bucket,
-      tag
+      files,
+      minify
+    }
+    const cloudfront = get('cloudfront')
+    const s3bucket = get('s3bucket')
+
+    const pushToS3 = createPushToS3({
+      cloudfront,
+      s3bucket
     })
 
     logger.log(
-`:construction: *${tag} deploy started by <@${user}>*
+`:construction: *deploying: ${tag} by <@${username.sync()}>*
 :cloud: *cloudfront:* ${cloudfront}
 :hash: *commit:* ${commit}
 :seedling: *env:* ${env}
 :compression: *minify:* ${minify}
-:package: *s3bucket:* ${s3bucket}`
-    ).then(() => {
-      Promise
-        .all(files.map(push))
+:package: *s3bucket:* ${s3bucket}
+:hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`
+    ).then(() =>
+      build(buildOpts)
         .then(() =>
-          logger.log(`:rocket: ${tag} deploy finished!! :tada: :confetti_ball: :tada:`)
+          logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`))
+        .then(() =>
+          Promise.all(outfiles.map((outfile) =>
+            readFile(outfile).then((body) =>
+              pushToS3({body, outfile})))))
+        .then(() =>
+          logger.log(`:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`)
             .then(() => process.exit(0)))
         .catch((err) =>
-          logger.log(`:rotating_light: *error deploying ${tag} ${err.message}*`)
-            .then(() => process.exit(1)))
-    })
+          logger.log(`:rotating_light: *${tag} error deploying ${tag} ${err.message || err}*`)
+            .then(() => process.exit(1))))
   })
 
 commander
@@ -214,3 +231,9 @@ commander
   })
 
 commander.parse(process.argv)
+
+const readFile = (f) =>
+  new Promise((resolve, reject) =>
+    fs.readFile(f, (err, data) => err
+      ? reject(err)
+      : resolve(data)))
