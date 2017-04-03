@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const commander = require('commander')
+const logger = require('../lib/logger')
 const path = require('path')
 
 const loadConfig = require('../lib/load-config')
@@ -42,11 +43,11 @@ commander
       const build = require('../lib/build')
       build(opts)
         .then((results) => {
-          console.log('done building...')
+          logger.log('done building...')
           if (!watch) process.exit(0)
         })
         .catch((err) => {
-          console.error(err)
+          logger.error(err)
           if (!watch) process.exit(1)
         })
     }
@@ -75,7 +76,6 @@ commander
   .action(function (entries, options) {
     const commit = require('this-commit')()
     const username = require('username')
-    const createLogger = require('../lib/logger')
     const pkg = require('../lib/pkg')
     const pushToS3 = require('../lib/push-to-s3')
 
@@ -91,20 +91,22 @@ commander
     const files = util.parseEntries([...entries, ...(get('entries') || [])])
     util.assertEntriesExist(files)
 
-    const log = createLogger({channel: config.env.SLACK_CHANNEL || '#devops', webhook: config.env.SLACK_WEBHOOK})
+    if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
+      logger.logToSlack({channel: config.env.SLACK_CHANNEL || '#devops', webhook: config.env.SLACK_WEBHOOK})
+    }
+
     const minify = get('minify')
     const cloudfront = get('cloudfront')
     const push = pushToS3({
       cloudfront,
       config,
       env,
-      log,
       minify,
       s3bucket,
       tag
     })
 
-    log(
+    logger.log(
 `:construction: *${tag} deploy started by <@${user}>*
 :cloud: *cloudfront:* ${cloudfront}
 :hash: *commit:* ${commit}
@@ -115,10 +117,10 @@ commander
       Promise
         .all(files.map(push))
         .then(() =>
-          log(`:rocket: ${tag} deploy finished!! :tada: :confetti_ball: :tada:`)
+          logger.log(`:rocket: ${tag} deploy finished!! :tada: :confetti_ball: :tada:`)
             .then(() => process.exit(0)))
         .catch((err) =>
-          log(`:rotating_light: *error deploying ${tag} ${err.message}*`)
+          logger.log(`:rotating_light: *error deploying ${tag} ${err.message}*`)
             .then(() => process.exit(1)))
     })
   })
@@ -158,14 +160,14 @@ commander
     const errors = lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
 
     if (errors.length > 0) {
-      console.log(`${errors.length} missing messages`)
+      logger.error(`${errors.length} missing messages`)
       for (const [message, file, line] of errors) {
-        console.log(`${file} line ${line}: ${message} is not defined`)
+        logger.error(`${file} line ${line}: ${message} is not defined`)
       }
 
       process.exit(1)
     } else {
-      console.log('No missing messages found! 💃')
+      logger.log('No missing messages found! 💃')
     }
   })
 
