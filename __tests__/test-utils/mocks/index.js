@@ -6,7 +6,7 @@ export default class MockTestComponentUniqueName {
     test: 'hi'
   }
 
-  render () {
+  render() {
     return <div />
   }
 }

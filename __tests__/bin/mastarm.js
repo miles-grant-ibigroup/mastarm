@@ -20,7 +20,7 @@ describe('mastarm cli', () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout
   })
 
-  it('should display usage with no args', (done) => {
+  it('should display usage with no args', done => {
     exec(`node ${mastarm} --help`, (err, stdout, stderr) => {
       expect(err).toBeNull()
       expect(stdout).toContain('Usage: mastarm [options] [command]')
@@ -29,15 +29,16 @@ describe('mastarm cli', () => {
     })
   })
 
-  describe('build', function () {
+  describe('build', function() {
     const buildDir = util.buildDir
     const mockDir = util.mockDir
 
-    beforeEach((done) => mkdirp(buildDir, done))
-    afterEach((done) => rimraf(buildDir, done))
+    beforeEach(done => mkdirp(buildDir, done))
+    afterEach(done => rimraf(buildDir, done))
 
-    it('should build a project', (done) => {
-      exec(`node ${mastarm} build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
+    it('should build a project', done => {
+      exec(
+        `node ${mastarm} build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toContain('done building')
@@ -50,15 +51,16 @@ describe('mastarm cli', () => {
     })
   })
 
-  describe('prepublish', function () {
+  describe('prepublish', function() {
     const buildDir = util.buildDir
     const mockDir = util.mockDir
 
-    beforeEach((done) => mkdirp(buildDir, done))
-    afterEach((done) => rimraf(buildDir, done))
+    beforeEach(done => mkdirp(buildDir, done))
+    afterEach(done => rimraf(buildDir, done))
 
-    it('should prepublish a project', (done) => {
-      exec(`node ${mastarm} prepublish ${mockDir}:${buildDir}`,
+    it('should prepublish a project', done => {
+      exec(
+        `node ${mastarm} prepublish ${mockDir}:${buildDir}`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toBe('')
@@ -70,7 +72,7 @@ describe('mastarm cli', () => {
     })
   })
 
-  it('should run lint on a project', (done) => {
+  it('should run lint on a project', done => {
     exec(`node ${mastarm} lint`, (err, stdout, stderr) => {
       expect(err).toBeNull()
       expect(stdout).toBe('')

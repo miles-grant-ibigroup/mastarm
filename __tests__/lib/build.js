@@ -24,7 +24,9 @@ describe('build', () => {
       })
 
       const transpiledString = result.toString()
-      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(-1)
+      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
+        -1
+      )
       expect(transpiledString.length).toMatchSnapshot()
     })
 
@@ -45,14 +47,13 @@ describe('build', () => {
       const [jsResult, cssResult] = await build({
         config: loadConfig(process.cwd(), null, 'production'),
         env: 'production',
-        files: [
-          [`${mockDir}/index.js`],
-          [`${mockDir}/index.css`]
-        ],
+        files: [[`${mockDir}/index.js`], [`${mockDir}/index.css`]],
         minify: true
       })
       const transpiledString = jsResult.toString()
-      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(-1)
+      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
+        -1
+      )
       expect(cssResult.css.indexOf('criticalClass')).not.toBe(-1)
       expect(transpiledString.length).toMatchSnapshot()
       expect(cssResult.css.length).toMatchSnapshot()
