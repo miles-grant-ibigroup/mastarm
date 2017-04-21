@@ -166,25 +166,8 @@ commander
   })
 
 commander.command('format').description('Format JavaScript').action(function() {
-  process.argv.splice(
-    2,
-    1,
-    '--no-semi',
-    '--no-bracket-spacing',
-    '--single-quote',
-    '--write'
-  )
-  if (process.argv.length === 6) {
-    process.argv.push(
-      '__mocks__/**/*.js',
-      '__tests__/**/*.js',
-      'bin/*',
-      'lib/**/*.js',
-      'src/**/*.js',
-      '*.js'
-    )
-  }
-  require('prettier/bin/prettier.js')
+  const format = require('../lib/format')
+  format(process.argv.slice(3))
 })
 
 commander
