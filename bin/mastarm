@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 const commander = require('commander')
-const fs = require('fs')
 const path = require('path')
 
+const {readFile} = require('../lib/fs-promise')
 const loadConfig = require('../lib/load-config')
 const logger = require('../lib/logger')
 const util = require('../lib/util')
@@ -204,21 +204,23 @@ commander
     const lintMessages = require('../lib/lint-messages').lint
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     // default to linting lib
-    const errors = lintMessages(
-      paths.length > 0 ? paths : ['lib'],
-      config.messages
-    )
+    lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
+      .then(errors => {
+        errors = [].concat(...errors)
+        if (errors.length > 0) {
+          logger.error(`${errors.length} missing messages`)
+          for (const [message, file, line] of errors) {
+            logger.error(`${file} line ${line}: ${message} is not defined`)
+          }
 
-    if (errors.length > 0) {
-      logger.error(`${errors.length} missing messages`)
-      for (const [message, file, line] of errors) {
-        logger.error(`${file} line ${line}: ${message} is not defined`)
-      }
-
-      process.exit(1)
-    } else {
-      logger.log('No missing messages found! 💃')
-    }
+          process.exit(1)
+        } else {
+          logger.log('No missing messages found! 💃')
+        }
+      })
+      .catch(err => {
+        throw err
+      })
   })
 
 commander
@@ -275,8 +277,3 @@ commander
   })
 
 commander.parse(process.argv)
-
-const readFile = f =>
-  new Promise((resolve, reject) =>
-    fs.readFile(f, (err, data) => (err ? reject(err) : resolve(data)))
-  )
