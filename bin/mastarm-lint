@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+const eslint = require('eslint')
+const path = require('path')
+const engine = require('standard-engine')
+
+const mastarmVersion = require('../package.json').version
+
+// get lint out of there
+process.argv = process.argv.filter(arg => arg !== 'lint')
+// Force verbose
+process.argv.push('--verbose')
+
+engine.cli({
+  bugs: 'github.com/conveyal/mastarm/issues',
+  cmd: 'mastarm lint',
+  eslint,
+  eslintConfig: {
+    configFile: path.join(__dirname, '../lib/eslintrc.json')
+  },
+  homepage: 'github.com/conveyal/mastarm',
+  tagline: 'never forget to floss...or lint!',
+  version: mastarmVersion
+})

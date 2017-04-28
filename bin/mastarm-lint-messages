@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+const commander = require('commander')
+
+const lintMessages = require('../lib/lint-messages').lint
+const loadConfig = require('../lib/load-config')
+const logger = require('../lib/logger')
+
+commander.parse(process.argv)
+
+const config = loadConfig(process.cwd(), commander.config, commander.env)
+const paths = commander.args
+
+// default to linting lib
+lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
+  .then(errors => {
+    errors = [].concat(...errors)
+    if (errors.length > 0) {
+      logger.error(`${errors.length} missing messages`)
+      for (const [message, file, line] of errors) {
+        logger.error(`${file} line ${line}: ${message} is not defined`)
+      }
+
+      process.exit(1)
+    } else {
+      logger.log('No missing messages found! 💃')
+    }
+  })
+  .catch(err => {
+    throw err
+  })
