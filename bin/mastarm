@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 const commander = require('commander')
-const fs = require('fs')
 const path = require('path')
 
+const {readFile} = require('../lib/fs-promise')
 const loadConfig = require('../lib/load-config')
 const logger = require('../lib/logger')
 const util = require('../lib/util')
@@ -28,7 +28,7 @@ commander
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
   .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
   .option('-w, --watch', 'Automatically rebuild on changes.')
-  .action(function(entries, options) {
+  .action(function (entries, options) {
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
     const files = util.parseEntries(
@@ -66,7 +66,7 @@ commander
 commander
   .command('commit')
   .description('Force intelligent commit messages.')
-  .action(function() {
+  .action(function () {
     util.popMastarmFromArgv()
     const path = require('path')
     const bootstrap = require('commitizen/dist/cli/git-cz').bootstrap
@@ -83,7 +83,7 @@ commander
   .description('Bundle & Deploy JavaScript & CSS')
   .option('--cloudfront', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket', 'S3 Bucket to push to.')
-  .action(function(entries, options) {
+  .action(function (entries, options) {
     const commit = require('this-commit')()
     const username = require('username')
 
@@ -166,33 +166,16 @@ commander
       )
   })
 
-commander.command('format').description('Format JavaScript').action(function() {
-  process.argv.splice(
-    2,
-    1,
-    '--no-semi',
-    '--no-bracket-spacing',
-    '--single-quote',
-    '--write'
-  )
-  if (process.argv.length === 6) {
-    process.argv.push(
-      '__mocks__/**/*.js',
-      '__tests__/**/*.js',
-      'bin/*',
-      'lib/**/*.js',
-      'src/**/*.js',
-      '*.js'
-    )
-  }
-  require('prettier/bin/prettier.js')
+commander.command('format').description('Format JavaScript').action(function () {
+  const format = require('../lib/format')
+  format(process.argv.slice(3))
 })
 
 commander
   .command('lint')
   .allowUnknownOption()
   .description('Lint JavaScript [& CSS coming soon!]')
-  .action(function() {
+  .action(function () {
     const eslint = require('eslint')
     const engine = require('standard-engine')
     // get lint out of there
@@ -218,31 +201,33 @@ commander
   .description(
     'Check that all messages used in source code are present in config. Pass in path to source file(s). Set the config with --config.'
   )
-  .action(function(paths) {
+  .action(function (paths) {
     const lintMessages = require('../lib/lint-messages').lint
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     // default to linting lib
-    const errors = lintMessages(
-      paths.length > 0 ? paths : ['lib'],
-      config.messages
-    )
+    lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
+      .then(errors => {
+        errors = [].concat(...errors)
+        if (errors.length > 0) {
+          logger.error(`${errors.length} missing messages`)
+          for (const [message, file, line] of errors) {
+            logger.error(`${file} line ${line}: ${message} is not defined`)
+          }
 
-    if (errors.length > 0) {
-      logger.error(`${errors.length} missing messages`)
-      for (const [message, file, line] of errors) {
-        logger.error(`${file} line ${line}: ${message} is not defined`)
-      }
-
-      process.exit(1)
-    } else {
-      logger.log('No missing messages found! 💃')
-    }
+          process.exit(1)
+        } else {
+          logger.log('No missing messages found! 💃')
+        }
+      })
+      .catch(err => {
+        throw err
+      })
   })
 
 commander
   .command('prepublish [entries...]')
   .description('Transpile JavaScript down to ES5 with Babel')
-  .action(function(cliEntries, options) {
+  .action(function (cliEntries, options) {
     const prepublish = require('../lib/prepublish')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
@@ -283,7 +268,7 @@ commander
     '--test-path-ignore-patterns <patterns>',
     'File patterns to ignore when scanning for test files'
   )
-  .action(function(patterns, options) {
+  .action(function (patterns, options) {
     const jest = require('jest')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
@@ -293,8 +278,3 @@ commander
   })
 
 commander.parse(process.argv)
-
-const readFile = f =>
-  new Promise((resolve, reject) =>
-    fs.readFile(f, (err, data) => (err ? reject(err) : resolve(data)))
-  )

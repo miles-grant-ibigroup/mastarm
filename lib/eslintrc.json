@@ -1,4 +1,9 @@
 {
+  "env": {
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
   "extends": [
     "standard",
     "standard-jsx",
@@ -8,16 +13,13 @@
   "parser": "babel-eslint",
   "plugins": [
     "flowtype",
-    "flowtype-errors",
     "jsx-a11y"
   ],
   "rules": {
-    "flowtype-errors/show-errors": 2,
     "prefer-const": ["warn", {
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
-    }],
-    "space-before-function-paren": "off"
+    }]
   },
   "settings": {
     "flowtype": {

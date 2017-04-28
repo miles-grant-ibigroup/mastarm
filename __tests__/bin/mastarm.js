@@ -29,7 +29,7 @@ describe('mastarm cli', () => {
     })
   })
 
-  describe('build', function() {
+  describe('build', function () {
     const buildDir = util.buildDir
     const mockDir = util.mockDir
 
@@ -51,7 +51,7 @@ describe('mastarm cli', () => {
     })
   })
 
-  describe('prepublish', function() {
+  describe('prepublish', function () {
     const buildDir = util.buildDir
     const mockDir = util.mockDir
 
