@@ -11,6 +11,7 @@ const mastarmVersion = require('../package.json').version
 
 commander
   .version(mastarmVersion)
+  .command('flow [COMMAND]', 'Run flow on the current directory.')
   .option(
     '-c, --config <path>',
     'Path to configuration files.',

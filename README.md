@@ -15,6 +15,7 @@
   * [Build](#build)
   * [Commit](#commit)
   * [Deploy](#deploy)
+  * [Flow](#flow)
   * [Format](#format)
   * [Lint](#lint)
   * [Prepublish](#prepublish)
@@ -146,6 +147,10 @@ To enable Slack notifications during the deploy process create a [Slack Webhook]
 SLACK_CHANNEL: '#devops'
 SLACK_WEBHOOK: https://hooks.slack.com/services/fake-code
 ```
+
+### `flow`
+
+Run [Flow](https://flow.org/). Must have a `.flowconfig` in the current working directory and a `// @flow` annotation at the top of each file you want to check. See the Flow website for documentation.
 
 ### `format`
 
