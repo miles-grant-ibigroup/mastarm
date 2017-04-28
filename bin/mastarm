@@ -30,5 +30,4 @@ commander
   .option('-e, --env <environment>', 'Environment to use.')
   .option('-m, --minify', 'Minify built files.')
   .option('-O, --outdir <dir>', 'Publish directory', '')
-
-commander.parse(process.argv)
+  .parse(process.argv)
