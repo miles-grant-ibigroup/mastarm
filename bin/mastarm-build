@@ -11,7 +11,7 @@ const util = require('../lib/util')
 commander
   .option('-F, --flyle', 'Cache and serve tiles.')
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
-  .option('-s, --serve', 'Serve with budo. Auto-matically rebuilds on changes.')
+  .option('-s, --serve', 'Serve with budo. Automatically rebuilds on changes.')
   .option('-w, --watch', 'Automatically rebuild on changes.')
   .parse(process.argv)
 
