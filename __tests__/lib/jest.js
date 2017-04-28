@@ -15,7 +15,9 @@ describe('test.js', () => {
       updateSnapshots: true
     })
     cfg[JEST_CONFIG_INDEX] = JSON.parse(cfg[JEST_CONFIG_INDEX])
-    expect(cfg[JEST_CONFIG_INDEX].transform['.*']).toContain('lib/jest-preprocessor.js')
+    expect(cfg[JEST_CONFIG_INDEX].transform['.*']).toContain(
+      'lib/jest-preprocessor.js'
+    )
     delete cfg[JEST_CONFIG_INDEX].transform
     expect(cfg).toMatchSnapshot()
   })

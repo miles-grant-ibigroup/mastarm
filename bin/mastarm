@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 const commander = require('commander')
-const fs = require('fs')
 const path = require('path')
 
+const {readFile} = require('../lib/fs-promise')
 const loadConfig = require('../lib/load-config')
 const logger = require('../lib/logger')
 const util = require('../lib/util')
@@ -11,7 +11,11 @@ const mastarmVersion = require('../package.json').version
 
 commander
   .version(mastarmVersion)
-  .option('-c, --config <path>', 'Path to configuration files.', path.join(process.cwd(), '/configurations/default'))
+  .option(
+    '-c, --config <path>',
+    'Path to configuration files.',
+    path.join(process.cwd(), '/configurations/default')
+  )
   .option('-e, --env <environment>', 'Environment to use.')
   .option('-m, --minify', 'Minify built files.')
   .option('-O, --outdir <dir>', 'Publish directory', '')
@@ -26,7 +30,10 @@ commander
   .action(function (entries, options) {
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     const get = util.makeGetFn([options, commander, config.settings])
-    const files = util.parseEntries([...entries, ...(get('entries') || [])], get('outdir'))
+    const files = util.parseEntries(
+      [...entries, ...(get('entries') || [])],
+      get('outdir')
+    )
     util.assertEntriesExist(files)
     const watch = get('watch')
     const opts = {
@@ -44,11 +51,11 @@ commander
     } else {
       const build = require('../lib/build')
       build(opts)
-        .then((results) => {
+        .then(results => {
           logger.log('done building...')
           if (!watch) process.exit(0)
         })
-        .catch((err) => {
+        .catch(err => {
           logger.error(err)
           if (!watch) process.exit(1)
         })
@@ -97,11 +104,8 @@ commander
 
     const files = util.parseEntries([...entries, ...(get('entries') || [])])
     util.assertEntriesExist(files)
-    const sourceFiles = files.map((f) => f[0])
-    const outfiles = [
-      ...files.map((f) => f[1]),
-      ...files.map((f) => `${f[1]}.map`)
-    ]
+    const sourceFiles = files.map(f => f[0])
+    const outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
 
     const env = get('env') || 'development'
     const minify = get('minify')
@@ -119,8 +123,9 @@ commander
       s3bucket
     })
 
-    logger.log(
-`:construction: *deploying: ${tag} by <@${username.sync()}>*
+    logger
+      .log(
+        `:construction: *deploying: ${tag} by <@${username.sync()}>*
 :vertical_traffic_light: *mastarm:* v${mastarmVersion}
 :cloud: *cloudfront:* ${cloudfront}
 :hash: *commit:* ${commit}
@@ -128,21 +133,42 @@ commander
 :compression: *minify:* ${minify}
 :package: *s3bucket:* ${s3bucket}
 :hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`
-    ).then(() =>
-      build(buildOpts)
-        .then(() =>
-          logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`))
-        .then(() =>
-          Promise.all(outfiles.map((outfile) =>
-            readFile(outfile).then((body) =>
-              pushToS3({body, outfile})))))
-        .then(() =>
-          logger.log(`:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`)
-            .then(() => process.exit(0)))
-        .catch((err) =>
-          logger.log(`:rotating_light: *${tag} error deploying ${tag} ${err.message || err}*`)
-            .then(() => process.exit(1))))
+      )
+      .then(() =>
+        build(buildOpts)
+          .then(() =>
+            logger.log(
+              `:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`
+            )
+          )
+          .then(() =>
+            Promise.all(
+              outfiles.map(outfile =>
+                readFile(outfile).then(body => pushToS3({body, outfile}))
+              )
+            )
+          )
+          .then(() =>
+            logger
+              .log(
+                `:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`
+              )
+              .then(() => process.exit(0))
+          )
+          .catch(err =>
+            logger
+              .log(
+                `:rotating_light: *${tag} error deploying ${tag} ${err.message || err}*`
+              )
+              .then(() => process.exit(1))
+          )
+      )
   })
+
+commander.command('format').description('Format JavaScript').action(function () {
+  const format = require('../lib/format')
+  format(process.argv.slice(3))
+})
 
 commander
   .command('lint')
@@ -152,7 +178,7 @@ commander
     const eslint = require('eslint')
     const engine = require('standard-engine')
     // get lint out of there
-    process.argv = process.argv.filter((arg) => arg !== 'lint')
+    process.argv = process.argv.filter(arg => arg !== 'lint')
     // Force verbose
     process.argv.push('--verbose')
 
@@ -171,23 +197,30 @@ commander
 
 commander
   .command('lint-messages [paths...]')
-  .description('Check that all messages used in source code are present in config. Pass in path to source file(s). Set the config with --config.')
+  .description(
+    'Check that all messages used in source code are present in config. Pass in path to source file(s). Set the config with --config.'
+  )
   .action(function (paths) {
     const lintMessages = require('../lib/lint-messages').lint
     const config = loadConfig(process.cwd(), commander.config, commander.env)
     // default to linting lib
-    const errors = lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
+    lintMessages(paths.length > 0 ? paths : ['lib'], config.messages)
+      .then(errors => {
+        errors = [].concat(...errors)
+        if (errors.length > 0) {
+          logger.error(`${errors.length} missing messages`)
+          for (const [message, file, line] of errors) {
+            logger.error(`${file} line ${line}: ${message} is not defined`)
+          }
 
-    if (errors.length > 0) {
-      logger.error(`${errors.length} missing messages`)
-      for (const [message, file, line] of errors) {
-        logger.error(`${file} line ${line}: ${message} is not defined`)
-      }
-
-      process.exit(1)
-    } else {
-      logger.log('No missing messages found! 💃')
-    }
+          process.exit(1)
+        } else {
+          logger.log('No missing messages found! 💃')
+        }
+      })
+      .catch(err => {
+        throw err
+      })
   })
 
 commander
@@ -199,9 +232,8 @@ commander
     const get = util.makeGetFn([options, commander, config.settings])
 
     const outdir = get('outdir')
-    const entries = util.parseEntries(cliEntries && cliEntries.length > 0
-      ? cliEntries
-      : get('entries') || [],
+    const entries = util.parseEntries(
+      cliEntries && cliEntries.length > 0 ? cliEntries : get('entries') || [],
       outdir
     )
 
@@ -215,14 +247,26 @@ commander
 commander
   .command('test [patterns...]')
   .description('Run tests using Jest')
-  .option('-u, --update-snapshots', 'Force update of snapshots. USE WITH CAUTION.')
+  .option(
+    '-u, --update-snapshots',
+    'Force update of snapshots. USE WITH CAUTION.'
+  )
   .option('--coverage', 'Run Jest with coverage reporting')
-  .option('--coverage-paths <paths>', 'Extra paths to collect code coverage from')
+  .option(
+    '--coverage-paths <paths>',
+    'Extra paths to collect code coverage from'
+  )
   .option('--no-cache', 'Run Jest without cache (defaults to using cache)')
   .option('--run-in-band', 'Run all tests serially in the current process')
   .option('--setup-files <paths>', 'Setup files to run before each test')
-  .option('--test-environment <env>', 'Jest test environment to use (Jest default is jsdom)')
-  .option('--test-path-ignore-patterns <patterns>', 'File patterns to ignore when scanning for test files')
+  .option(
+    '--test-environment <env>',
+    'Jest test environment to use (Jest default is jsdom)'
+  )
+  .option(
+    '--test-path-ignore-patterns <patterns>',
+    'File patterns to ignore when scanning for test files'
+  )
   .action(function (patterns, options) {
     const jest = require('jest')
     const config = loadConfig(process.cwd(), commander.config, commander.env)
@@ -233,9 +277,3 @@ commander
   })
 
 commander.parse(process.argv)
-
-const readFile = (f) =>
-  new Promise((resolve, reject) =>
-    fs.readFile(f, (err, data) => err
-      ? reject(err)
-      : resolve(data)))

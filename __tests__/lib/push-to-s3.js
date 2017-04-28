@@ -16,7 +16,11 @@ describe('lib > push to s3', () => {
   const loadConfig = require('../../lib/load-config')
 
   it('should compile JavaScript and CSS and send to s3 via aws-sdk', () => {
-    const config = loadConfig(process.cwd(), 'configurations/default', 'development')
+    const config = loadConfig(
+      process.cwd(),
+      'configurations/default',
+      'development'
+    )
     const push = createPushToS3({
       env: 'development',
       config,
@@ -28,7 +32,9 @@ describe('lib > push to s3', () => {
       env: 'development',
       files
     }).then(() =>
-      Promise.all(files.map((f) =>
-        push({body: fs.readFileSync(f[0]), outfile: f[0]}))))
+      Promise.all(
+        files.map(f => push({body: fs.readFileSync(f[0]), outfile: f[0]}))
+      )
+    )
   })
 })

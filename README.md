@@ -15,6 +15,7 @@
   * [Build](#build)
   * [Commit](#commit)
   * [Deploy](#deploy)
+  * [Format](#format)
   * [Lint](#lint)
   * [Prepublish](#prepublish)
   * [Test](#test)
@@ -144,6 +145,20 @@ To enable Slack notifications during the deploy process create a [Slack Webhook]
 ```
 SLACK_CHANNEL: '#devops'
 SLACK_WEBHOOK: https://hooks.slack.com/services/fake-code
+```
+
+### `format`
+
+Format JavaScript code using [Prettier](https://github.com/prettier/prettier). By default it globs all JavaScript files from the current directory and `__mocks__`, `__tests__`, `bin`, `lib`, and `src`. If you pass files in it directly it will just use those.
+
+```shell
+$ mastarm format
+```
+
+To format one file:
+
+```shell
+$ mastarm format index.js
 ```
 
 ### `lint`
