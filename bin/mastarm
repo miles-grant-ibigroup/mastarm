@@ -13,8 +13,14 @@ commander
   .command('flow [command]', 'Run flow on the current directory.')
   .command('format [entries...]', 'Format JavaScript')
   .command('lint', 'Lint JavaScript')
-  .command('lint-messages [paths...]', 'Check existence of messages used in source code.')
-  .command('prepublish [entries...]', 'Transpile JavaScript down to ES5 with Babel')
+  .command(
+    'lint-messages [paths...]',
+    'Check existence of messages used in source code.'
+  )
+  .command(
+    'prepublish [entries...]',
+    'Transpile JavaScript down to ES5 with Babel'
+  )
   .command('test [patterns...]', 'Run tests using Jest')
   .option(
     '-c, --config <path>',

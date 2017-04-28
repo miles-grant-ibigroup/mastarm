@@ -52,7 +52,8 @@ const pushToS3 = createPushToS3({
 })
 
 logger
-  .log(`:construction: *deploying: ${tag} by <@${username.sync()}>*
+  .log(
+    `:construction: *deploying: ${tag} by <@${username.sync()}>*
 :vertical_traffic_light: *mastarm:* v${mastarmVersion}
 :cloud: *cloudfront:* ${cloudfront}
 :hash: *commit:* ${commit}
@@ -64,9 +65,7 @@ logger
   .then(() =>
     build(buildOpts)
       .then(() =>
-        logger.log(
-          `:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`
-        )
+        logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`)
       )
       .then(() =>
         Promise.all(
