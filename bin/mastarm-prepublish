@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+
+const commander = require('commander')
+
+const loadConfig = require('../lib/load-config')
+const prepublish = require('../lib/prepublish')
+const util = require('../lib/util')
+
+commander.parse(process.argv)
+
+const config = loadConfig(process.cwd(), commander.config, commander.env)
+const get = util.makeGetFn([commander, config.settings])
+const cliEntries = commander.args
+
+const outdir = get('outdir')
+const entries = util.parseEntries(
+  cliEntries && cliEntries.length > 0 ? cliEntries : get('entries') || [],
+  outdir
+)
+
+prepublish({
+  entries,
+  env: get('env'),
+  outdir
+})

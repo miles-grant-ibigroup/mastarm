@@ -1,0 +1,92 @@
+#!/usr/bin/env node
+
+const commander = require('commander')
+const commit = require('this-commit')()
+const username = require('username')
+
+const build = require('../lib/build')
+const {readFile} = require('../lib/fs-promise')
+const loadConfig = require('../lib/load-config')
+const logger = require('../lib/logger')
+const pkg = require('../lib/pkg')
+const createPushToS3 = require('../lib/push-to-s3')
+const util = require('../lib/util')
+const mastarmVersion = require('../package.json').version
+
+commander
+  .option('--cloudfront', 'CloudFront Distribution ID to invalidate.')
+  .option('--s3bucket', 'S3 Bucket to push to.')
+  .parse(process.argv)
+
+const url = pkg.repository.url.replace('.git', '')
+const tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>`
+const config = loadConfig(process.cwd(), commander.config, commander.env)
+const get = util.makeGetFn([commander, config.settings])
+
+if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
+  logger.logToSlack({
+    channel: config.env.SLACK_CHANNEL || '#devops',
+    webhook: config.env.SLACK_WEBHOOK
+  })
+}
+
+const files = util.parseEntries([...commander.args, ...(get('entries') || [])])
+util.assertEntriesExist(files)
+const sourceFiles = files.map(f => f[0])
+const outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
+
+const env = get('env') || 'development'
+const minify = get('minify')
+const buildOpts = {
+  config,
+  env,
+  files,
+  minify
+}
+const cloudfront = get('cloudfront')
+const s3bucket = get('s3bucket')
+
+const pushToS3 = createPushToS3({
+  cloudfront,
+  s3bucket
+})
+
+logger
+  .log(`:construction: *deploying: ${tag} by <@${username.sync()}>*
+:vertical_traffic_light: *mastarm:* v${mastarmVersion}
+:cloud: *cloudfront:* ${cloudfront}
+:hash: *commit:* ${commit}
+:seedling: *env:* ${env}
+:compression: *minify:* ${minify}
+:package: *s3bucket:* ${s3bucket}
+:hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`
+  )
+  .then(() =>
+    build(buildOpts)
+      .then(() =>
+        logger.log(
+          `:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`
+        )
+      )
+      .then(() =>
+        Promise.all(
+          outfiles.map(outfile =>
+            readFile(outfile).then(body => pushToS3({body, outfile}))
+          )
+        )
+      )
+      .then(() =>
+        logger
+          .log(
+            `:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`
+          )
+          .then(() => process.exit(0))
+      )
+      .catch(err =>
+        logger
+          .log(
+            `:rotating_light: *${tag} error deploying ${tag} ${err.message || err}*`
+          )
+          .then(() => process.exit(1))
+      )
+  )
