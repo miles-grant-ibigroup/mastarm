@@ -15,6 +15,8 @@
   * [Build](#build)
   * [Commit](#commit)
   * [Deploy](#deploy)
+  * [Flow](#flow)
+  * [Format](#format)
   * [Lint](#lint)
   * [Prepublish](#prepublish)
   * [Test](#test)
@@ -67,29 +69,30 @@ Not all options pertain to all commands.  Entries are in the format `input/file.
 ```shell
 $ mastarm --help
 
-  Usage: mastarm <cmd> [options]
+  Usage: mastarm [options] [command]
 
 
   Commands:
 
-    build [entries...] [options]   Bundle JavaScript & CSS
-    commit                         Force intelligent commit messages.
-    deploy [entries...] [options]  Bundle & Deploy JavaScript & CSS
-    lint [paths...]                Lint JavaScript [& CSS coming soon!]
-    test [options]                 Run tests using Jest test runner
-    lint-messages [paths...]       Lint message strings, making sure all messages used in source files are present in messages.yml
+    build [entries...]        Bundle JavaScript & CSS
+    commit                    Force intelligent commit messages.
+    deploy                    Bundle & Deploy JavaScript & CSS
+    flow [command]            Run flow on the current directory.
+    format [entries...]       Format JavaScript
+    lint                      Lint JavaScript
+    lint-messages [paths...]  Check existence of messages used in source code.
+    prepublish [entries...]   Transpile JavaScript down to ES5 with Babel
+    test [patterns...]        Run tests using Jest
+    help [cmd]                display help for [cmd]
 
   Options:
 
-    -h, --help                     output usage information
-    -V, --version                  output the version number
-    -c, --config <path>            Path to configuration files.
-    -e, --env <environment>        Environment to use.
-    -m, --minify                   Minify built files.
-    -p, --proxy <address>          Proxy calls through to target address.
-    -s, --serve                    Serve with budo. Auto-matically rebuilds on changes.
-    -u, --update-snapshots         Force update of jest snapshots. USE WITH CAUTION.
-    -w, --watch                    Rebuild on changes with watchify.
+    -h, --help               output usage information
+    -V, --version            output the version number
+    -c, --config <path>      Path to configuration files.
+    -e, --env <environment>  Environment to use.
+    -m, --minify             Minify built files.
+    -O, --outdir <dir>       Publish directory
 ```
 
 ### `build`
@@ -97,14 +100,16 @@ $ mastarm --help
 Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes [babel](https://babeljs.io/), [browserify](https://github.com/substack/node-browserify), [budo](https://github.com/mattdesl/budo), and [postcss](http://postcss.org/).
 
 ```shell
-$ mastarm build [options] [entries...]
+$ mastarm build --help
+
+  Usage: mastarm-build [options]
 
   Options:
 
     -h, --help             output usage information
     -F, --flyle            Cache and serve tiles.
     -p, --proxy <address>  Proxy calls through to target address.
-    -s, --serve            Serve with budo. Auto-matically rebuilds on changes.
+    -s, --serve            Serve with budo. Automatically rebuilds on changes.
     -w, --watch            Automatically rebuild on changes.
 ```
 
@@ -134,7 +139,6 @@ Options:
   -h, --help    output usage information
   --cloudfront  CloudFront Distribution ID to invalidate.
   --s3bucket    S3 Bucket to push to.
-
 ```
 
 #### Slack Notifications
@@ -144,6 +148,24 @@ To enable Slack notifications during the deploy process create a [Slack Webhook]
 ```
 SLACK_CHANNEL: '#devops'
 SLACK_WEBHOOK: https://hooks.slack.com/services/fake-code
+```
+
+### `flow`
+
+Run [Flow](https://flow.org/). Must have a `.flowconfig` in the current working directory and a `// @flow` annotation at the top of each file you want to check. See the Flow website for documentation.
+
+### `format`
+
+Format JavaScript code using [Prettier](https://github.com/prettier/prettier). By default it globs all JavaScript files from the current directory and `__mocks__`, `__tests__`, `bin`, `lib`, and `src`. If you pass files in it directly it will just use those.
+
+```shell
+$ mastarm format
+```
+
+To format one file:
+
+```shell
+$ mastarm format index.js
 ```
 
 ### `lint`

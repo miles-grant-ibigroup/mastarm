@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+
+const commander = require('commander')
+
+const budo = require('../lib/budo')
+const build = require('../lib/build')
+const loadConfig = require('../lib/load-config')
+const logger = require('../lib/logger')
+const util = require('../lib/util')
+
+commander
+  .option('-F, --flyle', 'Cache and serve tiles.')
+  .option('-p, --proxy <address>', 'Proxy calls through to target address.')
+  .option('-s, --serve', 'Serve with budo. Automatically rebuilds on changes.')
+  .option('-w, --watch', 'Automatically rebuild on changes.')
+  .parse(process.argv)
+
+const config = loadConfig(process.cwd(), commander.config, commander.env)
+const get = util.makeGetFn([commander, config.settings])
+const files = util.parseEntries(
+  [...commander.args, ...(get('entries') || [])],
+  get('outdir')
+)
+util.assertEntriesExist(files)
+const watch = get('watch')
+const opts = {
+  config,
+  env: get('env'),
+  files,
+  flyle: get('flyle'),
+  minify: get('minify'),
+  proxy: get('proxy'),
+  watch
+}
+if (get('serve')) {
+  budo(opts)
+} else {
+  build(opts)
+    .then(results => {
+      logger.log('done building...')
+      if (!watch) process.exit(0)
+    })
+    .catch(err => {
+      logger.error(err)
+      if (!watch) process.exit(1)
+    })
+}

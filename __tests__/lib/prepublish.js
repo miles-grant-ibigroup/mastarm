@@ -8,8 +8,8 @@ const util = require('../../lib/util')
 const {buildDir, mockDir} = require('../test-utils/util.js')
 
 describe('prepublish', () => {
-  beforeEach((done) => mkdirp(buildDir, done))
-  afterEach((done) => rimraf(buildDir, done))
+  beforeEach(done => mkdirp(buildDir, done))
+  afterEach(done => rimraf(buildDir, done))
 
   it('should transpile a directory of files', () => {
     const results = prepublish({

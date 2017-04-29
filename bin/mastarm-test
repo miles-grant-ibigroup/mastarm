@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const commander = require('commander')
+const jest = require('jest')
+
+const loadConfig = require('../lib/load-config')
+const jestUtils = require('../lib/jest')
+const util = require('../lib/util')
+
+commander
+  .option(
+    '-u, --update-snapshots',
+    'Force update of snapshots. USE WITH CAUTION.'
+  )
+  .option('--coverage', 'Run Jest with coverage reporting')
+  .option(
+    '--coverage-paths <paths>',
+    'Extra paths to collect code coverage from'
+  )
+  .option('--no-cache', 'Run Jest without cache (defaults to using cache)')
+  .option('--run-in-band', 'Run all tests serially in the current process')
+  .option('--setup-files <paths>', 'Setup files to run before each test')
+  .option(
+    '--test-environment <env>',
+    'Jest test environment to use (Jest default is jsdom)'
+  )
+  .option(
+    '--test-path-ignore-patterns <patterns>',
+    'File patterns to ignore when scanning for test files'
+  )
+  .parse(process.argv)
+
+const config = loadConfig(process.cwd(), commander.config, commander.env)
+const get = util.makeGetFn([commander, config.settings])
+util.configureEnvironment({config, env: get('env')})
+jest.run(jestUtils.generateTestConfig(commander.args, commander))
