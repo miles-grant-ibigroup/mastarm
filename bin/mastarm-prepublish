@@ -1,12 +1,22 @@
 #!/usr/bin/env node
 
+const path = require('path')
+
 const commander = require('commander')
 
 const loadConfig = require('../lib/load-config')
 const prepublish = require('../lib/prepublish')
 const util = require('../lib/util')
 
-commander.parse(process.argv)
+commander
+  .option(
+    '-c, --config <path>',
+    'Path to configuration files.',
+    path.join(process.cwd(), '/configurations/default')
+  )
+  .option('-e, --env <environment>', 'Environment to use.')
+  .option('-O, --outdir <dir>', 'Publish directory', '')
+  .parse(process.argv)
 
 const config = loadConfig(process.cwd(), commander.config, commander.env)
 const get = util.makeGetFn([commander, config.settings])
