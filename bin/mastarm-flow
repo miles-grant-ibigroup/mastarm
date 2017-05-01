@@ -6,6 +6,7 @@ const flow = require('flow-bin')
 const args = process.argv.slice(2)
 if (args.length === 0) args.push('check')
 
-execFile(flow, args, (_, stdout) => {
+execFile(flow, args, (error, stdout) => {
   console.log(stdout)
+  if (error) process.exit(1)
 })
