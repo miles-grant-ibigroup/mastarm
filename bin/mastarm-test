@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const path = require('path')
+
 const commander = require('commander')
 const jest = require('jest')
 
@@ -8,6 +10,12 @@ const jestUtils = require('../lib/jest')
 const util = require('../lib/util')
 
 commander
+  .option(
+    '-c, --config <path>',
+    'Path to configuration files.',
+    path.join(process.cwd(), '/configurations/default')
+  )
+  .option('-e, --env <environment>', 'Environment to use.')
   .option(
     '-u, --update-snapshots',
     'Force update of snapshots. USE WITH CAUTION.'

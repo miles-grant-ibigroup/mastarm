@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 
+const path = require('path')
+
 const commander = require('commander')
 
 const lintMessages = require('../lib/lint-messages').lint
 const loadConfig = require('../lib/load-config')
 const logger = require('../lib/logger')
 
-commander.parse(process.argv)
+commander
+  .option(
+    '-c, --config <path>',
+    'Path to configuration files.',
+    path.join(process.cwd(), '/configurations/default')
+  )
+  .parse(process.argv)
 
 const config = loadConfig(process.cwd(), commander.config, commander.env)
 const paths = commander.args
