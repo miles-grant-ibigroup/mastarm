@@ -7,7 +7,16 @@
     "npm": "3"
   },
   "bin": {
-    "mastarm": "bin/mastarm"
+    "mastarm": "bin/mastarm",
+    "mastarm-build": "bin/mastarm-build",
+    "mastarm-commit": "bin/mastarm-commit",
+    "mastarm-deploy": "bin/mastarm-deploy",
+    "mastarm-flow": "bin/mastarm-flow",
+    "mastarm-format": "bin/mastarm-format",
+    "mastarm-lint": "bin/mastarm-lint",
+    "mastarm-lint-messages": "bin/mastarm-lint-messages",
+    "mastarm-prepublish": "bin/mastarm-prepublish",
+    "mastarm-test": "bin/mastarm-test"
   },
   "scripts": {
     "cover": "bin/mastarm test --env test --test-environment node --coverage --coverage-paths bin",
