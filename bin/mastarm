@@ -9,7 +9,7 @@ commander
   .command('build [entries...]', 'Bundle JavaScript & CSS')
   .command('commit', 'Force intelligent commit messages.')
   .command('deploy', 'Bundle & Deploy JavaScript & CSS')
-  .command('flow [command]', 'Run flow on the current directory.')
+  .command('flow', 'Run flow on the current directory.')
   .command('format [entries...]', 'Format JavaScript')
   .command('lint', 'Lint JavaScript')
   .command(
