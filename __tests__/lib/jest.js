@@ -2,9 +2,9 @@
 
 const jestUtils = require('../../lib/jest')
 
-const JEST_CONFIG_INDEX = 5
+const JEST_CONFIG_INDEX = 4
 
-describe('test.js', () => {
+describe('jest.js', () => {
   it('generateTestConfig should generate proper config', () => {
     const cfg = jestUtils.generateTestConfig(['these', 'files', 'only'], {
       cache: false,
