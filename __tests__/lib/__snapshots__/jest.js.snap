@@ -1,14 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test.js generateTestConfig should generate proper config 1`] = `
+exports[`jest.js generateTestConfig should generate proper config 1`] = `
 Array [
-  "--forceExit",
   "--updateSnapshot",
   "--no-cache",
   "--runInBand",
   "--config",
   Object {
-    "cacheDirectory": "tmp",
     "collectCoverageFrom": Array [
       "lib/**/*.js",
       "bin",
