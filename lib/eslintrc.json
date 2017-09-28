@@ -19,6 +19,13 @@
     "prefer-const": ["warn", {
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
+    }],
+    "require-jsdoc": ["error", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true
+      }
     }]
   },
   "settings": {
