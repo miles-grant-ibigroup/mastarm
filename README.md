@@ -9,6 +9,7 @@
 
 ## Table of Contents
 
+* [Node](#node)
 * [Install](#install)
 * [Configuration](#configuration)
 * [CLI Usage](#cli-usage)
@@ -22,9 +23,13 @@
   * [Test](#test)
   * [Lint Messages](#lint-messages)
 
+## Node
+
+We pin mastarm to a specific version of node due to inconsistencies across installation and building when using multiple versions. *Node 8 is now required to run mastarm*. 
+
 ## Install
 
-With [node v6 and npm 3 installed](https://nodejs.org/en/download/current/):
+With [node v8 and npm 5 installed](https://nodejs.org/en/download/current/):
 
 ```shell
 $ npm install -g mastarm
