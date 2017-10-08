@@ -27,7 +27,8 @@ describe('build', () => {
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toMatchSnapshot()
+      expect(transpiledString.length).toBeGreaterThan(150000)
+      expect(transpiledString.length).toBeLessThan(200000)
     })
 
     it('should transform css', async () => {
