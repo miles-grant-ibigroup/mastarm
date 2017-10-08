@@ -6,6 +6,13 @@ const util = require('../test-utils/util.js')
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
 
+const UNMINIFIED_JS = 450000
+const MINIFIED_JS = 400000
+const MINIFIED_PROD_JS = 250000
+
+const UNMINIFIED_CSS = 450000
+const MINIFIED_CSS = 400000
+
 describe('build', () => {
   const mockDir = util.mockDir
 
@@ -28,7 +35,7 @@ describe('build', () => {
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toMatchSnapshot()
+      expect(transpiledString.length).toBeGreaterThan(UNMINIFIED_JS)
     })
 
     it('should transform and minify', async () => {
@@ -43,7 +50,8 @@ describe('build', () => {
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toMatchSnapshot()
+      expect(transpiledString.length).toBeGreaterThan(MINIFIED_JS)
+      expect(transpiledString.length).toBeLessThan(UNMINIFIED_JS)
     })
 
     it('should transform, minify, and use production settings', async () => {
@@ -58,7 +66,8 @@ describe('build', () => {
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toMatchSnapshot()
+      expect(transpiledString.length).toBeGreaterThan(MINIFIED_PROD_JS)
+      expect(transpiledString.length).toBeLessThan(MINIFIED_JS)
     })
   })
 
@@ -71,7 +80,7 @@ describe('build', () => {
 
       const css = result.css
       expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
-      expect(css.length).toMatchSnapshot()
+      expect(css.length).toBeGreaterThan(UNMINIFIED_CSS)
     })
 
     it('should transform and minify', async () => {
@@ -83,12 +92,13 @@ describe('build', () => {
 
       const css = result.css
       expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
-      expect(css.length).toMatchSnapshot()
+      expect(css.length).toBeGreaterThan(MINIFIED_CSS)
+      expect(css.length).toBeLessThan(UNMINIFIED_CSS)
     })
   })
 
   describe('production', () => {
-    it('should transform and minify js and css', async () => {
+    it('should transform and minify js and css at the same time', async () => {
       const [jsResult, cssResult] = await build({
         config: loadConfig(process.cwd(), null, 'production'),
         env: 'production',
@@ -100,8 +110,6 @@ describe('build', () => {
         -1
       )
       expect(cssResult.css.indexOf('criticalClass')).not.toBe(-1)
-      expect(transpiledString.length).toMatchSnapshot()
-      expect(cssResult.css.length).toMatchSnapshot()
     })
   })
 })
