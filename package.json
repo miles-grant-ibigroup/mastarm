@@ -102,6 +102,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "react": "^16.0.0",
     "semantic-release": "^8.0.3"
   },
   "standard": {

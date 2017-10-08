@@ -16,10 +16,11 @@ describe('build', () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout
   })
 
-  describe('development', () => {
-    it('should transform js', async () => {
+  describe('js', () => {
+    it('should transform', async () => {
       const [result] = await build({
         config: loadConfig(process.cwd(), null, 'development'),
+        env: 'development',
         files: [[`${mockDir}/index.js`]]
       })
 
@@ -27,14 +28,57 @@ describe('build', () => {
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toBeGreaterThan(150000)
-      expect(transpiledString.length).toBeLessThan(200000)
+      expect(transpiledString.length).toMatchSnapshot()
     })
 
-    it('should transform css', async () => {
+    it('should transform and minify', async () => {
+      const [result] = await build({
+        config: loadConfig(process.cwd(), null, 'development'),
+        env: 'development',
+        files: [[`${mockDir}/index.js`]],
+        minify: true
+      })
+
+      const transpiledString = result.toString()
+      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
+        -1
+      )
+      expect(transpiledString.length).toMatchSnapshot()
+    })
+
+    it('should transform, minify, and use production settings', async () => {
+      const [result] = await build({
+        config: loadConfig(process.cwd(), null, 'production'),
+        env: 'production',
+        files: [[`${mockDir}/index.js`]],
+        minify: true
+      })
+
+      const transpiledString = result.toString()
+      expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
+        -1
+      )
+      expect(transpiledString.length).toMatchSnapshot()
+    })
+  })
+
+  describe('css', () => {
+    it('should transform', async () => {
       const [result] = await build({
         config: loadConfig(process.cwd(), null, 'development'),
         files: [[`${mockDir}/index.css`]]
+      })
+
+      const css = result.css
+      expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
+      expect(css.length).toMatchSnapshot()
+    })
+
+    it('should transform and minify', async () => {
+      const [result] = await build({
+        config: loadConfig(process.cwd(), null, 'development'),
+        files: [[`${mockDir}/index.css`]],
+        minify: true
       })
 
       const css = result.css
