@@ -38,7 +38,7 @@ describe('mastarm cli', () => {
 
     it('should build a project', done => {
       exec(
-        `node ${mastarm} build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
+        `node ${mastarm}-build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toContain('done building')
@@ -60,7 +60,7 @@ describe('mastarm cli', () => {
 
     it('should prepublish a project', done => {
       exec(
-        `node ${mastarm} prepublish ${mockDir}:${buildDir}`,
+        `node ${mastarm}-prepublish ${mockDir}:${buildDir}`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toBe('')
