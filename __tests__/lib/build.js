@@ -6,7 +6,7 @@ const util = require('../test-utils/util.js')
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
 
-const UNMINIFIED_JS = 450000
+const UNMINIFIED_JS = 430000
 const MINIFIED_JS = 400000
 const MINIFIED_PROD_JS = 250000
 

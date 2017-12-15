@@ -20,7 +20,7 @@
   },
   "scripts": {
     "cover": "bin/mastarm test --env test --test-environment node --coverage --coverage-paths bin",
-    "lint": "bin/mastarm lint",
+    "lint": "bin/mastarm lint lib __tests__",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "pretest": "yarn",
     "test": "bin/mastarm lint lib __tests__ && bin/mastarm test --run-in-band --env test --test-environment node"
@@ -94,7 +94,7 @@
     "postcss-import": "^11.0.0",
     "postcss-reporter": "^5.0.0",
     "postcss-safe-parser": "^3.0.1",
-    "prettier": "^1.9.2",
+    "prettier-eslint-cli": "^4.6.1",
     "rimraf": "^2.6.2",
     "slack-node": "^0.1.8",
     "this-commit": "^1.0.0",

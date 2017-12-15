@@ -72,7 +72,7 @@ describe('mastarm cli', () => {
   })
 
   it('should run lint on a project', done => {
-    exec(`node ${mastarm}-lint`, (err, stdout, stderr) => {
+    exec(`${mastarm}-lint lib --quiet`, (err, stdout, stderr) => {
       expect(err).toBeNull()
       expect(stdout).toBe('')
       expect(stderr).toBe('')
