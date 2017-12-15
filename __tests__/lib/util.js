@@ -32,7 +32,7 @@ describe('util.js', () => {
     const get = () => null
     it('should try to find default file paths', () => {
       const result = util.parseEntries([], get)
-      expect(result.length).toBe(0)
+      expect(result).toHaveLength(0)
       expect(result).toMatchSnapshot()
     })
 
@@ -41,7 +41,7 @@ describe('util.js', () => {
         [`${mockDir}/index.css:blah`, `${mockDir}/index.js:blah`],
         get
       )
-      expect(result.length).toBe(2)
+      expect(result).toHaveLength(2)
       expect(result).toMatchSnapshot()
     })
   })

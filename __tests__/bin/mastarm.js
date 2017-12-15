@@ -1,5 +1,4 @@
-/* globals afterEach, beforeEach, describe, it, jasmine, expect */
-
+// @flow
 const exec = require('child_process').exec
 const fs = require('fs')
 const mkdirp = require('mkdirp')
