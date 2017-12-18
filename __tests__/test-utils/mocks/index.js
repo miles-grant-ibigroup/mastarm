@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import uuid from 'uuid'
 import png from '../../../mastarm.png'
 
