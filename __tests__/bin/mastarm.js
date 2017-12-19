@@ -1,8 +1,9 @@
 // @flow
 const exec = require('child_process').exec
 const fs = require('fs')
-const mkdirp = require('mkdirp')
 const path = require('path')
+
+const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
 const util = require('../test-utils/util.js')

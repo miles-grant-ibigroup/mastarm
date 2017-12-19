@@ -1,4 +1,4 @@
-/* globals describe, expect, it */
+// @flow
 
 const testFile = `
 import messages, { analysis, project as proj } from '../utils/messages'
@@ -18,11 +18,11 @@ const test8 = test7 ? messages.common.runRegional : messages.common.stopRegional
 
 // test messages, some of the referenced messages are undefined
 const testMessages = {
-  common: {
-    download: 'Download'
-  },
   analysis: {
     run: 'Run'
+  },
+  common: {
+    download: 'Download'
   },
   project: {
     new: 'New'

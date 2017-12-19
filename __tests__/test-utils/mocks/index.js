@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import uuid from 'uuid'
+
 import png from '../../../mastarm.png'
 
 export default class MockTestComponentUniqueName extends Component {

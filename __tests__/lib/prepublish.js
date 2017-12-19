@@ -1,4 +1,4 @@
-/* globals afterEach, beforeEach, describe, it, expect */
+// @flow
 
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')

@@ -1,4 +1,4 @@
-/* globals describe, it, expect */
+// @flow
 
 const jestUtils = require('../../lib/jest')
 

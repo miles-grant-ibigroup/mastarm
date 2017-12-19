@@ -1,4 +1,4 @@
-/* globals describe, expect, it */
+// @flow
 
 const util = require('../../lib/util')
 const testUtils = require('../test-utils/util')
@@ -12,8 +12,8 @@ describe('util.js', () => {
     const store = {}
     const config = {
       env: 'mock-env',
-      path: '/made/up/path',
       messages,
+      path: '/made/up/path',
       settings,
       store
     }
