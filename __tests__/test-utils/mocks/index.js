@@ -3,6 +3,9 @@ import uuid from 'uuid'
 
 import png from '../../../mastarm.png'
 
+/**
+ * A Mock Component to test to ensure that building of React jsx components works
+ */
 export default class MockTestComponentUniqueName extends Component {
   static defaultProps = {
     test: 'hi'
