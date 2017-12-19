@@ -1,4 +1,4 @@
-/* globals afterEach, beforeEach, describe, it, expect, jasmine */
+// @flow
 
 const build = require('../../lib/build')
 const loadConfig = require('../../lib/load-config')
@@ -6,9 +6,9 @@ const util = require('../test-utils/util.js')
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
 
-const UNMINIFIED_JS = 430000
-const MINIFIED_JS = 400000
 const MINIFIED_PROD_JS = 250000
+const MINIFIED_JS = 350000
+const UNMINIFIED_JS = 430000
 
 const UNMINIFIED_CSS = 450000
 const MINIFIED_CSS = 400000
@@ -36,6 +36,7 @@ describe('build', () => {
         -1
       )
       expect(transpiledString.length).toBeGreaterThan(UNMINIFIED_JS)
+      expect(transpiledString.length).toBeLessThan(UNMINIFIED_JS + UNMINIFIED_JS)
     })
 
     it('should transform and minify', async () => {
