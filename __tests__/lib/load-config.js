@@ -1,4 +1,4 @@
-/* globals describe, expect, it */
+// @flow
 
 const loadConfig = require('../../lib/load-config')
 

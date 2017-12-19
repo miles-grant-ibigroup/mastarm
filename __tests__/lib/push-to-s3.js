@@ -1,5 +1,4 @@
-/* global describe, it */
-
+// @flow
 const fs = require('fs')
 const path = require('path')
 
@@ -22,8 +21,8 @@ describe('lib > push to s3', () => {
       'development'
     )
     const push = createPushToS3({
-      env: 'development',
       config,
+      env: 'development',
       minify: false,
       s3bucket: 'test-bucket'
     })

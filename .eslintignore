@@ -1,0 +1,4 @@
+/__tests__/test-utils/tmp/**
+/node_modules/**
+/react/**
+/tmp/**
