@@ -29,6 +29,13 @@
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
     }],
+    "require-jsdoc": ["warn", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true
+      }
+    }],
     "sort-keys": "warn",
     "sort-vars": "warn",
 
