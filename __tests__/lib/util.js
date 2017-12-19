@@ -1,4 +1,4 @@
-/* globals describe, expect, it */
+// @flow
 
 const util = require('../../lib/util')
 const testUtils = require('../test-utils/util')
@@ -12,8 +12,8 @@ describe('util.js', () => {
     const store = {}
     const config = {
       env: 'mock-env',
-      path: '/made/up/path',
       messages,
+      path: '/made/up/path',
       settings,
       store
     }
@@ -32,7 +32,7 @@ describe('util.js', () => {
     const get = () => null
     it('should try to find default file paths', () => {
       const result = util.parseEntries([], get)
-      expect(result.length).toBe(0)
+      expect(result).toHaveLength(0)
       expect(result).toMatchSnapshot()
     })
 
@@ -41,7 +41,7 @@ describe('util.js', () => {
         [`${mockDir}/index.css:blah`, `${mockDir}/index.js:blah`],
         get
       )
-      expect(result.length).toBe(2)
+      expect(result).toHaveLength(2)
       expect(result).toMatchSnapshot()
     })
   })

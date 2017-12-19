@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`format can format a file 1`] = `
-"function a () {
-  return 1
-}
-"
-`;
