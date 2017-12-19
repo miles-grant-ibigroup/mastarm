@@ -23,7 +23,7 @@
       "newlines-between": "always"
     }],
     "no-magic-numbers": ["warn", {
-      "ignore": [-1, 0, 1]
+      "ignore": [-1, 0, 1, 2]
     }],
     "prefer-const": ["warn", {
       "destructuring": "all",
