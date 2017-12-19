@@ -1,9 +1,9 @@
-/* globals afterEach, beforeEach, describe, it, jasmine, expect */
-
+// @flow
 const exec = require('child_process').exec
 const fs = require('fs')
-const mkdirp = require('mkdirp')
 const path = require('path')
+
+const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
 const util = require('../test-utils/util.js')
@@ -38,7 +38,7 @@ describe('mastarm cli', () => {
 
     it('should build a project', done => {
       exec(
-        `node ${mastarm} build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
+        `node ${mastarm}-build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toContain('done building')
@@ -60,7 +60,7 @@ describe('mastarm cli', () => {
 
     it('should prepublish a project', done => {
       exec(
-        `node ${mastarm} prepublish ${mockDir}:${buildDir}`,
+        `node ${mastarm}-prepublish ${mockDir}:${buildDir}`,
         (err, stdout, stderr) => {
           expect(err).toBeNull()
           expect(stdout).toBe('')
@@ -73,7 +73,7 @@ describe('mastarm cli', () => {
   })
 
   it('should run lint on a project', done => {
-    exec(`node ${mastarm}-lint`, (err, stdout, stderr) => {
+    exec(`${mastarm}-lint lib --quiet`, (err, stdout, stderr) => {
       expect(err).toBeNull()
       expect(stdout).toBe('')
       expect(stderr).toBe('')

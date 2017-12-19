@@ -1,8 +1,9 @@
+import {Component} from 'react'
 import uuid from 'uuid'
+
 import png from '../../../mastarm.png'
 
-/** A test component */
-export default class MockTestComponentUniqueName {
+export default class MockTestComponentUniqueName extends Component {
   static defaultProps = {
     test: 'hi'
   }
