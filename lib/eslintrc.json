@@ -13,11 +13,15 @@
   "parser": "babel-eslint",
   "plugins": [
     "flowtype",
+    "import",
     "jest",
     "jsx-a11y"
   ],
   "rules": {
     "complexity": ["warn", 10],
+    "import/order": ["warn", {
+      "newlines-between": "always"
+    }],
     "no-magic-numbers": ["warn", {
       "ignore": [-1, 0, 1]
     }],
@@ -25,8 +29,8 @@
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
     }],
-    "sort-imports": "warn",
     "sort-keys": "warn",
+    "sort-vars": "warn",
 
     "jsx-a11y/accessible-emoji": "warn",
     "jsx-a11y/alt-text": "warn",
