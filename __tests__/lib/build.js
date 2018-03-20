@@ -10,8 +10,8 @@ const MINIFIED_PROD_JS = 250000
 const MINIFIED_JS = 350000
 const UNMINIFIED_JS = 430000
 
-const UNMINIFIED_CSS = 450000
-const MINIFIED_CSS = 400000
+const UNMINIFIED_CSS = 180000
+const MINIFIED_CSS = 100000
 
 describe('build', () => {
   const mockDir = util.mockDir

@@ -1482,15 +1482,14 @@ browserify-des@^1.0.0:
     des.js "^1.0.0"
     inherits "^2.0.1"
 
-browserify-markdown@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/browserify-markdown/-/browserify-markdown-2.0.1.tgz#18e71dcb71abeba0bd802def00a2452d287fe36a"
+browserify-markdown@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/browserify-markdown/-/browserify-markdown-1.0.0.tgz#56321cdbcf92478c0467ef56b321a0766db78243"
   dependencies:
-    highlight.js "^9.7.0"
-    remarkable "github:matthewmueller/remarkable#3b896af"
+    highlight.js "^8.6.0"
+    remarkable "^1.6.0"
     string-to-js "0.0.1"
     through "^2.3.7"
-    through2 "2.0.1"
 
 browserify-rsa@^4.0.0:
   version "4.0.1"
@@ -3812,9 +3811,9 @@ hawk@~6.0.2:
     hoek "4.x.x"
     sntp "2.x.x"
 
-highlight.js@^9.7.0:
-  version "9.12.0"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"
+highlight.js@^8.6.0:
+  version "8.9.1"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-8.9.1.tgz#b8a9c5493212a9392f0222b649c9611497ebfb88"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -6922,9 +6921,9 @@ reload-css@^1.0.0:
   dependencies:
     query-string "^4.2.3"
 
-"remarkable@github:matthewmueller/remarkable#3b896af":
-  version "1.6.2"
-  resolved "https://codeload.github.com/matthewmueller/remarkable/tar.gz/3b896afdd1bb2963df11be63cfe96fbf2a3f39f3"
+remarkable@^1.6.0:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/remarkable/-/remarkable-1.7.1.tgz#aaca4972100b66a642a63a1021ca4bac1be3bff6"
   dependencies:
     argparse "~0.1.15"
     autolinker "~0.15.0"
@@ -7866,13 +7865,6 @@ throat@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
 
-through2@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.1.tgz#384e75314d49f32de12eebb8136b8eb6b5d59da9"
-  dependencies:
-    readable-stream "~2.0.0"
-    xtend "~4.0.0"
-
 through2@^2.0.0, through2@^2.0.2, through2@^2.0.3, through2@~2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.3.tgz#0004569b37c7c74ba39c43f3ced78d1ad94140be"
@@ -8410,7 +8402,7 @@ xmlbuilder@4.2.1, xmlbuilder@^4.1.0:
   dependencies:
     lodash "^4.0.0"
 
-"xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.0, xtend@~4.0.1:
+"xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 

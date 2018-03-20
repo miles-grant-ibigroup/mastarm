@@ -103,3 +103,74 @@ Array [
   ],
 ]
 `;
+
+exports[`lint-messages should parse named and default imports together correctly: import { analysis, project as proj }, messages from '../utils/messages' 1`] = `
+Array [
+  "messages",
+  Array [
+    Array [
+      "analysis",
+      "analysis",
+    ],
+    Array [
+      "project",
+      "proj",
+    ],
+  ],
+]
+`;
+
+exports[`lint-messages should parse named and default imports together correctly: import messages, { analysis, project as proj } from '../utils/messages' 1`] = `
+Array [
+  "messages",
+  Array [
+    Array [
+      "analysis",
+      "analysis",
+    ],
+    Array [
+      "project",
+      "proj",
+    ],
+  ],
+]
+`;
+
+exports[`lint-messages should parse named imports correctly: import { analysis, project as proj } from '../utils/messages' 1`] = `
+Array [
+  undefined,
+  Array [
+    Array [
+      "analysis",
+      "analysis",
+    ],
+    Array [
+      "project",
+      "proj",
+    ],
+  ],
+]
+`;
+
+exports[`lint-messages should parse named imports correctly: import {analysis, project as proj} from '../utils/messages' 1`] = `
+Array [
+  undefined,
+  Array [
+    Array [
+      "analysis",
+      "analysis",
+    ],
+    Array [
+      "project",
+      "proj",
+    ],
+  ],
+]
+`;
+
+exports[`lint-messages should parse root import correctly: import msgs from '../utils/messages' 1`] = `
+Array [
+  "msgs",
+  Array [],
+]
+`;
