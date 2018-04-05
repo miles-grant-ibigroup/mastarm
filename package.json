@@ -3,8 +3,8 @@
   "description": "Conveyal JavaScript development toolbelt.",
   "main": "bin/mastarm",
   "engines": {
-    "node": "8",
-    "npm": "5"
+    "node": ">=8",
+    "npm": ">=5"
   },
   "bin": {
     "mastarm": "bin/mastarm",
