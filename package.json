@@ -60,6 +60,7 @@
     "browserify": "^16.1.1",
     "browserify-markdown": "1.0.0",
     "budo": "^11.2.0",
+    "caniuse-lite": "^1.0.30000823",
     "chokidar": "^2.0.2",
     "commander": "^2.15.1",
     "commitizen": "^2.9.6",
@@ -84,7 +85,7 @@
     "flow-runtime": "^0.17.0",
     "glob": "^7.1.2",
     "isomorphic-fetch": "^2.2.1",
-    "jest": "^22.4.2",
+    "jest": "^22.4.3",
     "lodash.uniq": "^4.5.0",
     "middleware-proxy": "^2.0.2",
     "mime": "^2.2.0",
@@ -108,7 +109,7 @@
   },
   "devDependencies": {
     "bootstrap": "^4.0.0",
-    "react": "^16.2.0",
+    "react": "^16.3.0",
     "semantic-release": "^15.1.2"
   },
   "standard": {
