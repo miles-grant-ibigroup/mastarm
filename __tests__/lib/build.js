@@ -6,13 +6,6 @@ const util = require('../test-utils/util.js')
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
 
-const MINIFIED_PROD_JS = 250000
-const MINIFIED_JS = 350000
-const UNMINIFIED_JS = 430000
-
-const UNMINIFIED_CSS = 450000
-const MINIFIED_CSS = 400000
-
 describe('build', () => {
   const mockDir = util.mockDir
 
@@ -24,6 +17,9 @@ describe('build', () => {
   })
 
   describe('js', () => {
+    let unminifiedJsSize = 0
+    let minifiedJsDevSize = 0
+
     it('should transform', async () => {
       const [result] = await build({
         config: loadConfig(process.cwd(), null, 'development'),
@@ -32,11 +28,10 @@ describe('build', () => {
       })
 
       const transpiledString = result.toString()
+      unminifiedJsSize = transpiledString.length
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toBeGreaterThan(UNMINIFIED_JS)
-      expect(transpiledString.length).toBeLessThan(UNMINIFIED_JS + UNMINIFIED_JS)
     })
 
     it('should transform and minify', async () => {
@@ -48,11 +43,11 @@ describe('build', () => {
       })
 
       const transpiledString = result.toString()
+      minifiedJsDevSize = transpiledString.length
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toBeGreaterThan(MINIFIED_JS)
-      expect(transpiledString.length).toBeLessThan(UNMINIFIED_JS)
+      expect(minifiedJsDevSize).toBeLessThan(unminifiedJsSize)
     })
 
     it('should transform, minify, and use production settings', async () => {
@@ -67,12 +62,12 @@ describe('build', () => {
       expect(transpiledString.indexOf('MockTestComponentUniqueName')).not.toBe(
         -1
       )
-      expect(transpiledString.length).toBeGreaterThan(MINIFIED_PROD_JS)
-      expect(transpiledString.length).toBeLessThan(MINIFIED_JS)
+      expect(transpiledString.length).toBeLessThan(minifiedJsDevSize)
     })
   })
 
   describe('css', () => {
+    let unminifiedCssSize = 0
     it('should transform', async () => {
       const [result] = await build({
         config: loadConfig(process.cwd(), null, 'development'),
@@ -81,7 +76,7 @@ describe('build', () => {
 
       const css = result.css
       expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
-      expect(css.length).toBeGreaterThan(UNMINIFIED_CSS)
+      unminifiedCssSize = css.length
     })
 
     it('should transform and minify', async () => {
@@ -93,8 +88,7 @@ describe('build', () => {
 
       const css = result.css
       expect(css.indexOf('criticalClass')).toBeGreaterThan(-1)
-      expect(css.length).toBeGreaterThan(MINIFIED_CSS)
-      expect(css.length).toBeLessThan(UNMINIFIED_CSS)
+      expect(css.length).toBeLessThan(unminifiedCssSize)
     })
   })
 
