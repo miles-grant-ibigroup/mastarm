@@ -19,9 +19,9 @@ describe('util.js', () => {
     }
     util.configureEnvironment({config, env: env2})
     expect(process.env.NODE_ENV).toEqual(env2)
-    expect(JSON.parse(process.env.MESSAGES)).toEqual(messages)
-    expect(JSON.parse(process.env.SETTINGS)).toEqual(settings)
-    expect(JSON.parse(process.env.STORE)).toEqual(store)
+    expect(JSON.parse(process.env.MESSAGES || '')).toEqual(messages)
+    expect(JSON.parse(process.env.SETTINGS || '')).toEqual(settings)
+    expect(JSON.parse(process.env.STORE || '')).toEqual(store)
   })
 
   it('makeGetFn should find the right value', () => {
