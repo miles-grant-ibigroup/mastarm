@@ -20,6 +20,7 @@
   },
   "scripts": {
     "cover": "bin/mastarm test --env test --test-environment node --coverage --coverage-paths bin",
+    "flow": "bin/mastarm flow",
     "lint": "bin/mastarm lint lib __tests__",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "pretest": "yarn",
@@ -81,7 +82,7 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "exorcist": "^1.0.1",
-    "flow-bin": "^0.68.0",
+    "flow-bin": "^0.77.0",
     "flow-runtime": "^0.17.0",
     "glob": "^7.1.2",
     "isomorphic-fetch": "^2.2.1",
