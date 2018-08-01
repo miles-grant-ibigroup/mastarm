@@ -22,7 +22,7 @@
     "cover": "bin/mastarm test --env test --test-environment node --coverage --coverage-paths bin",
     "flow": "bin/mastarm flow",
     "lint": "bin/mastarm lint lib __tests__",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release",
     "pretest": "yarn",
     "test": "bin/mastarm lint lib __tests__ && bin/mastarm test --run-in-band --env test --test-environment node"
   },
@@ -111,7 +111,7 @@
   "devDependencies": {
     "bootstrap": "^4.0.0",
     "react": "^16.3.0",
-    "semantic-release": "^15.1.2"
+    "semantic-release": "^15.9.3"
   },
   "standard": {
     "parser": "babel-eslint"
