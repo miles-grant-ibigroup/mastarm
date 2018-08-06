@@ -25,7 +25,7 @@
 
 ## Node
 
-We pin mastarm to a specific version of node due to inconsistencies across installation and building when using multiple versions. *Node 8 is now required to run mastarm*. 
+We pin mastarm to a specific version of node due to inconsistencies across installation and building when using multiple versions. *Node 8 is now required to run mastarm*.
 
 ## Install
 
@@ -175,7 +175,7 @@ $ mastarm format index.js
 
 ### `lint`
 
-Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
+Lint using [Standard](http://standardjs.com/) and various configurations noted in an [internal eslintrc.json file](https://github.com/conveyal/mastarm/blob/dev/lib/eslintrc.json). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
 
 ```shell
 $ mastarm lint [paths...]
