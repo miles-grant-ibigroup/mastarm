@@ -23,6 +23,7 @@ Array [
       "<rootDir>/node_modules/",
       "<rootDir>/__tests__/test-utils",
     ],
+    "testURL": "http://localhost:9966",
   },
   "these",
   "files",

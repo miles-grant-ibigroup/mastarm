@@ -2,7 +2,7 @@
 
 const commander = require('commander')
 
-const mastarmVersion = require('../package.json').version
+const mastarmVersion = require('../package.json').version || 'development'
 
 commander
   .version(mastarmVersion)
