@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import uuid from 'uuid'
 
-const yaml = require('./mock.yaml')
-console.log(yaml)
+const yaml = require('./mock.yml')
 
 /**
  * A Mock Component to test to ensure that building of React jsx components works
@@ -16,8 +15,8 @@ export default class MockTestComponentUniqueName extends Component {
    * Render the component.
    */
   render () {
+    console.log(yaml)
+    console.log(uuid.v4())
     return <div />
   }
 }
-
-console.log(uuid.v4())
