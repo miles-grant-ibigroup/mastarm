@@ -19,6 +19,7 @@ commander
   .option('-e, --env <environment>', 'Environment to use.')
   .option('-F, --flyle', 'Cache and serve tiles.')
   .option('-m, --minify', 'Minify built files.')
+  .option('-i, --instrument', 'Instrument js files')
   .option('-O, --outdir <dir>', 'Publish directory', '')
   .option('-p, --proxy <address>', 'Proxy calls through to target address.')
   .option('-s, --serve', 'Serve with budo. Automatically rebuilds on changes.')
@@ -38,6 +39,7 @@ const opts = {
   env: get('env'),
   files,
   flyle: get('flyle'),
+  instrument: get('instrument'),
   minify: get('minify'),
   proxy: get('proxy'),
   watch
