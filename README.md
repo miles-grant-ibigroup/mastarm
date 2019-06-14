@@ -240,7 +240,8 @@ also pass in an arbitrary number of paths to directories or files to lint.
 
 `lint-messages` is somewhat opinionated about how messages should be used in code. They should be imported
 from a local module called `messages`, and referred to using dot notation. It will work regardless
-of whether you import the top-level messages object or named children; the following all work:
+of whether you import the top-level messages object or named children. The following import strategies
+all work:
 
     import messages from '../utils/messages'
     import msgs from './messages'
