@@ -214,7 +214,7 @@ Options:
   -u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
   --coverage                              Run Jest with coverage reporting
   --coverage-paths <paths>                Extra paths to collect code coverage from
-  --json-output-file <path>               Export a json report of the tests to the path
+  --jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quote
   --no-cache                              Run Jest without cache (defaults to using cache)
   --run-in-band                           Run all tests serially in the current process
   --setup-files <paths>                   Setup files to run before each test
