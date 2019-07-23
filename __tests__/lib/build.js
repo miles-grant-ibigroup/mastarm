@@ -1,5 +1,11 @@
 // @flow
-
+// Polyfills to support IE, etc.
+// Note: I attempted to update to core-js@3, but ran into issues about ES6
+// imports. core-js@2 does not have core-js/stable, which is why we're importing
+// the root.
+import 'core-js'
+import 'regenerator-runtime/runtime'
+// Imports for test
 const build = require('../../lib/build')
 const loadConfig = require('../../lib/load-config')
 const util = require('../test-utils/util.js')
