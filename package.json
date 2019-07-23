@@ -103,6 +103,7 @@
     "postcss-reporter": "^6.0.1",
     "postcss-safe-parser": "^4.0.1",
     "prettier-eslint-cli": "^4.7.1",
+    "regenerator-runtime": "^0.13.3",
     "rimraf": "^2.6.3",
     "slack-node": "^0.1.8",
     "this-commit": "^1.0.0",
