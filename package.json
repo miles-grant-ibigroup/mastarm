@@ -19,12 +19,13 @@
     "mastarm-test": "bin/mastarm-test"
   },
   "scripts": {
-    "cover": "bin/mastarm test --env test --test-environment node --coverage --coverage-paths bin",
+    "cover": "yarn run jest -- --coverage --coverage-paths bin",
     "flow": "bin/mastarm flow",
+    "jest": "bin/mastarm test --run-in-band --env test --test-environment node",
     "lint": "bin/mastarm lint lib __tests__",
     "semantic-release": "semantic-release",
     "pretest": "yarn",
-    "test": "bin/mastarm lint lib __tests__ && bin/mastarm test --run-in-band --env test --test-environment node"
+    "test": "yarn run lint && yarn run flow && yarn run jest"
   },
   "repository": {
     "type": "git",
@@ -48,11 +49,12 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-react-display-name": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@babel/runtime": "^7.3.4",
+    "@babel/runtime-corejs2": "^7.5.5",
     "aws-sdk": "^2.414.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",

@@ -11,6 +11,10 @@ export default class MockTestComponentUniqueName extends Component {
     test: 'hi'
   }
 
+  doSomeFancyAsyncThingy = async () => {
+    await Promise.resolve('hi')
+  }
+
   /**
    * Render the component.
    */
