@@ -26,4 +26,8 @@ describe('jest.js', () => {
     const indexWithYaml = require('../test-utils/mocks/index-with-yaml')
     expect(indexWithYaml).toBeTruthy()
   })
+
+  it('should be able to perform an async test', async () => {
+    await Promise.resolve()
+  })
 })
