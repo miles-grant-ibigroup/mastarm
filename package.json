@@ -19,7 +19,7 @@
     "mastarm-test": "bin/mastarm-test"
   },
   "scripts": {
-    "cover": "yarn run jest -- --coverage --coverage-paths bin",
+    "cover": "yarn run jest --coverage --coverage-paths bin",
     "flow": "bin/mastarm flow",
     "jest": "bin/mastarm test --run-in-band --env test --test-environment node",
     "lint": "bin/mastarm lint lib __tests__",
