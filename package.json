@@ -120,5 +120,6 @@
   },
   "standard": {
     "parser": "babel-eslint"
-  }
+  },
+  "version": "0.0.0-semantically-released"
 }
