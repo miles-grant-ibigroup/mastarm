@@ -89,6 +89,7 @@ logger
           .log(
             `:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`
           )
+          .then(() => logToMsTeams())
           .then(() => process.exit(0))
       )
       .catch(err =>
@@ -96,6 +97,44 @@ logger
           .log(
             `:rotating_light: *${tag} error deploying ${tag} ${err.message || err}*`
           )
+          .then(() => logToMsTeams(err))
           .then(() => process.exit(1))
       )
   )
+
+/**
+ * Sends a card to MS Teams with information about the deployment
+ * @param  {[Error]} error the error, if one occurred. A falsy value indicates
+ *                          success
+ */
+function logToMsTeams (error) {
+  if (!config.env.MS_TEAMS_WEBHOOK) return Promise.resolve()
+
+  const potentialAction = [{
+    '@type': 'OpenUri',
+    name: `View Commit on Github`,
+    targets: [
+      {
+        os: 'default',
+        uri: `${url}/commit/${commit}`
+      }
+    ]
+  }]
+  const text = `📄 *commit:* ${pkg.name}@${commit.slice(0, 6)}\n
+  👤 *deployed by:* ${username.sync()}\n
+  🚦 *mastarm:* v${mastarmVersion}\n
+  ☁️ *cloudfront:* ${cloudfront}\n
+  🌱 *env:* ${env}\n
+  🗜️ *minify:* ${minify}\n
+  📦 *s3bucket:* ${s3bucket}\n
+  ${error
+    ? `🚨 🚨 *error deploying ${error.message || error}*`
+    : `🎉 🎊 🎉 *deploy successful!* 🎉 🎊 🎉`}`
+
+  return logger.notifyMsTeams({
+    potentialAction,
+    text,
+    title: `${error ? 'Failed to deploy' : 'Successfully deployed'} ${pkg.name}`,
+    webhook: config.env.MS_TEAMS_WEBHOOK
+  })
+}
