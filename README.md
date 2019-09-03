@@ -155,6 +155,14 @@ SLACK_CHANNEL: '#devops'
 SLACK_WEBHOOK: https://hooks.slack.com/services/fake-code
 ```
 
+#### MS Teams Notifications
+
+To enable an MS Teams notification upon the completion (successful or not) of the deploy process, create a [MS Teams Webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using#setting-up-a-custom-incoming-webhook) and add the incoming webhook url as the `MS_TEAMS_WEBHOOK` key/value to your `env.yml`.
+
+```
+MS_TEAMS_WEBHOOK: https://outlook.office.com/webhook/123...abc
+```
+
 ### `flow`
 
 Run [Flow](https://flow.org/). Must have a `.flowconfig` in the current working directory and a `// @flow` annotation at the top of each file you want to check. See the Flow website for documentation.
