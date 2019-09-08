@@ -218,16 +218,20 @@ Run tests using Jest
 
 Options:
 
-  -h, --help                              output usage information
-  -u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
-  --coverage                              Run Jest with coverage reporting
-  --coverage-paths <paths>                Extra paths to collect code coverage from
-  --jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quote
-  --no-cache                              Run Jest without cache (defaults to using cache)
-  --run-in-band                           Run all tests serially in the current process
-  --setup-files <paths>                   Setup files to run before each test
-  --test-environment <env>                Jest test environment to use (Jest default is jsdom)
-  --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
+-c, --config <path>                     Path to configuration files. (default: path.join(process.cwd() + '/configurations/default'))
+-e, --env <environment>                 Environment to use.
+-u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
+--coverage                              Run Jest with coverage reporting
+--coverage-paths <paths>                Extra paths to collect code coverage from
+--customConfigFile <path>               Override the Jest config with the values found in a file path relative to the current working directory
+--force-exit                            Force Jest to exit after all tests have completed running.
+--jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quotes
+--no-cache                              Run Jest without cache (defaults to using cache)
+--run-in-band                           Run all tests serially in the current process
+--setup-files <paths>                   Setup files to run before each test
+--test-environment <env>                Jest test environment to use (Jest default is jsdom)
+--test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
+-h, --help                              output usage information
 
 ```
 
