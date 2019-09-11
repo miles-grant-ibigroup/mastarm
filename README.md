@@ -207,7 +207,7 @@ $ mastarm prepublish lib:build
 
 ### `test`
 
-Run the [Jest](http://facebook.github.io/jest/) test runner on your project. By default, mastarm will run Jest and generate coverage reports on all .js files in the `lib` folder of your project. The `patterns` argument will make Jest run only tests whose filename match the provided pattern.
+Run the [Jest](http://facebook.github.io/jest/) test runner on your project.
 
 ```shell
 $ mastarm test
@@ -223,7 +223,7 @@ Options:
 -u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
 --coverage                              Run Jest with coverage reporting
 --coverage-paths <paths>                Extra paths to collect code coverage from
---customConfigFile <path>               Override the Jest config with the values found in a file path relative to the current working directory
+--custom-config-file <path>             Override the Jest config with the values found in a file path relative to the current working directory
 --force-exit                            Force Jest to exit after all tests have completed running.
 --jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quotes
 --no-cache                              Run Jest without cache (defaults to using cache)
@@ -233,6 +233,29 @@ Options:
 --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
 -h, --help                              output usage information
 
+```
+
+By default, mastarm will run Jest with most of the defaults in place. The defaults that mastarm adds include:
+
+- some transforms needed to read certain .js files and also YAML files.  
+- ignoring the test path directory `__tests__/test-utils`
+- setting the [testURL](https://jestjs.io/docs/en/configuration#testurl-string) to `http://localhost:9966`
+- turning on [notifications](https://jestjs.io/docs/en/configuration#notify-boolean) of test completion
+
+If the `coverage` flag is set to true, mastarm will automatically generate coverage reports of all .js files in the `lib` folder and will save the reports to the `coverage` folder.
+
+The `patterns` argument will make Jest run only tests whose filename match the provided pattern.
+
+There are two ways to override the [Jest config](https://jestjs.io/docs/en/configuration). The first is by adding a `jest` object to the package.json of the project. The second is by sending over a custom config file (either .json or .js) via the `--custom-config-file` option. Ex:
+
+```shell
+matarm test --custom-config-file __tests__/test-utils/mocks/mock-jest-config.json
+```
+
+It is also possible to override any [Jest CLI Options](https://jestjs.io/docs/en/cli) by setting the `--jest-cli-args` flag. Ex:
+
+```shell
+mastarm test --jest-cli-args "--json --outputFile e2e-test-results/results.json"
 ```
 
 ### `lint-messages`

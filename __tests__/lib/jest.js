@@ -9,7 +9,7 @@ describe('jest.js', () => {
     const cfg = jestUtils.generateTestConfig(['these', 'files', 'only'], {
       cache: false,
       coveragePaths: 'bin src another-folder',
-      customConfigFile: '__tests__/lib/mock-jest-config.json',
+      customConfigFile: '__tests__/test-utils/mocks/mock-jest-config.json',
       runInBand: true,
       setupFiles: 'beforeTestsSetup.js',
       testEnvironment: 'node',
