@@ -222,12 +222,12 @@ Options:
 -e, --env <environment>                 Environment to use.
 -u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
 --coverage                              Run Jest with coverage reporting
---coverage-paths <paths>                Extra paths to collect code coverage from
+--coverage-paths <paths>                Extra paths to collect code coverage from in addition to the mastarm default of `lib/**/*.js`
 --custom-config-file <path>             Override the Jest config with the values found in a file path relative to the current working directory
 --force-exit                            Force Jest to exit after all tests have completed running.
 --jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quotes
 --no-cache                              Run Jest without cache (defaults to using cache)
---run-in-band                           Run all tests serially in the current process
+--run-in-band                           Run all tests serially in the current process. This is always set to true while running on in a continuous integration environment.
 --setup-files <paths>                   Setup files to run before each test
 --test-environment <env>                Jest test environment to use (Jest default is jsdom)
 --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
@@ -246,10 +246,17 @@ If the `coverage` flag is set to true, mastarm will automatically generate cover
 
 The `patterns` argument will make Jest run only tests whose filename match the provided pattern.
 
-There are two ways to override the [Jest config](https://jestjs.io/docs/en/configuration). The first is by adding a `jest` object to the package.json of the project. The second is by sending over a custom config file (either .json or .js) via the `--custom-config-file` option. Ex:
+There are a number of ways to set the [Jest config](https://jestjs.io/docs/en/configuration). The first is by adding a `jest` object to the package.json of the project. A number of other mastarm options will override the config. And finally, it is possible to use a custom config file (either .json or .js) via the `--custom-config-file` option. The config values are set and potentially overridden in the following order:
+
+1. mastarm defaults.
+2. Options in the `jest` object of the project's package.json file.
+3. The values specified in the mastarm arguments `--coverage-paths`, `--setup-files`, `--test-environment` and `--test-path-ignore-patterns`
+4. Options set in a custom config file specified in the mastarm argument `--custom-config-file`.
+
+Here is an example of how to set the config using a custom file:
 
 ```shell
-matarm test --custom-config-file __tests__/test-utils/mocks/mock-jest-config.json
+mastarm test --custom-config-file __tests__/test-utils/mocks/mock-jest-config.json
 ```
 
 It is also possible to override any [Jest CLI Options](https://jestjs.io/docs/en/cli) by setting the `--jest-cli-args` flag. Ex:
