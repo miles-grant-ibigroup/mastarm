@@ -7,13 +7,13 @@ Array [
   "--runInBand",
   "--config",
   Object {
+    "collectCoverage": true,
     "collectCoverageFrom": Array [
       "lib/**/*.js",
       "bin",
       "src",
       "another-folder",
     ],
-    "coverage": true,
     "coverageDirectory": "coverage",
     "moduleFileExtensions": Array [
       "js",
