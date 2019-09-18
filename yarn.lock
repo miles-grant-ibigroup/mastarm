@@ -4472,6 +4472,15 @@ git-repo-info@^2.1.0:
   resolved "https://registry.yarnpkg.com/git-repo-info/-/git-repo-info-2.1.0.tgz#13d1f753c75bc2994432e65a71e35377ff563813"
   integrity sha512-+kigfDB7j3W80f74BoOUX+lKOmf4pR3/i2Ww6baKTCPe2hD4FRdjhV3s4P5Dy0Tak1uY1891QhKoYNtnyX2VvA==
 
+git-repo-is-up-to-date@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/git-repo-is-up-to-date/-/git-repo-is-up-to-date-1.0.1.tgz#ff9a915fbac1b35a76bf2e39d086fa2dcb474313"
+  integrity sha512-rg/olld/00pjb2HBIAnca3rTbyWIHnaGFW3WFovCEJ0enB9cwCKHs6M17KnrZxczlGTMGY0IWSwoEFffy6kXmQ==
+  dependencies:
+    execa "^2.0.4"
+    git-remote-origin-url "^3.0.0"
+    git-repo-info "^2.1.0"
+
 gitconfiglocal@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/gitconfiglocal/-/gitconfiglocal-2.1.0.tgz#07c28685c55cc5338b27b5acbcfe34aeb92e43d1"

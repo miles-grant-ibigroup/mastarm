@@ -4,8 +4,7 @@ const path = require('path')
 
 const commander = require('commander')
 const execa = require('execa')
-const origin = require('git-remote-origin-url')
-const repoInfo = require('git-repo-info')
+const gitRepoIsUpToDate = require('git-repo-is-up-to-date')
 const commit = require('this-commit')()
 const username = require('username')
 
@@ -36,55 +35,22 @@ commander
 let cloudfront, config, env, minify, s3bucket, tag, url
 
 async function deploy () {
-  // get information about the config directory being used
-  const repoUrl = await origin(commander.config)
-  let configCommit, configRemoteUrl
-  const configRepoRoot = repoInfo(commander.config).root
-  const configDir = path
-    .resolve(commander.config)
-    .replace(configRepoRoot, '')
+  // get information about the directory that the config is in
+  const configRepoStatus = await gitRepoIsUpToDate(commander.config)
+  const { remoteUrl: configRemoteUrl, repoInfo } = configRepoStatus
+  let configCommit, configDir
+  if (repoInfo) {
+    configCommit = repoInfo.localCommit
+    configDir = repoInfo.root
+  }
 
-  // check if the config directory being used is a configurations repo
-  if (repoUrl.endsWith('/configurations.git')) {
-    // run some extra checks to make sure configurations repo is up to date
-    // modified from https://stackoverflow.com/a/3278427/269834
-    configRemoteUrl = repoUrl.replace('.git', '')
-    const { stdout: local } = await execa('git', ['-C', configRepoRoot, 'rev-parse', '@'])
-    const { stdout: remote } = await execa('git', ['-C', configRepoRoot, 'rev-parse', '@{u}'])
-    const { stdout: base } = await execa('git', ['-C', configRepoRoot, 'merge-base', '@', '@{u}'])
-    let configurationsOk = false
-    if (local === remote) {
-      // Up-to-date
-      console.log('Configurations up-to-date')
-      configurationsOk = true
-    } else if (local === base) {
-      console.error('Configurations out of sync: Need to pull')
-    } else if (remote === base) {
-      console.error('Configurations out of sync: Need to push')
-    } else {
-      console.error('Configurations out of sync: Diverged')
+  // do some extra analysis if it looks like a configurations repo is being used
+  if (configRemoteUrl && configRemoteUrl.endsWith('/configurations.git')) {
+    if (!configRepoStatus.isUpToDate) {
+      console.error('Configurations folder is not up-to-date! Errors:')
+      configRepoStatus.errors.forEach(err => console.error(err))
+      process.exit(1)
     }
-
-    // make sure there are no changes to the configurations
-    const { stdout: status } = await execa(
-      'git',
-      [
-        '-C',
-        configRepoRoot,
-        'status',
-        '-s'
-      ]
-    )
-    if (status === '') {
-      console.log('No changes to configurations repo')
-    } else {
-      console.error('Configurations out of sync: local changes exist that are not yet committed')
-      configurationsOk = false
-    }
-
-    if (!configurationsOk) process.exit(1)
-
-    configCommit = local
 
     // decrypt env file using sops to make sure old file is overwritten with
     // data from encoded sops file
