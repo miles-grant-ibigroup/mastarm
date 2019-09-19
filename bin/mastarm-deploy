@@ -172,20 +172,20 @@ function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
       ]
     })
   }
-  const text = `📄 *commit:* ${pkg.name}@${commit.slice(0, 6)}\n
-  👤 *deployed by:* ${username.sync()}\n
+  const text = `📄 **commit:** ${pkg.name}@${commit.slice(0, 6)}\n
+  👤 **deployed by:** ${username.sync()}\n
   ${configCommit
-    ? `🎛️ *config:* configurations@${configCommit.slice(0, 6)}\n
-  📂 *config folder:* ${configDir}\n` // improper indenting here needed to properly format on MS Teams
-    : '🎛️ *config:* unknown configuration data!\n'}
-  🚦 *mastarm:* v${mastarmVersion}\n
-  ☁️ *cloudfront:* ${cloudfront}\n
-  🌱 *env:* ${env}\n
-  🗜️ *minify:* ${minify}\n
-  📦 *s3bucket:* ${s3bucket}\n
+    ? `🎛️ **config:** configurations@${configCommit.slice(0, 6)}\n
+  📂 **config folder:** ${configDir}\n` // improper indenting here needed to properly format on MS Teams
+    : '🎛️ **config:** unknown configuration data!\n'}
+  🚦 **mastarm:** v${mastarmVersion}\n
+  ☁️ **cloudfront:** ${cloudfront}\n
+  🌱 **env:** ${env}\n
+  🗜️ **minify:** ${minify}\n
+  📦 **s3bucket:** ${s3bucket}\n
   ${error
-    ? `🚨 🚨 *error deploying ${error.message || error}*`
-    : `🎉 🎊 🎉 *deploy successful!* 🎉 🎊 🎉`}`
+    ? `🚨 🚨 **error deploying ${error.message || error}**`
+    : `🎉 🎊 🎉 **deploy successful!** 🎉 🎊 🎉`}`
 
   return logger.notifyMsTeams({
     potentialAction,
