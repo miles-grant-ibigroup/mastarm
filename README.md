@@ -155,6 +155,14 @@ SLACK_CHANNEL: '#devops'
 SLACK_WEBHOOK: https://hooks.slack.com/services/fake-code
 ```
 
+#### MS Teams Notifications
+
+To enable an MS Teams notification upon the completion (successful or not) of the deploy process, create a [MS Teams Webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/connectors/connectors-using#setting-up-a-custom-incoming-webhook) and add the incoming webhook url as the `MS_TEAMS_WEBHOOK` key/value to your `env.yml`.
+
+```
+MS_TEAMS_WEBHOOK: https://outlook.office.com/webhook/123...abc
+```
+
 ### `flow`
 
 Run [Flow](https://flow.org/). Must have a `.flowconfig` in the current working directory and a `// @flow` annotation at the top of each file you want to check. See the Flow website for documentation.
@@ -199,7 +207,7 @@ $ mastarm prepublish lib:build
 
 ### `test`
 
-Run the [Jest](http://facebook.github.io/jest/) test runner on your project. By default, mastarm will run Jest and generate coverage reports on all .js files in the `lib` folder of your project. The `patterns` argument will make Jest run only tests whose filename match the provided pattern.
+Run the [Jest](http://facebook.github.io/jest/) test runner on your project.
 
 ```shell
 $ mastarm test
@@ -210,17 +218,51 @@ Run tests using Jest
 
 Options:
 
-  -h, --help                              output usage information
-  -u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
-  --coverage                              Run Jest with coverage reporting
-  --coverage-paths <paths>                Extra paths to collect code coverage from
-  --jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quote
-  --no-cache                              Run Jest without cache (defaults to using cache)
-  --run-in-band                           Run all tests serially in the current process
-  --setup-files <paths>                   Setup files to run before each test
-  --test-environment <env>                Jest test environment to use (Jest default is jsdom)
-  --test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
+-c, --config <path>                     Path to configuration files. (default: path.join(process.cwd() + '/configurations/default'))
+-e, --env <environment>                 Environment to use.
+-u, --update-snapshots                  Force update of snapshots. USE WITH CAUTION.
+--coverage                              Run Jest with coverage reporting
+--coverage-paths <paths>                Extra paths to collect code coverage from in addition to the mastarm default of `lib/**/*.js`
+--custom-config-file <path>             Override the Jest config with the values found in a file path relative to the current working directory
+--force-exit                            Force Jest to exit after all tests have completed running.
+--jest-cli-args <args>                  Extra arguments to pass directly to the Jest Cli. Make sure to encapsulate all extra arguments in quotes
+--no-cache                              Run Jest without cache (defaults to using cache)
+--run-in-band                           Run all tests serially in the current process. This is always set to true while running on in a continuous integration environment.
+--setup-files <paths>                   Setup files to run before each test
+--test-environment <env>                Jest test environment to use (Jest default is jsdom)
+--test-path-ignore-patterns <patterns>  File patterns to ignore when scanning for test files
+-h, --help                              output usage information
 
+```
+
+By default, mastarm will run Jest with most of the defaults in place. The defaults that mastarm adds include:
+
+- some transforms needed to read certain .js files and also YAML files.  
+- ignoring the test path directory `__tests__/test-utils`
+- setting the [testURL](https://jestjs.io/docs/en/configuration#testurl-string) to `http://localhost:9966`
+- turning on [notifications](https://jestjs.io/docs/en/configuration#notify-boolean) of test completion
+
+If the `coverage` flag is set to true, mastarm will automatically generate coverage reports of all .js files in the `lib` folder and will save the reports to the `coverage` folder.
+
+The `patterns` argument will make Jest run only tests whose filename match the provided pattern.
+
+There are a number of ways to set the [Jest config](https://jestjs.io/docs/en/configuration). The first is by adding a `jest` object to the package.json of the project. A number of other mastarm options will override the config. And finally, it is possible to use a custom config file (either .json or .js) via the `--custom-config-file` option. The config values are set and potentially overridden in the following order:
+
+1. mastarm defaults.
+2. Options in the `jest` object of the project's package.json file.
+3. The values specified in the mastarm arguments `--coverage-paths`, `--setup-files`, `--test-environment` and `--test-path-ignore-patterns`
+4. Options set in a custom config file specified in the mastarm argument `--custom-config-file`.
+
+Here is an example of how to set the config using a custom file:
+
+```shell
+mastarm test --custom-config-file __tests__/test-utils/mocks/mock-jest-config.json
+```
+
+It is also possible to override any [Jest CLI Options](https://jestjs.io/docs/en/cli) by setting the `--jest-cli-args` flag. Ex:
+
+```shell
+mastarm test --jest-cli-args "--json --outputFile e2e-test-results/results.json"
 ```
 
 ### `lint-messages`

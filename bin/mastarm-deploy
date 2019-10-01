@@ -3,11 +3,13 @@
 const path = require('path')
 
 const commander = require('commander')
+const execa = require('execa')
+const gitRepoIsUpToDate = require('git-repo-is-up-to-date')
 const commit = require('this-commit')()
 const username = require('username')
 
 const build = require('../lib/build')
-const {readFile} = require('../lib/fs-promise')
+const {readFile, writeFile} = require('../lib/fs-promise')
 const loadConfig = require('../lib/load-config')
 const logger = require('../lib/logger')
 const pkg = require('../lib/pkg')
@@ -28,74 +30,167 @@ commander
   .option('--s3bucket', 'S3 Bucket to push to.')
   .parse(process.argv)
 
-const url = pkg.repository.url.replace('.git', '')
-const tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>`
-const config = loadConfig(process.cwd(), commander.config, commander.env)
-const get = util.makeGetFn([commander, config.settings])
+// each of these variables are also used in the logToMsTeams function and
+// these need to be defined after potentially decoding a sops-encoded file
+let cloudfront, config, env, minify, s3bucket, tag, url
 
-if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
-  logger.logToSlack({
-    channel: config.env.SLACK_CHANNEL || '#devops',
-    webhook: config.env.SLACK_WEBHOOK
+async function deploy () {
+  // get information about the directory that the config is in
+  const configRepoStatus = await gitRepoIsUpToDate(commander.config)
+  const { remoteUrl: configRemoteUrl, repoInfo } = configRepoStatus
+  let configCommit, configDir
+  if (repoInfo) {
+    configCommit = repoInfo.localCommit
+    configDir = repoInfo.root
+  }
+
+  // do some extra analysis if it looks like a configurations repo is being used
+  if (configRemoteUrl && configRemoteUrl.endsWith('/configurations.git')) {
+    if (!configRepoStatus.isUpToDate) {
+      console.error('Configurations folder is not up-to-date! Errors:')
+      configRepoStatus.errors.forEach(err => console.error(err))
+      process.exit(1)
+    }
+
+    // decrypt env file using sops to make sure old file is overwritten with
+    // data from encoded sops file
+    const configPath = path.resolve(commander.config)
+    console.log('decrypting env file with sops')
+    const {stdout} = await execa(
+      'sops',
+      [
+        '-d',
+        path.join(configPath, 'env.enc.yml')
+      ]
+    )
+    await writeFile(path.join(configPath, 'env.yml'), stdout)
+    // at this point, we can be certain that the local configurations repo
+    // directory matches what has been committed and pushed to the remote repo
+  }
+
+  url = pkg.repository.url.replace('.git', '')
+  tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>`
+  config = loadConfig(process.cwd(), commander.config, commander.env)
+  const get = util.makeGetFn([commander, config.settings])
+
+  if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
+    logger.logToSlack({
+      channel: config.env.SLACK_CHANNEL || '#devops',
+      webhook: config.env.SLACK_WEBHOOK
+    })
+  }
+
+  const files = util.parseEntries([...commander.args, ...(get('entries') || [])])
+  util.assertEntriesExist(files)
+  const sourceFiles = files.map(f => f[0])
+  const outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
+
+  env = get('env') || 'development'
+  minify = get('minify')
+  const buildOpts = {
+    config,
+    env,
+    files,
+    minify
+  }
+  cloudfront = get('cloudfront')
+  s3bucket = get('s3bucket')
+
+  const pushToS3 = createPushToS3({
+    cloudfront,
+    s3bucket
+  })
+
+  await logger.log(
+    `:construction: *deploying: ${tag} by <@${username.sync()}>*
+    :vertical_traffic_light: *mastarm:* v${mastarmVersion}
+    :cloud: *cloudfront:* ${cloudfront}
+    :hash: *commit:* ${commit}
+    :seedling: *env:* ${env}
+    :compression: *minify:* ${minify}
+    :package: *s3bucket:* ${s3bucket}
+    :hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`
+  )
+
+  try {
+    await build(buildOpts)
+    await logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`)
+    await Promise.all(
+      outfiles.map(outfile =>
+        readFile(outfile).then(body => pushToS3({body, outfile}))
+      )
+    )
+    await logger.log(
+      `:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`
+    )
+    await logToMsTeams({ configCommit, configDir, configRemoteUrl })
+    process.exit(0)
+  } catch (error) {
+    await logger.log(
+      `:rotating_light: *${tag} error deploying ${tag} ${error.message || error}*`
+    )
+    await logToMsTeams({ configCommit, configDir, configRemoteUrl, error })
+    process.exit(1)
+  }
+}
+
+deploy()
+
+/**
+ * Sends a card to MS Teams with information about the deployment
+ * @param  {[string]} configCommit   hash of the commit in the configurations
+ *                          repo (if it exists)
+ * @param  {[string]} configDir   partial path to specific config directory used
+ *                          to deploy
+ * @param  {[string]} configRemoteUrl base url for the configurations repo
+ *                          (if it exists)
+ * @param  {[Error]} error the error, if one occurred. A falsy value indicates
+ *                          success
+ */
+function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
+  if (!config.env.MS_TEAMS_WEBHOOK) return Promise.resolve()
+
+  const potentialAction = [{
+    '@type': 'OpenUri',
+    name: `View Commit on Github`,
+    targets: [
+      {
+        os: 'default',
+        uri: `${url}/commit/${commit}`
+      }
+    ]
+  }]
+  if (configCommit && configRemoteUrl) {
+    potentialAction.push({
+      '@type': 'OpenUri',
+      name: `View Config Commit on Github`,
+      targets: [
+        {
+          os: 'default',
+          uri: `${configRemoteUrl}/tree/${configCommit}/${configDir}`
+        }
+      ]
+    })
+  }
+  const text = `📄 **commit:** ${pkg.name}@${commit.slice(0, 6)}\n
+  👤 **deployed by:** ${username.sync()}\n
+  ${configCommit
+    ? `🎛️ **config:** configurations@${configCommit.slice(0, 6)}\n
+  📂 **config folder:** ${configDir}\n` // improper indenting here needed to properly format on MS Teams
+    : '🎛️ **config:** unknown configuration data!\n'}
+  🚦 **mastarm:** v${mastarmVersion}\n
+  ☁️ **cloudfront:** ${cloudfront}\n
+  🌱 **env:** ${env}\n
+  🗜️ **minify:** ${minify}\n
+  📦 **s3bucket:** ${s3bucket}\n
+  ${error
+    ? `🚨 🚨 **error deploying ${error.message || error}**`
+    : `🎉 🎊 🎉 **deploy successful!** 🎉 🎊 🎉`}`
+
+  return logger.notifyMsTeams({
+    potentialAction,
+    text,
+    title: `${error ? 'Failed to deploy' : 'Successfully deployed'} ${pkg.name}`,
+    webhook: config.env.MS_TEAMS_WEBHOOK
   })
 }
-
-const files = util.parseEntries([...commander.args, ...(get('entries') || [])])
-util.assertEntriesExist(files)
-const sourceFiles = files.map(f => f[0])
-const outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
-
-const env = get('env') || 'development'
-const minify = get('minify')
-const buildOpts = {
-  config,
-  env,
-  files,
-  minify
-}
-const cloudfront = get('cloudfront')
-const s3bucket = get('s3bucket')
-
-const pushToS3 = createPushToS3({
-  cloudfront,
-  s3bucket
-})
-
-logger
-  .log(
-    `:construction: *deploying: ${tag} by <@${username.sync()}>*
-:vertical_traffic_light: *mastarm:* v${mastarmVersion}
-:cloud: *cloudfront:* ${cloudfront}
-:hash: *commit:* ${commit}
-:seedling: *env:* ${env}
-:compression: *minify:* ${minify}
-:package: *s3bucket:* ${s3bucket}
-:hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`
-  )
-  .then(() =>
-    build(buildOpts)
-      .then(() =>
-        logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`)
-      )
-      .then(() =>
-        Promise.all(
-          outfiles.map(outfile =>
-            readFile(outfile).then(body => pushToS3({body, outfile}))
-          )
-        )
-      )
-      .then(() =>
-        logger
-          .log(
-            `:tada: :confetti_ball: :tada: *deploy ${tag} complete* :tada: :confetti_ball: :tada:`
-          )
-          .then(() => process.exit(0))
-      )
-      .catch(err =>
-        logger
-          .log(
-            `:rotating_light: *${tag} error deploying ${tag} ${err.message || err}*`
-          )
-          .then(() => process.exit(1))
-      )
-  )

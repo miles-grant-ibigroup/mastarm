@@ -8,13 +8,15 @@
     "standard",
     "standard-jsx",
     "plugin:flowtype/recommended",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    "plugin:jsx-a11y/strict"
   ],
   "parser": "babel-eslint",
   "plugins": [
     "flowtype",
     "import",
-    "jest"
+    "jest",
+    "jsx-a11y"
   ],
   "rules": {
     "complexity": ["warn", 12],

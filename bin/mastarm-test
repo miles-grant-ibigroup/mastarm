@@ -25,6 +25,10 @@ commander
     '--coverage-paths <paths>',
     'Extra paths to collect code coverage from'
   )
+  .option(
+    '--custom-config-file <path>',
+    'Override the Jest config with the values found in a file path relative to the current working directory'
+  )
   .option('--force-exit', 'Force Jest to exit after all tests have completed running.')
   .option(
     '--jest-cli-args <args>',
