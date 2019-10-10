@@ -85,22 +85,8 @@ async function deploy () {
     })
   }
 
-  const files = util.parseEntries([...commander.args, ...(get('entries') || [])])
-  // assert that the files exist if not uploading from static file directory
-  if (!commander.staticFileDirectory) {
-    util.assertEntriesExist(files)
-  }
-  const sourceFiles = files.map(f => f[0])
-  let outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
-
   env = get('env') || 'development'
   minify = get('minify')
-  const buildOpts = {
-    config,
-    env,
-    files,
-    minify
-  }
   cloudfront = get('cloudfront')
   s3bucket = get('s3bucket')
 
@@ -118,10 +104,10 @@ async function deploy () {
     :compression: *minify:* ${minify}
     :package: *s3bucket:* ${s3bucket}`
   )
-
+  let outfiles
   try {
-    // if the flag staticFileDirectory is set, then replace the list of files to
-    // upload with all files found in the base level of the given directory
+    // If the flag staticFileDirectory is set, upload all files found in
+    // the base level of the given directory.
     if (commander.staticFileDirectory) {
       const staticDirPath = path.resolve(commander.staticFileDirectory)
       process.chdir(staticDirPath)
@@ -135,8 +121,20 @@ async function deploy () {
       }))
       await logger.log(`:rocket: *uploading:* ${outfiles.length} file(s)`)
     } else {
+      // Otherwise, upload the files specified with the entries arg.
+      const files = util.parseEntries([...commander.args, ...(get('entries') || [])])
+      // assert that the files exist if not uploading from static file directory
+      util.assertEntriesExist(files)
       // build files using mastarm build
+      outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
+      const sourceFiles = files.map(f => f[0])
       await logger.log(`:hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`)
+      const buildOpts = {
+        config,
+        env,
+        files,
+        minify
+      }
       await build(buildOpts)
       await logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`)
     }
@@ -182,7 +180,7 @@ function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
 
   const potentialAction = [{
     '@type': 'OpenUri',
-    name: `View Commit on Github`,
+    name: 'View Commit on Github',
     targets: [
       {
         os: 'default',
@@ -193,7 +191,7 @@ function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
   if (configCommit && configRemoteUrl) {
     potentialAction.push({
       '@type': 'OpenUri',
-      name: `View Config Commit on Github`,
+      name: 'View Config Commit on Github',
       targets: [
         {
           os: 'default',
@@ -215,7 +213,7 @@ function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
   📦 **s3bucket:** ${s3bucket}\n
   ${error
     ? `🚨 🚨 **error deploying ${error.message || error}**`
-    : `🎉 🎊 🎉 **deploy successful!** 🎉 🎊 🎉`}`
+    : '🎉 🎊 🎉 **deploy successful!** 🎉 🎊 🎉'}`
 
   return logger.notifyMsTeams({
     potentialAction,
