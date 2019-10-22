@@ -130,7 +130,7 @@ Utilize best practices when forming a commit message using [Commitzen](http://co
 
 ### `deploy`
 
-Build, push to S3, and invalidate CloudFront in one command. If the static-file-directory flag is set, then mastarm will not build any files with browserify, and instead it will just upload all files in the base level of the specified directory.
+Build, push to S3, and invalidate CloudFront in one command. If the static-file-directory flag is set, then mastarm will not build any files with browserify, and instead it will upload all files in the base level of the specified directory (or all files recursively if the recursive flag is set).
 
 ```shell
 $ mastarm deploy --help
@@ -143,6 +143,7 @@ Options:
   --cloudfront <id>              CloudFront Distribution ID to invalidate.
   --s3bucket <bucket>            S3 Bucket to push to.
   --static-file-directory <dir>  Directory of static files to deploy in lieu of building
+  --recursive                    Recursively upload files if deploying a static file directory
   -h, --help                     output usage information
 ```
 

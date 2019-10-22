@@ -30,13 +30,34 @@ commander
   .option('--cloudfront <id>', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket <bucket>', 'S3 Bucket to push to.')
   .option('--static-file-directory <dir>', 'Directory of static files to deploy in lieu of building')
+  .option('--recursive', 'Recursively upload files if deploying a static file directory')
   .parse(process.argv)
 
 // each of these variables are also used in the logToMsTeams function and
 // these need to be defined after potentially decoding a sops-encoded file
-let cloudfront, config, env, minify, s3bucket, tag, url
+let cloudfront,
+  config,
+  env,
+  minify,
+  recursive,
+  s3bucket,
+  staticFileDirectory,
+  tag,
+  url
 
 async function deploy () {
+  url = pkg.repository ? pkg.repository.url.replace('.git', '') : ''
+  tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>`
+  config = loadConfig(process.cwd(), commander.config, commander.env)
+  const get = util.makeGetFn([commander, config.settings])
+
+  env = get('env') || 'development'
+  minify = get('minify')
+  cloudfront = get('cloudfront')
+  recursive = get('recursive')
+  s3bucket = get('s3bucket')
+  staticFileDirectory = get('staticFileDirectory')
+
   // get information about the directory that the config is in
   const configRepoStatus = await gitRepoIsUpToDate(commander.config)
   const { remoteUrl: configRemoteUrl, repoInfo } = configRepoStatus
@@ -55,7 +76,7 @@ async function deploy () {
     }
 
     // no decryption needed during workflow to upload just static files
-    if (!commander.staticFileDirectory) {
+    if (!staticFileDirectory) {
       // decrypt env file using sops to make sure old file is overwritten with
       // data from encoded sops file
       const configPath = path.resolve(commander.config)
@@ -73,22 +94,12 @@ async function deploy () {
     // directory matches what has been committed and pushed to the remote repo
   }
 
-  url = pkg.repository.url.replace('.git', '')
-  tag = `<${url}/commit/${commit}|${pkg.name}@${commit.slice(0, 6)}>`
-  config = loadConfig(process.cwd(), commander.config, commander.env)
-  const get = util.makeGetFn([commander, config.settings])
-
   if (config.env.SLACK_WEBHOOK && config.env.SLACK_WEBHOOK.length > 0) {
     logger.logToSlack({
       channel: config.env.SLACK_CHANNEL || '#devops',
       webhook: config.env.SLACK_WEBHOOK
     })
   }
-
-  env = get('env') || 'development'
-  minify = get('minify')
-  cloudfront = get('cloudfront')
-  s3bucket = get('s3bucket')
 
   const pushToS3 = createPushToS3({
     cloudfront,
@@ -108,17 +119,11 @@ async function deploy () {
   try {
     // If the flag staticFileDirectory is set, upload all files found in
     // the base level of the given directory.
-    if (commander.staticFileDirectory) {
-      const staticDirPath = path.resolve(commander.staticFileDirectory)
+    if (staticFileDirectory) {
+      const staticDirPath = path.resolve(staticFileDirectory)
       process.chdir(staticDirPath)
       outfiles = []
-      const files = await fs.readdir(staticDirPath)
-      await Promise.all(files.map(async file => {
-        const fileStats = await fs.stat(file)
-        if (!fileStats.isDirectory()) {
-          outfiles.push(file)
-        }
-      }))
+      await addFiles(outfiles, staticDirPath, '', recursive)
       await logger.log(`:rocket: *uploading:* ${outfiles.length} file(s)`)
     } else {
       // Otherwise, upload the files specified with the entries arg.
@@ -221,4 +226,30 @@ function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
     title: `${error ? 'Failed to deploy' : 'Successfully deployed'} ${pkg.name}`,
     webhook: config.env.MS_TEAMS_WEBHOOK
   })
+}
+
+/**
+ * Adds all files in a directory (optionally recursive) to a list of files.
+ *
+ * @param {Array<String>} outfiles The list to add the file paths to
+ * @param {String} currentDir The current directory of files to scan
+ * @param {String} relativeDir The relative directory that the file should be
+ *    added to for s3 upload purposes
+ * @param {boolean} recursive If true, recursively adds files in subdirectories
+ */
+async function addFiles (outfiles, currentDir, relativeDir, recursive) {
+  const files = await fs.readdir(currentDir)
+  await Promise.all(files.map(async file => {
+    const fileStats = await fs.stat(path.join(currentDir, file))
+    if (!fileStats.isDirectory()) {
+      outfiles.push(path.join(relativeDir, file))
+    } else if (recursive) {
+      await addFiles(
+        outfiles,
+        path.join(currentDir, file),
+        path.join(relativeDir, file),
+        recursive
+      )
+    }
+  }))
 }
