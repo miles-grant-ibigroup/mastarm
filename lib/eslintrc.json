@@ -23,6 +23,17 @@
     "import/order": ["warn", {
       "newlines-between": "always"
     }],
+    // turn off nesting requirement. See https://github.com/conveyal/mastarm/pull/296
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": [ "Label" ],
+        "required": {
+            "every": [ "id" ]
+        },
+        "allowChildren": false
+      }
+    ],
     "object-curly-spacing": 0,
     "prefer-const": ["warn", {
       "destructuring": "all",
