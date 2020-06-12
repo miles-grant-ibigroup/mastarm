@@ -63,7 +63,7 @@
     "browserify": "^16.2.3",
     "browserify-markdown": "2.0.1",
     "budo": "^11.6.1",
-    "caniuse-lite": "^1.0.30000941",
+    "caniuse-lite": "^1.0.30001038",
     "chokidar": "^2.1.2",
     "commander": "^2.19.0",
     "commitizen": "^3.0.7",
@@ -101,10 +101,11 @@
     "node-emoji": "^1.10.0",
     "postcss": "^7.0.14",
     "postcss-import": "^12.0.1",
-    "postcss-preset-env": "^6.6.0",
+    "postcss-preset-env": "^6.7.0",
     "postcss-reporter": "^6.0.1",
     "postcss-safe-parser": "^4.0.1",
     "prettier-eslint-cli": "^5.0.0",
+    "request": "^2.88.2",
     "rimraf": "^2.6.3",
     "slack-node": "^0.1.8",
     "sshpk": "^1.16.1",
@@ -119,7 +120,7 @@
   "devDependencies": {
     "bootstrap": "^4.3.1",
     "react": "^16.8.3",
-    "semantic-release": "^15.13.3"
+    "semantic-release": "^17.0.8"
   },
   "standard": {
     "parser": "babel-eslint"
