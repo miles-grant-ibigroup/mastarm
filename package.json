@@ -120,7 +120,7 @@
   "devDependencies": {
     "bootstrap": "^4.3.1",
     "react": "^16.8.3",
-    "semantic-release": "^15.13.3"
+    "semantic-release": "^17.0.8"
   },
   "standard": {
     "parser": "babel-eslint"
