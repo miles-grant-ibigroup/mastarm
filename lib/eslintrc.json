@@ -21,6 +21,7 @@
   "rules": {
     "complexity": ["warn", 12],
     "import/order": ["warn", {
+      "groups": ["builtin", "external", ["parent", "sibling", "index"]],
       "newlines-between": "always"
     }],
     // turn off nesting requirement. See https://github.com/conveyal/mastarm/pull/296
