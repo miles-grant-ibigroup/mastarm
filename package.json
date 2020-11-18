@@ -63,7 +63,7 @@
     "browserify": "^16.2.3",
     "browserify-markdown": "2.0.1",
     "budo": "^11.6.1",
-    "caniuse-lite": "^1.0.30000941",
+    "caniuse-lite": "^1.0.30001158",
     "chokidar": "^3.2.2",
     "commander": "^3.0.2",
     "commitizen": "^4.0.3",
