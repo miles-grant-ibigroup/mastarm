@@ -11,9 +11,8 @@ install:
 script:
   - yarn run lint
   - yarn run flow
-  - yarn run cover
+  - yarn run jest
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
   - semantic-release
 branches:
   except:
