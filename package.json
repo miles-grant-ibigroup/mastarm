@@ -24,6 +24,7 @@
     "jest": "bin/mastarm test --run-in-band --env test --test-environment node",
     "lint": "bin/mastarm lint lib __tests__",
     "pretest": "yarn",
+    "semantic-release": "semantic-release",
     "test": "yarn run lint && yarn run flow && yarn run jest"
   },
   "repository": {
