@@ -24,6 +24,7 @@
     "jest": "bin/mastarm test --run-in-band --env test --test-environment node",
     "lint": "bin/mastarm lint lib __tests__",
     "pretest": "yarn",
+    "semantic-release": "semantic-release",
     "test": "yarn run lint && yarn run flow && yarn run jest"
   },
   "repository": {
@@ -63,7 +64,7 @@
     "browserify": "^16.2.3",
     "browserify-markdown": "2.0.1",
     "budo": "^11.6.1",
-    "caniuse-lite": "^1.0.30001158",
+    "caniuse-lite": "^1.0.30001228",
     "chokidar": "^3.2.2",
     "commander": "^3.0.2",
     "commitizen": "^4.0.3",
@@ -118,6 +119,7 @@
   },
   "devDependencies": {
     "bootstrap": "^4.3.1",
+    "jest-transform-stub": "^2.0.0",
     "react": "^16.8.3",
     "semantic-release": "^15.13.3"
   },
