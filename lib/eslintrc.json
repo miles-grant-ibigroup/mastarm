@@ -16,14 +16,15 @@
     "flowtype",
     "import",
     "jest",
-    "jsx-a11y"
+    "jsx-a11y",
+    "react",
+    "sort-destructure-keys"
   ],
   "rules": {
     "complexity": ["warn", 12],
     "import/order": ["warn", {
       "newlines-between": "always"
     }],
-    // turn off nesting requirement. See https://github.com/conveyal/mastarm/pull/296
     "jsx-a11y/label-has-for": [
       2,
       {
@@ -34,10 +35,22 @@
         "allowChildren": false
       }
     ],
+    "react/jsx-sort-props": ["error", {
+      "ignoreCase": true
+    }],
     "object-curly-spacing": 0,
     "prefer-const": ["warn", {
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
+    }],
+    "sort-destructure-keys/sort-destructure-keys": ["error", {
+      "caseSensitive": false
+    }],
+    "sort-keys": ["error", "asc", {
+      "caseSensitive": false
+    }],
+    "sort-vars": ["error", {
+      "ignoreCase": true
     }],
     "flowtype/sort-keys": [
       "error",
