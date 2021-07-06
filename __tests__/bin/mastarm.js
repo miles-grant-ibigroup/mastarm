@@ -29,28 +29,6 @@ describe('mastarm cli', () => {
     })
   })
 
-  describe('build', function () {
-    const buildDir = util.buildDir
-    const mockDir = util.mockDir
-
-    beforeEach(() => mkdirp(buildDir))
-    afterEach((done) => rimraf(buildDir, done))
-
-    it('should build a project', (done) => {
-      exec(
-        `node ${mastarm}-build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
-        (err, stdout, stderr) => {
-          expect(err).toBeNull()
-          expect(stdout).toContain('done building')
-          expect(stderr).toBe('')
-          expect(fs.existsSync(`${buildDir}/index.js`)).toBeTruthy()
-          expect(fs.existsSync(`${buildDir}/index.css`)).toBeTruthy()
-          done()
-        }
-      )
-    })
-  })
-
   describe('prepublish', function () {
     const buildDir = util.buildDir
     const mockDir = util.mockDir

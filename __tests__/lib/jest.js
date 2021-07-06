@@ -23,11 +23,6 @@ describe('jest.js', () => {
     expect(cfg).toMatchSnapshot()
   })
 
-  it('should be able to load a file that requires yaml', () => {
-    const indexWithYaml = require('../test-utils/mocks/index-with-yaml')
-    expect(indexWithYaml).toBeTruthy()
-  })
-
   it('should be able to perform an async test', async () => {
     await Promise.resolve()
   })
