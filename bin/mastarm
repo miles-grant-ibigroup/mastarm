@@ -6,10 +6,8 @@ const mastarmVersion = require('../package.json').version || 'development'
 
 commander
   .version(mastarmVersion)
-  .command('build [entries...]', 'Bundle JavaScript & CSS')
   .command('commit', 'Force intelligent commit messages.')
   .command('deploy', 'Bundle & Deploy JavaScript & CSS')
-  .command('flow', 'Run flow on the current directory.')
   .command('format [entries...]', 'Format JavaScript')
   .command('lint', 'Lint JavaScript')
   .command(
@@ -21,4 +19,6 @@ commander
     'Transpile JavaScript down to ES5 with Babel'
   )
   .command('test [patterns...]', 'Run tests using Jest')
+  // TODO: this should exist
+  .command('typescript', 'Run typescript on the current directory.')
   .parse(process.argv)
