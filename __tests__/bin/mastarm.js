@@ -10,17 +10,17 @@ const util = require('../test-utils/util.js')
 
 const mastarm = path.resolve(__dirname, '../../bin/mastarm')
 
-const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
+const originalTimeout = jest.originalTimeout
 
 describe('mastarm cli', () => {
   beforeEach(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+    jest.setTimeout(20000)
   })
   afterEach(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout
+    jest.setTimeout(originalTimeout)
   })
 
-  it('should display usage with no args', done => {
+  it('should display usage with no args', (done) => {
     exec(`node ${mastarm} --help`, (err, stdout, stderr) => {
       expect(err).toBeNull()
       expect(stdout).toContain('Usage: mastarm [options] [command]')
@@ -33,10 +33,10 @@ describe('mastarm cli', () => {
     const buildDir = util.buildDir
     const mockDir = util.mockDir
 
-    beforeEach(done => mkdirp(buildDir, done))
-    afterEach(done => rimraf(buildDir, done))
+    beforeEach(() => mkdirp(buildDir))
+    afterEach((done) => rimraf(buildDir, done))
 
-    it('should build a project', done => {
+    it('should build a project', (done) => {
       exec(
         `node ${mastarm}-build ${mockDir}/index.js:${buildDir}/index.js ${mockDir}/index.css:${buildDir}/index.css`,
         (err, stdout, stderr) => {
@@ -55,10 +55,10 @@ describe('mastarm cli', () => {
     const buildDir = util.buildDir
     const mockDir = util.mockDir
 
-    beforeEach(done => mkdirp(buildDir, done))
-    afterEach(done => rimraf(buildDir, done))
+    beforeEach(() => mkdirp(buildDir))
+    afterEach((done) => rimraf(buildDir, done))
 
-    it('should prepublish a project', done => {
+    it('should prepublish a project', (done) => {
       exec(
         `node ${mastarm}-prepublish ${mockDir}:${buildDir}`,
         (err, stdout, stderr) => {
@@ -72,7 +72,7 @@ describe('mastarm cli', () => {
     })
   })
 
-  it('should run lint on a project', done => {
+  it('should run lint on a project', (done) => {
     exec(`${mastarm}-lint lib --quiet`, (err, stdout, stderr) => {
       expect(err).toBeNull()
       expect(stdout).toBe('')
