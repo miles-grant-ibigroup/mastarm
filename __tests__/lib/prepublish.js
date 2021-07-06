@@ -5,11 +5,11 @@ const rimraf = require('rimraf')
 
 const prepublish = require('../../lib/prepublish')
 const util = require('../../lib/util')
-const {buildDir, mockDir} = require('../test-utils/util.js')
+const { buildDir, mockDir } = require('../test-utils/util.js')
 
 describe('prepublish', () => {
-  beforeEach(done => mkdirp(buildDir, done))
-  afterEach(done => rimraf(buildDir, done))
+  beforeEach(() => mkdirp(buildDir))
+  afterEach((done) => rimraf(buildDir, done))
 
   it('should transpile a directory of files', () => {
     const results = prepublish({
