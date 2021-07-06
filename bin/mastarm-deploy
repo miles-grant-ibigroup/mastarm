@@ -8,9 +8,9 @@ const fs = require('fs-extra')
 const gitRepoIsUpToDate = require('git-repo-is-up-to-date')
 const commit = require('this-commit')()
 const username = require('username')
+const { readFile, writeFile } = require('fs-extra')
 
 const build = require('../lib/build')
-const {readFile, writeFile} = require('../lib/fs-promise')
 const loadConfig = require('../lib/load-config')
 const logger = require('../lib/logger')
 const pkg = require('../lib/pkg')
@@ -29,14 +29,17 @@ commander
   .option('-O, --outdir <dir>', 'Publish directory', '')
   .option('--cloudfront <id>', 'CloudFront Distribution ID to invalidate.')
   .option('--s3bucket <bucket>', 'S3 Bucket to push to.')
-  .option('--static-file-directory <dir>', 'Directory of static files to deploy in lieu of building')
+  .option(
+    '--static-file-directory <dir>',
+    'Directory of static files to deploy in lieu of building'
+  )
   .parse(process.argv)
 
 // each of these variables are also used in the logToMsTeams function and
 // these need to be defined after potentially decoding a sops-encoded file
 let cloudfront, config, env, minify, s3bucket, tag, url
 
-async function deploy () {
+async function deploy() {
   // get information about the directory that the config is in
   const configRepoStatus = await gitRepoIsUpToDate(commander.config)
   const { remoteUrl: configRemoteUrl, repoInfo } = configRepoStatus
@@ -50,7 +53,7 @@ async function deploy () {
   if (configRemoteUrl && configRemoteUrl.endsWith('/configurations.git')) {
     if (!configRepoStatus.isUpToDate) {
       console.error('Configurations folder is not up-to-date! Errors:')
-      configRepoStatus.errors.forEach(err => console.error(err))
+      configRepoStatus.errors.forEach((err) => console.error(err))
       process.exit(1)
     }
 
@@ -60,13 +63,10 @@ async function deploy () {
       // data from encoded sops file
       const configPath = path.resolve(commander.config)
       console.log('decrypting env file with sops')
-      const {stdout} = await execa(
-        'sops',
-        [
-          '-d',
-          path.join(configPath, 'env.enc.yml')
-        ]
-      )
+      const { stdout } = await execa('sops', [
+        '-d',
+        path.join(configPath, 'env.enc.yml')
+      ])
       await writeFile(path.join(configPath, 'env.yml'), stdout)
     }
     // at this point, we can be certain that the local configurations repo
@@ -113,22 +113,29 @@ async function deploy () {
       process.chdir(staticDirPath)
       outfiles = []
       const files = await fs.readdir(staticDirPath)
-      await Promise.all(files.map(async file => {
-        const fileStats = await fs.stat(file)
-        if (!fileStats.isDirectory()) {
-          outfiles.push(file)
-        }
-      }))
+      await Promise.all(
+        files.map(async (file) => {
+          const fileStats = await fs.stat(file)
+          if (!fileStats.isDirectory()) {
+            outfiles.push(file)
+          }
+        })
+      )
       await logger.log(`:rocket: *uploading:* ${outfiles.length} file(s)`)
     } else {
       // Otherwise, upload the files specified with the entries arg.
-      const files = util.parseEntries([...commander.args, ...(get('entries') || [])])
+      const files = util.parseEntries([
+        ...commander.args,
+        ...(get('entries') || [])
+      ])
       // assert that the files exist if not uploading from static file directory
       util.assertEntriesExist(files)
       // build files using mastarm build
-      outfiles = [...files.map(f => f[1]), ...files.map(f => `${f[1]}.map`)]
-      const sourceFiles = files.map(f => f[0])
-      await logger.log(`:hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`)
+      outfiles = [...files.map((f) => f[1]), ...files.map((f) => `${f[1]}.map`)]
+      const sourceFiles = files.map((f) => f[0])
+      await logger.log(
+        `:hammer_and_wrench: *building:* ${sourceFiles.join(', ')}`
+      )
       const buildOpts = {
         config,
         env,
@@ -136,14 +143,16 @@ async function deploy () {
         minify
       }
       await build(buildOpts)
-      await logger.log(`:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`)
+      await logger.log(
+        `:rocket: *uploading:* ${sourceFiles.length * 2} file(s)`
+      )
     }
 
     // upload files to s3 and invalid cloudfront if needed
     await Promise.all(
-      outfiles.map(async outfile => {
+      outfiles.map(async (outfile) => {
         const body = await readFile(outfile)
-        await pushToS3({body, outfile})
+        await pushToS3({ body, outfile })
       })
     )
 
@@ -155,7 +164,9 @@ async function deploy () {
     process.exit(0)
   } catch (error) {
     await logger.log(
-      `:rotating_light: *${tag} error deploying ${tag} ${error.message || error}*`
+      `:rotating_light: *${tag} error deploying ${tag} ${
+        error.message || error
+      }*`
     )
     await logToMsTeams({ configCommit, configDir, configRemoteUrl, error })
     process.exit(1)
@@ -175,19 +186,21 @@ deploy()
  * @param  {[Error]} error the error, if one occurred. A falsy value indicates
  *                          success
  */
-function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
+function logToMsTeams({ configCommit, configDir, configRemoteUrl, error }) {
   if (!config.env.MS_TEAMS_WEBHOOK) return Promise.resolve()
 
-  const potentialAction = [{
-    '@type': 'OpenUri',
-    name: 'View Commit on Github',
-    targets: [
-      {
-        os: 'default',
-        uri: `${url}/commit/${commit}`
-      }
-    ]
-  }]
+  const potentialAction = [
+    {
+      '@type': 'OpenUri',
+      name: 'View Commit on Github',
+      targets: [
+        {
+          os: 'default',
+          uri: `${url}/commit/${commit}`
+        }
+      ]
+    }
+  ]
   if (configCommit && configRemoteUrl) {
     potentialAction.push({
       '@type': 'OpenUri',
@@ -202,23 +215,29 @@ function logToMsTeams ({ configCommit, configDir, configRemoteUrl, error }) {
   }
   const text = `📄 **commit:** ${pkg.name}@${commit.slice(0, 6)}\n
   👤 **deployed by:** ${username.sync()}\n
-  ${configCommit
-    ? `🎛️ **config:** configurations@${configCommit.slice(0, 6)}\n
+  ${
+    configCommit
+      ? `🎛️ **config:** configurations@${configCommit.slice(0, 6)}\n
   📂 **config folder:** ${configDir}\n` // improper indenting here needed to properly format on MS Teams
-    : '🎛️ **config:** unknown configuration data!\n'}
+      : '🎛️ **config:** unknown configuration data!\n'
+  }
   🚦 **mastarm:** v${mastarmVersion}\n
   ☁️ **cloudfront:** ${cloudfront}\n
   🌱 **env:** ${env}\n
   🗜️ **minify:** ${minify}\n
   📦 **s3bucket:** ${s3bucket}\n
-  ${error
-    ? `🚨 🚨 **error deploying ${error.message || error}**`
-    : '🎉 🎊 🎉 **deploy successful!** 🎉 🎊 🎉'}`
+  ${
+    error
+      ? `🚨 🚨 **error deploying ${error.message || error}**`
+      : '🎉 🎊 🎉 **deploy successful!** 🎉 🎊 🎉'
+  }`
 
   return logger.notifyMsTeams({
     potentialAction,
     text,
-    title: `${error ? 'Failed to deploy' : 'Successfully deployed'} ${pkg.name}`,
+    title: `${error ? 'Failed to deploy' : 'Successfully deployed'} ${
+      pkg.name
+    }`,
     webhook: config.env.MS_TEAMS_WEBHOOK
   })
 }
