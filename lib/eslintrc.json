@@ -7,18 +7,22 @@
   "extends": [
     "standard",
     "standard-jsx",
-    "plugin:flowtype/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
     "plugin:jest/recommended",
-    "plugin:jsx-a11y/strict"
+    "plugin:jsx-a11y/strict",
+    "plugin:prettier/recommended",
+    "prettier"
   ],
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "plugins": [
-    "flowtype",
+    "@typescript-eslint",
     "import",
     "jest",
     "jsx-a11y"
   ],
   "rules": {
+    "@typescript-eslint/no-var-requires": 0,
     "complexity": ["warn", 12],
     "import/order": ["warn", {
       "newlines-between": "always"
@@ -28,17 +32,6 @@
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
     }],
-    "flowtype/sort-keys": [
-      "error",
-      "asc", {
-        "caseSensitive": true,
-        "natural": false
-      }
-    ]
-  },
-  "settings": {
-    "flowtype": {
-      "onlyFilesWithFlowAnnotation": true
-    }
+    "prettier/prettier": ["error", {"semi": false, "singleQuote": true, "trailingComma": "none"}]
   }
 }
