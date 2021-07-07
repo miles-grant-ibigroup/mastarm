@@ -17,7 +17,7 @@ describe('prepublish', () => {
       env: 'development'
     })
 
-    expect(results).toHaveLength(2)
+    expect(results).toHaveLength(4)
   })
 
   it('should transpile a directory of files to a specific outdir', () => {
@@ -27,7 +27,7 @@ describe('prepublish', () => {
       outdir: buildDir
     })
 
-    expect(results).toHaveLength(2)
+    expect(results).toHaveLength(4)
   })
 
   it('should transpile entries', () => {

@@ -44,6 +44,13 @@ describe('mastarm cli', () => {
           expect(stdout).toBe('')
           expect(stderr).toBe('')
           expect(fs.existsSync(`${buildDir}/index.js`)).toBeTruthy()
+
+          // Check for typescript generated files
+          expect(fs.existsSync(`${buildDir}/demots.jsx`)).toBeTruthy()
+          expect(fs.existsSync(`${buildDir}/basic.js`)).toBeTruthy()
+
+          // Don't export d.ts files
+          expect(fs.existsSync(`${buildDir}/types.d.js`)).toBeFalsy()
           done()
         }
       )
