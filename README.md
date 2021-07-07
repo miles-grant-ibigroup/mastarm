@@ -9,23 +9,23 @@
 
 ## Table of Contents
 
-* [Node](#node)
-* [Install](#install)
-* [Configuration](#configuration)
-* [CLI Usage](#cli-usage)
-  * [Build](#build)
-  * [Commit](#commit)
-  * [Deploy](#deploy)
-  * [Flow](#flow)
-  * [Format](#format)
-  * [Lint](#lint)
-  * [Prepublish](#prepublish)
-  * [Test](#test)
-  * [Lint Messages](#lint-messages)
+- [Node](#node)
+- [Install](#install)
+- [Configuration](#configuration)
+- [CLI Usage](#cli-usage)
+  - [Build](#build)
+  - [Commit](#commit)
+  - [Deploy](#deploy)
+  - [Flow](#flow)
+  - [Format](#format)
+  - [Lint](#lint)
+  - [Prepublish](#prepublish)
+  - [Test](#test)
+  - [Lint Messages](#lint-messages)
 
 ## Node
 
-We pin mastarm to a specific version of node due to inconsistencies across installation and building when using multiple versions. *Node 8 is now required to run mastarm*.
+We pin mastarm to a specific version of node due to inconsistencies across installation and building when using multiple versions. _Node 8 is now required to run mastarm_.
 
 ## Install
 
@@ -51,13 +51,13 @@ This file should contain string messages to be used throughout the application. 
 
 Settings contain both Mastarm configuration settings and per environment settings to be used in the application and are usually duplicates of what can be passed from the command line. Current Mastarm settings are:
 
-* `cloudfront` {String} CloudFront distribution id that will automatically invalidate file paths after they are deployed to S3
-* `entries` {Array} input:output JavaScript & CSS file pairs
-* `env` {String} environment override
-* `environments` {Object} override top level settings (see [example](https://github.com/conveyal/modeify/blob/master/configurations/example/settings.yml#L40))
-* `flyle` {Boolean} serve map tiles from a local cache for working offline
-* `s3bucket` {String} bucket to deploy to
-* `serve` {Boolean} serve client side files via budo
+- `cloudfront` {String} CloudFront distribution id that will automatically invalidate file paths after they are deployed to S3
+- `entries` {Array} input:output JavaScript & CSS file pairs
+- `env` {String} environment override
+- `environments` {Object} override top level settings (see [example](https://github.com/conveyal/modeify/blob/master/configurations/example/settings.yml#L40))
+- `flyle` {Boolean} serve map tiles from a local cache for working offline
+- `s3bucket` {String} bucket to deploy to
+- `serve` {Boolean} serve client side files via budo
 
 ### `store.yml`
 
@@ -69,7 +69,7 @@ Add a stylesheet that gets `@import`ed at the beginning of your entry stylesheet
 
 ## CLI Usage
 
-Not all options pertain to all commands.  Entries are in the format `input/file.js:output/file.js`.
+Not all options pertain to all commands. Entries are in the format `input/file.js:output/file.js`.
 
 ```shell
 $ mastarm --help
@@ -82,11 +82,10 @@ $ mastarm --help
     build [entries...]        Bundle JavaScript & CSS
     commit                    Force intelligent commit messages.
     deploy                    Bundle & Deploy JavaScript & CSS
-    flow [command]            Run flow on the current directory.
-    format [entries...]       Format JavaScript
-    lint                      Lint JavaScript
+    ts [command]              Run tsc on the current directory.
+    lint [entries...]         Lint JavaScript
     lint-messages [paths...]  Check existence of messages used in source code.
-    prepublish [entries...]   Transpile JavaScript down to ES5 with Babel
+    prepublish [entries...]   Transpile JavaScript and Typescript down to ES5 with Babel
     test [patterns...]        Run tests using Jest
     help [cmd]                display help for [cmd]
 
@@ -99,30 +98,6 @@ $ mastarm --help
     -m, --minify             Minify built files.
     -O, --outdir <dir>       Publish directory
 ```
-
-### `build`
-
-Compile JS, HTML, CSS, YAML, Markdown into a single `.js`. Utilizes [babel](https://babeljs.io/), [browserify](https://github.com/substack/node-browserify), [budo](https://github.com/mattdesl/budo), and [postcss](http://postcss.org/).
-
-```shell
-$ mastarm build --help
-
-  Usage: mastarm-build [options]
-
-  Options:
-
-    -h, --help             output usage information
-    -F, --flyle            Cache and serve tiles.
-    -p, --proxy <address>  Proxy calls through to target address.
-    -s, --serve            Serve with budo. Automatically rebuilds on changes.
-    -w, --watch            Automatically rebuild on changes.
-```
-
-If no entries are provided, mastarm will use the `entries` option from your `settings.yml` config file. If no entries are found, build will not run.
-
-#### CSS Building
-
-CSS builds occur separately from the browserify build. Any CSS imports into a JavaScript file cause a build error. To build CSS file(s), specify the CSS file(s) as entries in the command. When running in `serve` or `watch` mode, the CSS files get automatically rebuilt, but a manual page refresh is necessary.
 
 ### `commit`
 
@@ -163,23 +138,9 @@ To enable an MS Teams notification upon the completion (successful or not) of th
 MS_TEAMS_WEBHOOK: https://outlook.office.com/webhook/123...abc
 ```
 
-### `flow`
+### `ts`
 
-Run [Flow](https://flow.org/). Must have a `.flowconfig` in the current working directory and a `// @flow` annotation at the top of each file you want to check. See the Flow website for documentation.
-
-### `format`
-
-Format JavaScript code using [Prettier](https://github.com/prettier/prettier). By default it globs all JavaScript files from the current directory and `__mocks__`, `__tests__`, `bin`, `lib`, and `src`. If you pass files in it directly it will just use those.
-
-```shell
-$ mastarm format
-```
-
-To format one file:
-
-```shell
-$ mastarm format index.js
-```
+Run [Typescript](https://typescriptlang.org/). Must have a `tsconfig.json` in the project directory. See the Typescript website for documentation.
 
 ### `lint`
 
@@ -199,7 +160,7 @@ Note: by default standard will look for all files matching the patterns: `"**/*.
 
 ### `prepublish`
 
-Transpile a library using [Babel](http://babeljs.io/) and our custom config. Usually used as a prepublish step for libraries written in ES6+ that will be published to NPM. Pass it a directory and it will look for `.js` files to transpile.
+Transpile a library using [Babel](http://babeljs.io/) and our custom config. Usually used as a prepublish step for libraries written in ES6+ that will be published to NPM. Pass it a directory and it will look for `.js` and `.ts` files to transpile.
 
 ```shell
 $ mastarm prepublish lib:build
@@ -237,7 +198,7 @@ Options:
 
 By default, mastarm will run Jest with most of the defaults in place. The defaults that mastarm adds include:
 
-- some transforms needed to read certain .js files and also YAML files.  
+- some transforms needed to read certain .js files and also YAML files.
 - ignoring the test path directory `__tests__/test-utils`
 - setting the [testURL](https://jestjs.io/docs/en/configuration#testurl-string) to `http://localhost:9966`
 - turning on [notifications](https://jestjs.io/docs/en/configuration#notify-boolean) of test completion
