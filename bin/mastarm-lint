@@ -1,4 +1,4 @@
 #!/bin/bash
 CWD=$(dirname $0)
 
-$CWD/../node_modules/.bin/eslint --config $CWD/../lib/eslintrc.json $FILES $@
+$CWD/../node_modules/.bin/eslint --config $CWD/../lib/eslintrc.json --ignore-pattern "**/*.d.ts" --fix $FILES $@

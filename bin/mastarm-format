@@ -1,8 +1,0 @@
-#!/bin/bash
-
-CWD=$(dirname $0)
-
-$CWD/../node_modules/.bin/prettier-eslint \
-  --eslint-path $CWD/../node_modules/eslint \
-  --eslint-config-path $CWD/../lib/eslintrc.json \
-  $@
