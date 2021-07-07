@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import uuid from 'uuid'
 
 const yaml = require('./mock.yml')
@@ -14,7 +14,7 @@ export default class MockTestComponentUniqueName extends Component {
   /**
    * Render the component.
    */
-  render () {
+  render() {
     console.log(yaml)
     console.log(uuid.v4())
     return <div />

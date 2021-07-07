@@ -30,7 +30,10 @@ const testMessages = {
 }
 
 describe('lint-messages', () => {
-  const {lintFileContents, parseImportLine} = require('../../lib/lint-messages')
+  const {
+    lintFileContents,
+    parseImportLine
+  } = require('../../lib/lint-messages')
   it('should parse root import correctly', () => {
     expect(
       parseImportLine("import msgs from '../utils/messages'")

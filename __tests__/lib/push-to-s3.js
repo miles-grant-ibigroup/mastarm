@@ -32,7 +32,7 @@ describe('lib > push to s3', () => {
       files
     }).then(() =>
       Promise.all(
-        files.map(f => push({body: fs.readFileSync(f[0]), outfile: f[0]}))
+        files.map((f) => push({ body: fs.readFileSync(f[0]), outfile: f[0] }))
       )
     )
   })

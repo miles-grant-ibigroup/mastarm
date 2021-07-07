@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
 
-
 /**
  * A Mock Component to test to ensure that building of React jsx components works
  */
@@ -14,7 +13,10 @@ export default class MockTestComponentUniqueName extends Component {
     await Promise.resolve('hi')
   }
 
-  anotherFancyMethod = (numberOfPrints: number, stringToPrint: string): Array<string> => {
+  anotherFancyMethod = (
+    numberOfPrints: number,
+    stringToPrint: string
+  ): Array<string> => {
     const array: Array<string> = Array(numberOfPrints)
     array.fill(stringToPrint)
     return array
@@ -23,8 +25,8 @@ export default class MockTestComponentUniqueName extends Component {
   /**
    * Render the component.
    */
-  render () {
-    return <div/>
+  render() {
+    return <div />
   }
 }
 
