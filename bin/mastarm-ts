@@ -1,3 +1,8 @@
 #!/bin/bash
 
-$(dirname $0)/../node_modules/.bin/tsc --jsx react
+CWD=$(dirname $0)
+PROJECT_DIR=$(pwd)
+# Copy tsconfig.json if it doesn't yet exist
+cp -n $CWD/../../tsconfig.json $PROJECT_DIR/tsconfig.json
+
+$CWD/../../node_modules/.bin/tsc --project $PROJECT_DIR --jsx react
