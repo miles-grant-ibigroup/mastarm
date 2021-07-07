@@ -183,7 +183,7 @@ $ mastarm format index.js
 
 ### `lint`
 
-Lint using [Standard](http://standardjs.com/). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
+Lint using [Standard](http://standardjs.com/) and various configurations noted in an [internal eslintrc.json file](https://github.com/conveyal/mastarm/blob/master/lib/eslintrc.json). Everything is passed directly to [`standard-engine`](https://github.com/Flet/standard-engine).
 
 ```shell
 $ mastarm lint [paths...]
