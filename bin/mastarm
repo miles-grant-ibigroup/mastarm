@@ -20,5 +20,5 @@ commander
   )
   .command('test [patterns...]', 'Run tests using Jest')
   // TODO: this should exist
-  .command('typescript', 'Run typescript on the current directory.')
+  .command('ts', 'Run tsc on the current directory.')
   .parse(process.argv)
