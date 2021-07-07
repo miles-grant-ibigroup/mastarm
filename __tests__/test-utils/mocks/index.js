@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import uuid from 'uuid'
 
 import png from '../../../mastarm.png'
+
+// Check that we can import both commonjs and es6 modules
+const uuid = require('uuid')
 
 /**
  * A Mock Component to test to ensure that building of React jsx components works
@@ -18,7 +20,7 @@ export default class MockTestComponentUniqueName extends Component {
   /**
    * Render the component.
    */
-  render () {
+  render() {
     return <div />
   }
 }
