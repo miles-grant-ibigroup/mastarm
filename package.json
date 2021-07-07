@@ -8,19 +8,17 @@
   },
   "bin": {
     "mastarm": "bin/mastarm",
-    "mastarm-build": "bin/mastarm-build",
     "mastarm-commit": "bin/mastarm-commit",
     "mastarm-deploy": "bin/mastarm-deploy",
-    "mastarm-flow": "bin/mastarm-flow",
-    "mastarm-format": "bin/mastarm-format",
     "mastarm-lint": "bin/mastarm-lint",
     "mastarm-lint-messages": "bin/mastarm-lint-messages",
     "mastarm-prepublish": "bin/mastarm-prepublish",
-    "mastarm-test": "bin/mastarm-test"
+    "mastarm-test": "bin/mastarm-test",
+    "mastarm-ts": "bin/mastarm-ts"
   },
   "scripts": {
     "cover": "yarn run jest --coverage --coverage-paths bin",
-    "flow": "bin/mastarm flow",
+    "ts": "bin/mastarm ts",
     "jest": "bin/mastarm test --run-in-band --env test --test-environment node",
     "lint": "bin/mastarm lint lib __tests__",
     "pretest": "yarn",

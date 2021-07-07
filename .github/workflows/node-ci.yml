@@ -17,7 +17,7 @@ jobs:
       - name: Lint code
         run: yarn lint
       - name: Static typing
-        run: yarn flow
+        run: yarn ts
       - name: Run tests
         run: yarn jest
 
