@@ -1,6 +1,6 @@
 {
   "name": "mastarm",
-  "version": "9999.100.100",
+  "version": "123.456.789",
   "description": "Conveyal JavaScript development toolbelt.",
   "main": "bin/mastarm",
   "engines": {
